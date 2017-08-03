@@ -6,6 +6,13 @@
     tools:context="com.example.jaewanlee.mapmemo.Activity.FAQActivity"
     android:orientation="vertical"
     android:weightSum="10">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:text="Standard with finish"
+        android:textSize="70dp" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -36,5 +43,11 @@
         android:layout_weight="1"
         android:text="standard activity with finish"
         android:id="@+id/faq_standard_with"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="recent screen"
+        android:id="@+id/faq_recent_screen"/>
 
 </LinearLayout>

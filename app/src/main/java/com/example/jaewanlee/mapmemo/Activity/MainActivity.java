@@ -1,6 +1,7 @@
 package com.example.jaewanlee.mapmemo.Activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -48,17 +49,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        navigationView.getMenu().findItem(R.id.app_bar_switch).setActionView(new Switch(this));
+        navigationView.getMenu().findItem(R.id.drawer_lock_screen).setActionView(new Switch(this));
 
-        ((Switch) navigationView.getMenu().findItem(R.id.app_bar_switch).getActionView()).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ((Switch) navigationView.getMenu().findItem(R.id.drawer_lock_screen).getActionView()).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    Intent intent=new Intent(getApplicationContext(),ScreenService.class);
+                if (b) {
+                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
                     startService(intent);
-                }
-                else{
-                    Intent intent=new Intent(getApplicationContext(),ScreenService.class);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
                     stopService(intent);
                 }
             }
@@ -103,19 +103,33 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.drawer_location_base) {
+            Intent intent = new Intent(getApplicationContext(), LocationBaseActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.drawer_time_base) {
+            Intent intent = new Intent(getApplicationContext(), TimeBaseActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.drawer_setting) {
+            Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.drawer_faq) {
+            Intent intent = new Intent(getApplicationContext(), FAQActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.drawer_access_terms) {
+            Intent intent = new Intent(getApplicationContext(), AccessTermActivity.class);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            } else {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            startActivity(intent);
 
-        } else if (id == R.id.app_bar_switch) {
+        } else if (id == R.id.drawer_lock_screen) {
             boolean status = ((Switch) item.getActionView()).isChecked();
             ((Switch) item.getActionView()).setChecked(!status);
         }
