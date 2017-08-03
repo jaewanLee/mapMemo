@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jaewanlee.mapmemo.Activity.FAQActivity"
+    android:orientation="vertical"
+    android:weightSum="10">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Standarad Activity without finish"
+        android:id="@+id/faq_standard_without"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="single task activity"
+        android:id="@+id/faq_single_task"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="single top activity"
+        android:id="@+id/faq_single_top"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="single instance activity"
+        android:id="@+id/faq_single_instance"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="standard activity with finish"
+        android:id="@+id/faq_standard_with"/>
+
+</LinearLayout>
