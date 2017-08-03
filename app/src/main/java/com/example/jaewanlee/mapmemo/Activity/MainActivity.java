@@ -1,5 +1,6 @@
 package com.example.jaewanlee.mapmemo.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+
+import com.example.jaewanlee.mapmemo.Core.Service.ScreenService;
+import com.example.jaewanlee.mapmemo.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +46,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        navigationView.getMenu().findItem(R.id.app_bar_switch).setActionView(new Switch(this));
+
+        ((Switch) navigationView.getMenu().findItem(R.id.app_bar_switch).getActionView()).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    Intent intent=new Intent(getApplicationContext(),ScreenService.class);
+                    startService(intent);
+                }
+                else{
+                    Intent intent=new Intent(getApplicationContext(),ScreenService.class);
+                    stopService(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -92,6 +115,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.app_bar_switch) {
+            boolean status = ((Switch) item.getActionView()).isChecked();
+            ((Switch) item.getActionView()).setChecked(!status);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
