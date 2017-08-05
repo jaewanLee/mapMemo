@@ -6,10 +6,13 @@ import android.view.WindowManager;
 
 import com.example.jaewanlee.mapmemo.R;
 
+import io.airbridge.statistics.page.DontTrack;
+
 /**
  * Created by jaewanlee on 2017. 8. 2..
  */
 
+@DontTrack
 public class LockScrennActivity extends AppCompatActivity {
 
     @Override

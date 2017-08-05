@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.tsengvn.typekit.Typekit;
 
+import io.airbridge.AirBridge;
 import io.realm.Realm;
 
 
@@ -22,6 +23,8 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Typekit.getInstance().addNormal(Typekit.createFromAsset(this,"BMHANNA_11yrs_otf.otf"));
+        AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
+        AirBridge.setDebugMode(true);
     }
 
     public void userDataInit(){

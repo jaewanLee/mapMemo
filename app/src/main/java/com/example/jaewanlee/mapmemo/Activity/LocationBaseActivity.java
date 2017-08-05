@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import com.example.jaewanlee.mapmemo.R;
 
+import io.airbridge.AirBridge;
+import io.airbridge.statistics.events.inapp.SignInEvent;
+
 /**
  * Created by jaewanlee on 2017. 8. 3..
  */
@@ -19,6 +22,8 @@ public class LocationBaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_base_memo);
+
+        AirBridge.getTracker().send(new SignInEvent());
 
         Button mainButton = (Button) findViewById(R.id.locationBase_standard_without);
         Button locationButton = (Button) findViewById(R.id.locationBase_single_task);
