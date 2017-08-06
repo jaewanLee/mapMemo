@@ -5,15 +5,15 @@ package com.example.jaewanlee.mapmemo.Core;
  */
 
 public class Constant {
-    static String TAG="MAP_MEMO";
+    public static String LOG_TAG="MAP_MEMO";
 
-    static String DEVICE_INFO_FETCHED="1024";
+    public static String DEVICE_INFO_FETCHED="1024";
 
-    static String GUEST_LOGIN="GUEST_LOGIN";
+    public static String GUEST_LOGIN="GUEST_LOGIN";
 
-    static String GOOGLE_LOGIN;
+    public static String GOOGLE_LOGIN;
 
-    static String FACEBOOK_LOGIN;
+    public static String FACEBOOK_LOGIN;
 
 
 

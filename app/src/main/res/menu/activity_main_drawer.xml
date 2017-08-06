@@ -6,35 +6,32 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/drawer_location_base"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="single task" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/drawer_time_base"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="single top" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/drawer_setting"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="single instance" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="일반">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/drawer_faq"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="standard with finsih" />
+            <item
+                android:id="@+id/drawer_access_terms"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="recent screen" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-            <item
-                android:id="@+id/app_bar_switch"
+                android:id="@+id/drawer_lock_screen"
                 android:title="lockScreen"
                 android:icon="@drawable/ic_action_name"
                 app:actionLayout="@layout/switch_item" />

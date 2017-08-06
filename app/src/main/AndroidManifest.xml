@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:name=".Core.MainApplication"
@@ -17,7 +21,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activity.MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="#여기요"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Map.TestActivity">
+
+
+        </activity>
+
         <activity
             android:name=".Activity.LockScreen.LockScrennActivity"
             android:excludeFromRecents="true"
@@ -42,16 +51,22 @@
         </receiver>
 
         <service android:name=".Core.Service.ScreenService" />
-        <activity android:name=".Activity.LocationBaseActivity"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name=".Activity.TimeBaseActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".Activity.SettingActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Activity.FAQActivity"
-            android:launchMode="standard"/>
-        <activity android:name=".Activity.AccessTermActivity"></activity>
+
+        <activity
+            android:name=".Activity.LocationBaseActivity"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".Activity.TimeBaseActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activity.SettingActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Activity.FAQActivity"
+            android:launchMode="standard" />
+        <activity
+            android:name=".Activity.AccessTermActivity"
+            android:launchMode="standard" />
     </application>
 
 </manifest>
