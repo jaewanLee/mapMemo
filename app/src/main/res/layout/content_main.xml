@@ -12,6 +12,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_Nmap_replace"/>
+        android:id="@+id/main_map_replace"/>
 
 </FrameLayout>

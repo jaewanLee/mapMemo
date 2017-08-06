@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,20 +16,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.jaewanlee.mapmemo.Core.Service.ScreenService;
-import com.example.jaewanlee.mapmemo.Map.NMapCustomFragment;
+import com.example.jaewanlee.mapmemo.Map.CustomMapView;
+import com.example.jaewanlee.mapmemo.Map.CustomMarker;
 import com.example.jaewanlee.mapmemo.R;
-import com.example.jaewanlee.mapmemo.Util.Logger;
 import com.tsengvn.typekit.TypekitContextWrapper;
+
+import net.daum.mf.map.api.MapPoint;
+
+import static com.example.jaewanlee.mapmemo.Util.Constant.MARKER_TAG_DEFAULT;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     android.support.v7.widget.SearchView searchView;
+    CustomMapView customMapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +79,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        NMapCustomFragment nMapFragment = new NMapCustomFragment();
-        nMapFragment.setArguments(new Bundle());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_Nmap_replace, nMapFragment);
-        fragmentTransaction.commit();
-        Logger.d("MainAcitivty onCrate");
+        customMapView=new CustomMapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.main_map_replace);
+        mapViewContainer.addView(customMapView);
+        initMap();
+
     }
 
     @Override
@@ -183,6 +185,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
+
+    private void initMap(){
+
+
+        //저장되어 있는 마커 추가
+        CustomMarker customMarker=new CustomMarker("테스트 마커",MARKER_TAG_DEFAULT, MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633));
+        customMapView.addPOIItem(customMarker);
     }
 
 
