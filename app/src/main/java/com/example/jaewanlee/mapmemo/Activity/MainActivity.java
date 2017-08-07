@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.jaewanlee.mapmemo.Core.MainApplication;
 import com.example.jaewanlee.mapmemo.Core.Service.ScreenService;
 import com.example.jaewanlee.mapmemo.Map.CustomMapView;
 import com.example.jaewanlee.mapmemo.Map.CustomMarker;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        //다음 지도 초기화
         customMapView=new CustomMapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.main_map_replace);
         mapViewContainer.addView(customMapView);
@@ -117,11 +119,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Toast.makeText(MainActivity.this, "entering query", Toast.LENGTH_SHORT).show();
-                //이게 메인 어플리케이션으로
-                KeywordSearchInterface keywordSearchInterface=KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
-                //이거는 여기서 쿼리 바로 받아서
+                MainApplication mainApplication=(MainApplication)getApplication();
+                KeywordSearchInterface keywordSearchInterface = mainApplication.getKeywordSearchInterface();
                 Call<KeywordSearchRepo> call=keywordSearchInterface.getKeywordSearchRepo(query);
-                //이게 익서큐터로
                 call.enqueue(new Callback<KeywordSearchRepo>() {
                     @Override
                     public void onResponse(Call<KeywordSearchRepo> call, Response<KeywordSearchRepo> response) {
@@ -223,8 +223,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initMap(){
-
-
         //저장되어 있는 마커 추가
         CustomMarker customMarker=new CustomMarker("테스트 마커",MARKER_TAG_DEFAULT, MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633));
         customMapView.addPOIItem(customMarker);
