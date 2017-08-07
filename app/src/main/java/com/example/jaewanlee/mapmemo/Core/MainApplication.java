@@ -1,6 +1,7 @@
 package com.example.jaewanlee.mapmemo.Core;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.tsengvn.typekit.Typekit;
@@ -18,7 +19,6 @@ public class MainApplication extends Application {
     Realm UserData;
     SharedPreferences sharedPreferences;
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +30,10 @@ public class MainApplication extends Application {
     public void userDataInit(){
 //        this.UserData=Realm.getInstance();
 //        RealmResults<UserDatabase> userDatabases=this.UserData.where(UserDatabase.class).findAll();
+    }
+
+    public static Context getContext(){
+        return getContext();
     }
 
 

@@ -24,10 +24,17 @@ import android.widget.Toast;
 import com.example.jaewanlee.mapmemo.Core.Service.ScreenService;
 import com.example.jaewanlee.mapmemo.Map.CustomMapView;
 import com.example.jaewanlee.mapmemo.Map.CustomMarker;
+import com.example.jaewanlee.mapmemo.Network.KeywordSearchInterface;
+import com.example.jaewanlee.mapmemo.Network.KeywordSearchRepo;
 import com.example.jaewanlee.mapmemo.R;
+import com.example.jaewanlee.mapmemo.Util.Logger;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import net.daum.mf.map.api.MapPoint;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.jaewanlee.mapmemo.Util.Constant.MARKER_TAG_DEFAULT;
 
@@ -83,6 +90,8 @@ public class MainActivity extends AppCompatActivity
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.main_map_replace);
         mapViewContainer.addView(customMapView);
         initMap();
+//        SearchLocation searchLocation=SearchLocation.getInstance();
+//        Logger.d(searchLocation.run("영등포구청 탐앤탐스"));
 
     }
 
@@ -108,6 +117,32 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Toast.makeText(MainActivity.this, "entering query", Toast.LENGTH_SHORT).show();
+                //이게 메인 어플리케이션으로
+                KeywordSearchInterface keywordSearchInterface=KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
+                //이거는 여기서 쿼리 바로 받아서
+                Call<KeywordSearchRepo> call=keywordSearchInterface.getKeywordSearchRepo(query);
+                //이게 익서큐터로
+                call.enqueue(new Callback<KeywordSearchRepo>() {
+                    @Override
+                    public void onResponse(Call<KeywordSearchRepo> call, Response<KeywordSearchRepo> response) {
+                        if(response.isSuccessful()){
+                            Logger.d(response.body().getKeywordDocuments().get(0).getPlace_name());
+                            KeywordSearchRepo.KeywordDocuments keywordDocuments=response.body().getKeywordDocuments().get(0);
+                            Logger.d("X: "+keywordDocuments.getX()+" Y : "+keywordDocuments.getY());
+                            customMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(Double.valueOf(keywordDocuments.getY()),Double.valueOf(keywordDocuments.getX())),false);
+
+                        }
+                        else{
+                            Logger.d(response.errorBody().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<KeywordSearchRepo> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "에러가 발생하였습니다 잠시후 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 return false;
             }
 
@@ -194,6 +229,5 @@ public class MainActivity extends AppCompatActivity
         CustomMarker customMarker=new CustomMarker("테스트 마커",MARKER_TAG_DEFAULT, MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633));
         customMapView.addPOIItem(customMarker);
     }
-
 
 }
