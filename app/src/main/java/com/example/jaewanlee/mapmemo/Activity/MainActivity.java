@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, "entering query", Toast.LENGTH_SHORT).show();
+                Logger.d("on QuesryText Submit");
                 MainApplication mainApplication=(MainApplication)getApplication();
                 KeywordSearchInterface keywordSearchInterface = mainApplication.getKeywordSearchInterface();
                 Call<KeywordSearchRepo> call=keywordSearchInterface.getKeywordSearchRepo(query);
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(MainActivity.this, "enter searching", Toast.LENGTH_SHORT).show();
+                Logger.d("on QueryText Change");
                 return false;
             }
         });
