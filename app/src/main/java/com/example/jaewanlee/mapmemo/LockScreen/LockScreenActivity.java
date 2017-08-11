@@ -33,7 +33,7 @@ import io.realm.RealmResults;
  */
 
 @DontTrack
-public class LockScrennActivity extends AppCompatActivity {
+public class LockScreenActivity extends AppCompatActivity {
 
     LocationManager locationManager;
 
@@ -61,7 +61,7 @@ public class LockScrennActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView_manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerView_manager);
-        lockScreenAdapter = new LockScreenAdapter(LockScrennActivity.this);
+        lockScreenAdapter = new LockScreenAdapter(LockScreenActivity.this);
         recyclerView.setAdapter(lockScreenAdapter);
         recyclerView.addItemDecoration(new RecyclerViewDecoration(25));
 
@@ -97,7 +97,7 @@ public class LockScrennActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Logger.d("Enter in Lockscreen image");
-                Toast.makeText(LockScrennActivity.this, "클릭잼", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LockScreenActivity.this, "클릭잼", Toast.LENGTH_SHORT).show();
                 Uri uri = Uri.parse("ablog://main");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -120,7 +120,7 @@ public class LockScrennActivity extends AppCompatActivity {
             calculateDistance.setCurrentLat(latitude);
             calculateDistance.setCurrentLon(longtitude);
 
-            Toast.makeText(LockScrennActivity.this, "변경 잼", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LockScreenActivity.this, "변경 잼", Toast.LENGTH_SHORT).show();
 
             RealmResults<MemoDatabase> memoDatabaseRealmResults = realm.where(MemoDatabase.class).findAll();
             for(MemoDatabase memoDatabase:memoDatabaseRealmResults){
