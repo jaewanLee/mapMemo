@@ -12,6 +12,7 @@ import com.example.jaewanlee.mapmemo.R;
 import com.example.jaewanlee.mapmemo.Util.TranscHash;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by jaewanlee on 2017. 8. 10..
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class LockScreenAdapter extends RecyclerView.Adapter<LockScreenAdapter.ViewHolder> {
     Context context;
     ArrayList<MemoDatabase> memoDatabases=new ArrayList<>();
+    HashMap<Integer,MemoDatabase> memoHash=new HashMap<>();
 
     public LockScreenAdapter(Context context) {
         this.context = context;
@@ -27,6 +29,10 @@ public class LockScreenAdapter extends RecyclerView.Adapter<LockScreenAdapter.Vi
 
     public void addData(MemoDatabase memoDatabase) {
         this.memoDatabases.add(memoDatabase);
+//        if(!memoHash.containsKey(memoDatabase.getMemo_no())){
+//            this.memoDatabases.add(memoDatabase);
+//            memoHash.put(memoDatabase.getMemo_no(),memoDatabase);
+//        }
     }
 
     @Override
@@ -46,6 +52,7 @@ public class LockScreenAdapter extends RecyclerView.Adapter<LockScreenAdapter.Vi
         holder.phone.setText(memoDatabase.getMemo_document_phone());
         holder.memo.setText(memoDatabase.getMemo_content());
     }
+
 
     @Override
     public int getItemCount() {
