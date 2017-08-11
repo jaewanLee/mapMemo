@@ -8,15 +8,15 @@
         <item
             android:id="@+id/drawer_location_base"
             android:icon="@drawable/ic_menu_camera"
-            android:title="single task" />
+            android:title="지역보기(single task)" />
         <item
             android:id="@+id/drawer_time_base"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="single top" />
+            android:title="최신순(single top)" />
         <item
             android:id="@+id/drawer_setting"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="single instance" />
+            android:title="세팅(single instance)" />
 
     </group>
 
@@ -25,11 +25,11 @@
             <item
                 android:id="@+id/drawer_faq"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="standard with finsih" />
+                android:title="FAQ(standard with finsih)" />
             <item
                 android:id="@+id/drawer_access_terms"
                 android:icon="@drawable/ic_menu_share"
-                android:title="recent screen" />
+                android:title="이용약관(recent screen)" />
             <item
                 android:id="@+id/drawer_lock_screen"
                 android:title="lockScreen"

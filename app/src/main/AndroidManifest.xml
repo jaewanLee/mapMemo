@@ -4,12 +4,12 @@
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:name=".Core.MainApplication"
@@ -24,7 +24,7 @@
             android:value="@string/DUAM_API_KEY" />
 
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".HomeView.MainActivity"
             android:label="#여기요"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -33,41 +33,41 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Map.TestActivity"></activity>
         <activity
-            android:name=".Activity.LockScreen.LockScrennActivity"
+            android:name=".LockScreen.LockScrennActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity android:name=".Login.Login" />
 
-        <receiver android:name=".Core.BoradcastReceiver.RestartReceiver" />
+        <receiver android:name=".LockScreen.BoradcastReceiver.RestartReceiver" />
         <receiver
-            android:name=".Core.BoradcastReceiver.ScreenReceiver"
+            android:name=".LockScreen.BoradcastReceiver.ScreenReceiver"
             android:process=".remote">
             <intent-filter>
                 <action android:name="RestartReceiver.restart" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".Core.Service.ScreenService" />
+        <service android:name=".LockScreen.Service.ScreenService" />
 
         <activity
-            android:name=".Activity.LocationBaseActivity"
+            android:name=".HomeView.LocationBaseActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.TimeBaseActivity"
+            android:name=".HomeView.TimeBaseActivity"
             android:launchMode="singleTop" />
         <activity
-            android:name=".Activity.SettingActivity"
+            android:name=".HomeView.SettingActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".Activity.FAQActivity"
+            android:name=".HomeView.FAQActivity"
             android:launchMode="standard" />
         <activity
-            android:name=".Activity.AccessTermActivity"
+            android:name=".HomeView.AccessTermActivity"
             android:launchMode="standard" />
-        <activity android:name=".Activity.AddMarkerActivity"></activity>
+        <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
+        <activity android:name=".AddMemoView.AddMemoActivity"></activity>
     </application>
 
 </manifest>

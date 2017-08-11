@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corner"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="검색 결과 이름"
+                android:singleLine="true"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:gravity="bottom"
+                android:paddingBottom="10dp"
+                android:id="@+id/keyword_search_result_cardview_name_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="10dp"
+                android:text="카테고리"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:paddingLeft="10dp"
+                android:textColor="#b6b6b6"
+                android:paddingBottom="10dp"
+                android:id="@+id/keyword_search_result_cardview_category_text"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_map_black"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:textSize="12dp"
+                android:paddingLeft="5dp"
+                android:gravity="center_vertical"
+                android:text="검색 결과 주소"
+                android:id="@+id/keyword_search_result_cardview_addr_text"/>
+
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_action_phone"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:paddingLeft="5dp"
+            android:textSize="12dp"
+            android:gravity="center_vertical"
+            android:text="전화번호"
+            android:id="@+id/keyword_search_result_cardview_phone_text"/>
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_homepage"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:paddingLeft="5dp"
+                android:textSize="12dp"
+                android:gravity="center_vertical"
+                android:text="URL"
+                android:textColor="#00309f"
+                android:inputType="textUri"
+                android:id="@+id/keyword_search_result_cardview_url_text"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

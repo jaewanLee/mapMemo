@@ -4,7 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.jaewanlee.mapmemo.Network.KeywordSearchInterface;
+import com.example.jaewanlee.mapmemo.Map.KeywordSearchInterface;
+import com.example.jaewanlee.mapmemo.Util.TranscHash;
 import com.tsengvn.typekit.Typekit;
 
 import io.airbridge.AirBridge;
@@ -28,8 +29,14 @@ public class MainApplication extends Application {
         AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
         AirBridge.setDebugMode(true);
 
+
         //키워드 중심 검색
         keywordSearchInterface=KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
+
+        //CategoryHash init
+        TranscHash.init();
+
+        Realm.init(this);
     }
 
     public void userDataInit(){
@@ -41,7 +48,7 @@ public class MainApplication extends Application {
         return getContext();
     }
     public KeywordSearchInterface getKeywordSearchInterface(){
-        return this.getKeywordSearchInterface();
+        return this.keywordSearchInterface;
     }
 
 

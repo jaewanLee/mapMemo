@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jaewanlee.mapmemo.Activity.TimeBaseActivity"
+    tools:context="com.example.jaewanlee.mapmemo.HomeView.TimeBaseActivity"
     android:weightSum="10"
     android:orientation="vertical">
     <TextView
