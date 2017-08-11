@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.example.jaewanlee.mapmemo.LockScreen.LockScrennActivity;
+import com.example.jaewanlee.mapmemo.LockScreen.LockScreenActivity;
 
 /**
  * Created by jaewanlee on 2017. 8. 2..
@@ -40,7 +40,7 @@ public class ScreenReceiver extends BroadcastReceiver {
 
             disableKeyguard();
 
-            Intent i = new Intent(context, LockScrennActivity.class);
+            Intent i = new Intent(context, LockScreenActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }

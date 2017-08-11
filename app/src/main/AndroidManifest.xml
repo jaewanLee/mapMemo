@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LockScreen.LockScrennActivity"
+            android:name=".LockScreen.LockScreenActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
