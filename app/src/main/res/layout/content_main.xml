@@ -9,10 +9,7 @@
     tools:context="com.example.jaewanlee.mapmemo.HomeView.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <FrameLayout
-        android:id="@+id/main_map_replace"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -172,4 +172,17 @@ public class MemoDatabase extends RealmObject {
         this.memo_document_x = keyworDocuemnt.getX();
         this.memo_document_y = keyworDocuemnt.getY();
     }
+//    public void setDataFromMemoDatabase(MemoDatabase memoDatabase){
+//        this.memo_document_address_name = memoDatabase.getMemo_document_address_name();
+//        this.memo_document_category_group_code = memoDatabase.memo_document_category_group_code;
+//        this.memo_document_category_name = memoDatabase.getMemo_document_category_name();
+//        this.memo_document_distance = keyworDocuemnt.getDistance();
+//        this.memo_document_id = keyworDocuemnt.getId();
+//        this.memo_document_phone = keyworDocuemnt.getPhone();
+//        this.memo_document_place_name = keyworDocuemnt.getPlace_name();
+//        this.memo_document_place_url = keyworDocuemnt.getPlace_url();
+//        this.memo_document_road_address_name = keyworDocuemnt.getRoad_address_name();
+//        this.memo_document_x = keyworDocuemnt.getX();
+//        this.memo_document_y = keyworDocuemnt.getY();
+//    }
 }

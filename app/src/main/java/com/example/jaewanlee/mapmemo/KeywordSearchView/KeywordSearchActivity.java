@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jaewanlee.mapmemo.Core.MainApplication;
+import com.example.jaewanlee.mapmemo.Database.MemoDatabase;
 import com.example.jaewanlee.mapmemo.Map.KeywordSearchInterface;
 import com.example.jaewanlee.mapmemo.Map.KeywordSearchRepo;
 import com.example.jaewanlee.mapmemo.R;
@@ -79,7 +80,11 @@ public class KeywordSearchActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     if (keywordSearchDocumentList != null) {
                         if (keywordSearchDocumentList.get(position) != null) {
-                            intent.putExtra("searchResult", new GsonBuilder().serializeNulls().create().toJson(keywordSearchDocumentList.get(position)));
+                            KeywordSearchRepo.KeywordDocuments keywordDocuments= (KeywordSearchRepo.KeywordDocuments) keywordSearchDocumentList.get(position);
+                            //여기서 이걸 data형태로 바꿀수는 없나?
+                            MemoDatabase memoDatabase=new MemoDatabase();
+                            memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
+                            intent.putExtra("searchResult", new GsonBuilder().serializeNulls().create().toJson(memoDatabase));
                         }
                     }
                     setResult(Constant.SEARCH_QUERY_INTENT,intent);

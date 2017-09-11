@@ -34,6 +34,7 @@ public class AddMemoActivity extends AppCompatActivity {
     Realm realm;
 
     KeywordSearchRepo.KeywordDocuments keywordDocuments;
+    MemoDatabase memoDatabase;
 
     int tag;
     Intent getIntent;
@@ -67,13 +68,17 @@ public class AddMemoActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                realm = Realm.getDefaultInstance();
                 if (tag == 1 || tag == Constant.MARKER_TAG_NEW) {
                     Number number = realm.where(MemoDatabase.class).max("memo_no");
                     if (number == null) number = -1;
 
                     realm.beginTransaction();
                     //TODO 해당 유저 아이디로 바꿔주기
-                    MemoDatabase memoDatabase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
+//                    MemoDatabase lastDatbase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
+                    int lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
+
+                    memoDatabase.setMemo_no(lastData);
                     memoDatabase.setMemo_own_user_id("guest");
                     memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
@@ -82,6 +87,8 @@ public class AddMemoActivity extends AppCompatActivity {
                     memoDatabase.setMemo_category(TranscHash.spinnerToMarkerTag.get(memoCategory.getSelectedItemPosition()));
                     memoDatabase.setMemo_content(memoContent.getText().toString());
                     memo_no = memoDatabase.getMemo_no();
+
+                    memoDatabase = realm.copyToRealm(memoDatabase);
 
                     realm.commitTransaction();
 
@@ -95,8 +102,7 @@ public class AddMemoActivity extends AppCompatActivity {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            MemoDatabase memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
-
+                            memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
                             memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
                             memoDatabase.setMemo_category(TranscHash.spinnerToMarkerTag.get(memoCategory.getSelectedItemPosition()));
                             memoDatabase.setMemo_content(memoContent.getText().toString());
@@ -126,15 +132,14 @@ public class AddMemoActivity extends AppCompatActivity {
     private void init() {
 
         if (tag == 1 || tag == Constant.MARKER_TAG_NEW) {
-            keywordDocuments = new Gson().fromJson(getIntent.getStringExtra("keywordDocument"), KeywordSearchRepo.KeywordDocuments.class);
-
-            memoTitle.setText(keywordDocuments.getPlace_name());
-            if (keywordDocuments.getRoad_address_name().equals("")) {
-                memoAddr.setText(keywordDocuments.getAddress_name());
-            } else memoAddr.setText(keywordDocuments.getRoad_address_name());
+            memoDatabase = new Gson().fromJson(getIntent.getStringExtra("keywordDocument"), MemoDatabase.class);
+            memoTitle.setText(memoDatabase.getMemo_document_place_name());
+            if (memoDatabase.getMemo_document_road_address_name().equals(""))
+                memoAddr.setText(memoDatabase.getMemo_document_address_name());
+            else memoAddr.setText(memoDatabase.getMemo_document_road_address_name());
 
         } else {
-            MemoDatabase memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
+            memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
 
             memoTitle.setText(memoDatabase.getMemo_document_place_name());
             if (memoDatabase.getMemo_document_road_address_name().equals(""))
@@ -149,6 +154,7 @@ public class AddMemoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        realm.close();
+        if (!realm.isClosed())
+            realm.close();
     }
 }

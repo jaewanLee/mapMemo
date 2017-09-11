@@ -72,22 +72,12 @@ public class LockScreenActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        calculateDistance=new CalculateDistance();
-
-//        RealmResults<MemoDatabase> memoDatabaseRealmResults = realm.where(MemoDatabase.class).findAll();
-//        lockScreenAdapter.setData(memoDatabaseRealmResults);
-//        lockScreenAdapter.notifyDataSetChanged();
+        calculateDistance = new CalculateDistance();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //TODO 펴미션 체크가 안되어 있다면 다시 퍼미션 체크 하기
             Toast.makeText(this, "퍼미션 체크 안됬는데", Toast.LENGTH_SHORT).show();
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1000, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, locationListener);
@@ -123,28 +113,28 @@ public class LockScreenActivity extends AppCompatActivity {
             Toast.makeText(LockScreenActivity.this, "변경 잼", Toast.LENGTH_SHORT).show();
 
             RealmResults<MemoDatabase> memoDatabaseRealmResults = realm.where(MemoDatabase.class).findAll();
-            for(MemoDatabase memoDatabase:memoDatabaseRealmResults){
-                if(calculateDistance.calculate(Double.valueOf(memoDatabase.getMemo_document_y()),Double.valueOf(memoDatabase.getMemo_document_x()))){
+            for (MemoDatabase memoDatabase : memoDatabaseRealmResults) {
+                if (calculateDistance.calculate(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()))) {
                     lockScreenAdapter.addData(memoDatabase);
                 }
             }
-//            lockScreenAdapter.setData(memoDatabaseRealmResults);
             lockScreenAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
 
+            Logger.d("onStatusChanged");
         }
 
         @Override
         public void onProviderEnabled(String s) {
-
+            Logger.d("onProviderEnabled");
         }
 
         @Override
         public void onProviderDisabled(String s) {
-
+            Logger.d("onProviderDisabled");
         }
     };
 }

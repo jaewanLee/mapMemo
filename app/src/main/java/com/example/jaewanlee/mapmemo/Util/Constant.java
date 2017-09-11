@@ -24,6 +24,8 @@ public class Constant {
 
     public static final int SEARCH_QUERY_INTENT=9402;
 
+    public static final int GPS_SETTING_INTENT=9403;
+
     public static final int ADD_MEMO_INTENT=9403;
 
     public static final int DETAIL_MEMO_INTENT=9404;

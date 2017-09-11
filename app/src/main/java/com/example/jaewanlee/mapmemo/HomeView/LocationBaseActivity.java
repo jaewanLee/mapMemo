@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.jaewanlee.mapmemo.R;
+import com.example.jaewanlee.mapmemo.Util.Logger;
 
 import io.airbridge.AirBridge;
 import io.airbridge.statistics.events.inapp.SignInEvent;
@@ -32,6 +33,10 @@ public class LocationBaseActivity extends AppCompatActivity {
         Button faqButton = (Button) findViewById(R.id.locationBase_standard_with);
         Button accessButton=(Button)findViewById(R.id.locationBase_recent_screen);
 
+        Intent intent=getIntent();
+        String deepLinkUri=intent.getData().getPath();
+        String parsedData=deepLinkUri.substring(1);
+        Logger.d(parsedData);
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

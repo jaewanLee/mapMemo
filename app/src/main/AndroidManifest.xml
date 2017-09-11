@@ -53,7 +53,20 @@
 
         <activity
             android:name=".HomeView.LocationBaseActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask">
+            <intent-filter>
+                <!-- Sets the intent action to view the activity -->
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Allows the link to be opened from a web browser -->
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the deep link to be used without specifying the app name -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- URI mapmemo://deeplink -->
+                <data android:scheme="mapmemo" android:host="deeplink"/>
+                <!-- URI http://www.mapmemo.com -->
+                <data android:scheme="http" android:host="www.mapmemo.com"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".HomeView.TimeBaseActivity"
             android:launchMode="singleTop" />
@@ -67,7 +80,8 @@
             android:name=".HomeView.AccessTermActivity"
             android:launchMode="standard" />
         <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
-        <activity android:name=".AddMemoView.AddMemoActivity"></activity>
+        <activity android:name=".AddMemoView.AddMemoActivity" />
+        <activity android:name=".HomeView.MenuActivity"></activity>
     </application>
 
 </manifest>
