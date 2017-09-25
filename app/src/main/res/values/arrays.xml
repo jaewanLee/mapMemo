@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="spinnerArrayCategory">
+        <item>식당</item>
+        <item>명소</item>
+        <item>까페</item>
+        <item>공원</item>
+        <item>기타</item>
+    </string-array>
+
+</resources>

@@ -4,8 +4,12 @@
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:name=".Core.MainApplication"
@@ -15,9 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/DUAM_API_KEY" />
+
         <activity
-            android:name=".Activity.MainActivity"
-            android:label="@string/title_activity_main"
+            android:name=".HomeView.MainActivity"
+            android:label="#여기요"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,33 +34,60 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.LockScreen.LockScrennActivity"
+            android:name=".LockScreen.LockScreenActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity android:name=".Login.Login" />
 
-        <receiver android:name=".Core.BoradcastReceiver.RestartReceiver" />
+        <receiver android:name=".LockScreen.BoradcastReceiver.RestartReceiver" />
         <receiver
-            android:name=".Core.BoradcastReceiver.ScreenReceiver"
+            android:name=".LockScreen.BoradcastReceiver.ScreenReceiver"
             android:process=".remote">
             <intent-filter>
                 <action android:name="RestartReceiver.restart" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".Core.Service.ScreenService" />
-        <activity android:name=".Activity.LocationBaseActivity"
+        <service android:name=".LockScreen.Service.ScreenService" />
+
+        <activity
+            android:name=".HomeView.LocationBaseActivity"
             android:launchMode="singleTask">
+            <intent-filter>
+
+                <!-- Sets the intent action to view the activity -->
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Allows the link to be opened from a web browser -->
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the deep link to be used without specifying the app name -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- URI mapmemo://deeplink -->
+                <data
+                    android:host="deeplink"
+                    android:scheme="mapmemo" />
+                <!-- URI http://www.mapmemo.com -->
+                <data
+                    android:host="www.mapmemo.com"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Activity.TimeBaseActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".Activity.SettingActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Activity.FAQActivity"
-            android:launchMode="standard"/>
-        <activity android:name=".Activity.AccessTermActivity"
-            android:launchMode="standard"></activity>
+        <activity
+            android:name=".HomeView.TimeBaseActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".HomeView.SettingActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".HomeView.FAQActivity"
+            android:launchMode="standard" />
+        <activity
+            android:name=".HomeView.AccessTermActivity"
+            android:launchMode="standard" />
+        <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
+        <activity android:name=".AddMemoView.AddMemoActivity" />
+        <activity android:name=".HomeView.MenuActivity" />
+        <activity android:name=".Memo.MemoListActivity"></activity>
     </application>
 
 </manifest>
