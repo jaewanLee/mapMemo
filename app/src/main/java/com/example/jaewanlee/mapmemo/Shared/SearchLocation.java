@@ -1,4 +1,4 @@
-package com.example.jaewanlee.mapmemo.Network;
+package com.example.jaewanlee.mapmemo.Shared;
 
 import android.os.AsyncTask;
 

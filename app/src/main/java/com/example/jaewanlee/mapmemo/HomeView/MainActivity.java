@@ -24,6 +24,7 @@ import com.example.jaewanlee.mapmemo.Database.MemoDatabase;
 import com.example.jaewanlee.mapmemo.KeywordSearchView.KeywordSearchActivity;
 import com.example.jaewanlee.mapmemo.Map.CustomMapView;
 import com.example.jaewanlee.mapmemo.Map.CustomMarker;
+import com.example.jaewanlee.mapmemo.Memo.MemoListActivity;
 import com.example.jaewanlee.mapmemo.R;
 import com.example.jaewanlee.mapmemo.Util.Logger;
 import com.google.gson.Gson;
@@ -48,9 +49,11 @@ import static com.example.jaewanlee.mapmemo.Util.Constant.SEARCH_QUERY_INTENT;
 
 public class MainActivity extends AppCompatActivity {
 
+    //상단 바
     ImageButton fullScreen_ib;
     ImageButton close_ib;
 
+    //상담 탭
     LinearLayout functionTool_LL;
     ImageButton menu_ib;
     EditText searchView_et;
@@ -141,6 +144,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent searchKeywordIntent = new Intent(MainActivity.this, KeywordSearchActivity.class);
                 searchKeywordIntent.putExtra("search_query", searchKeyword);
                 startActivityForResult(searchKeywordIntent, SEARCH_QUERY_INTENT);
+            }
+        });
+        //memo list 버튼 클릭
+        list_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(), MemoListActivity.class);
+                startActivity(intent);
             }
         });
 
