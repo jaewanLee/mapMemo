@@ -2,9 +2,12 @@ package com.example.jaewanlee.mapmemo.Map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jaewanlee.mapmemo.AddMemoView.AddMemoActivity;
 import com.example.jaewanlee.mapmemo.Database.MemoDatabase;
@@ -14,6 +17,8 @@ import com.google.gson.GsonBuilder;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
+
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -29,18 +34,21 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
 
 {
 
-    TextView markerTitle;
-    TextView markerCategory;
-    TextView markerAddr;
-    TextView markerPhone;
-    TextView markerUrl;
-    ImageButton imageButton;
+    LinearLayout memoInfo_ll;
+    TextView createdDate_tv;
+    TextView category_tv;
+    TextView memoName_tv;
+    TextView memoContent_tv;
+    Button memoDetail_tv;
+    ImageButton call_ib;
+    ImageButton share_ib;
 
     CustomMarker currentMarker;
-    MapPoint currentLocation;
     Realm realm;
 
     Activity activity;
+
+    MapPOIItem lastClickedPOI;
 
     public CustomMapView(Activity activity, LinearLayout linearLayout) {
         super(activity);
@@ -56,31 +64,10 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
         this.setMapViewEventListener(this);
         this.setPOIItemEventListener(this);
         this.realm = Realm.getDefaultInstance();
+
     }
 
-    public void setMarkerTitle(TextView markerTitle) {
-        this.markerTitle = markerTitle;
-    }
 
-    public void setMarkerAddr(TextView markerAddr) {
-        this.markerAddr = markerAddr;
-    }
-
-    public void setMarkerCategory(TextView markerCategory) {
-        this.markerCategory = markerCategory;
-    }
-
-    public void setMarkerPhone(TextView markerPhone) {
-        this.markerPhone = markerPhone;
-    }
-
-    public void setMarkerUrl(TextView markerUrl) {
-        this.markerUrl = markerUrl;
-    }
-
-    public void setImageButton(ImageButton imageButton) {
-        this.imageButton = imageButton;
-    }
 
     //mapView 초기화시
     @Override
@@ -114,7 +101,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     //지도 터치
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-        Logger.d("omMapViewSingleTapped");
+        this.memoInfo_ll.setVisibility(INVISIBLE);
     }
 
     //지도 두번 터
@@ -150,6 +137,68 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     //POI item을 선택할 시
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+        lastClickedPOI=mapPOIItem;
+
+        this.memoInfo_ll.setVisibility(VISIBLE);
+
+        if(mapPOIItem.getTag()==MARKER_TAG_NEW){
+            final KeywordSearchRepo.KeywordDocuments keywordDocuments=((CustomMarker)mapPOIItem).getKeywordDocuments();
+            this.createdDate_tv.setText(new Date(System.currentTimeMillis()).toString());
+            this.category_tv.setText(keywordDocuments.getCategory_name());
+            this.memoName_tv.setText(keywordDocuments.getPlace_name());
+            this.memoContent_tv.setText("새로운 메모입니다");
+            this.memoDetail_tv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CustomMarker customMarker = (CustomMarker) lastClickedPOI;
+                    Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(customMarker.getMemoDatabase()));
+                    intent.putExtra("Tag", MARKER_TAG_NEW);
+                    activity.startActivityForResult(intent, ADD_MEMO_INTENT);
+                }
+            });
+            this.call_ib.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(activity, keywordDocuments.getPhone(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            this.share_ib.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(activity, "먼저 메모를 저장해 주세요", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            final MemoDatabase memoDatabase=((CustomMarker)mapPOIItem).getMemoDatabase();
+            this.createdDate_tv.setText(new Date(memoDatabase.getMemo_createDate()).toString());
+            this.category_tv.setText(memoDatabase.getMemo_document_category_name());
+            this.memoName_tv.setText(memoDatabase.getMemo_document_place_name());
+            this.memoContent_tv.setText(memoDatabase.getMemo_content());
+            this.memoDetail_tv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CustomMarker customMarker = (CustomMarker) lastClickedPOI;
+                    Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra("memo_no", customMarker.getMemoDatabase().getMemo_no());
+                    intent.putExtra("Tag", customMarker.getTag());
+//            mapView.removePOIItem(mapPOIItem);
+                    activity.startActivityForResult(intent, ADD_MEMO_INTENT);
+                }
+            });
+            this.call_ib.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(activity, memoDatabase.getMemo_document_phone(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            this.share_ib.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(activity, "shared!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 
@@ -161,23 +210,24 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     //마커 위에 말풍선 선택시
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
-        Logger.d("onCalloutBallonOfPOIItemTouched method with long parameter called on CustomMapView");
-
-        if (mapPOIItem.getTag() == MARKER_TAG_NEW) {
-            CustomMarker customMarker = (CustomMarker) mapPOIItem;
-            Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
-            intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(customMarker.getMemoDatabase()));
-            intent.putExtra("Tag", MARKER_TAG_NEW);
-            mapView.removePOIItem(mapPOIItem);
-            activity.startActivityForResult(intent, ADD_MEMO_INTENT);
-        } else {
-            CustomMarker customMarker = (CustomMarker) mapPOIItem;
-            Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
-            intent.putExtra("memo_no", customMarker.getMemoDatabase().getMemo_no());
-            intent.putExtra("Tag", customMarker.getTag());
-            mapView.removePOIItem(mapPOIItem);
-            activity.startActivityForResult(intent, ADD_MEMO_INTENT);
-        }
+//        Logger.d("onCalloutBallonOfPOIItemTouched method with long parameter called on CustomMapView");
+//        lastClickedPOI=mapPOIItem;
+//
+//        if (mapPOIItem.getTag() == MARKER_TAG_NEW) {
+//            CustomMarker customMarker = (CustomMarker) mapPOIItem;
+//            Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
+//            intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(customMarker.getMemoDatabase()));
+//            intent.putExtra("Tag", MARKER_TAG_NEW);
+////            mapView.removePOIItem(mapPOIItem);
+//            activity.startActivityForResult(intent, ADD_MEMO_INTENT);
+//        } else {
+//            CustomMarker customMarker = (CustomMarker) mapPOIItem;
+//            Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
+//            intent.putExtra("memo_no", customMarker.getMemoDatabase().getMemo_no());
+//            intent.putExtra("Tag", customMarker.getTag());
+////            mapView.removePOIItem(mapPOIItem);
+//            activity.startActivityForResult(intent, ADD_MEMO_INTENT);
+//        }
     }
 
     //사용자가 POI item을 길게 눌러서, 이동가능한 POI item을 이동시킨 경우 호
@@ -188,6 +238,10 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
 
     public CustomMarker getCurrentMarker() {
         return currentMarker;
+    }
+
+    public void removeLastPOI(){
+        this.removePOIItem(this.lastClickedPOI);
     }
 
     //현재 내 위치 트래킹시, 위치 변경되었을 경우 사용
@@ -218,4 +272,36 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
 //        Logger.d("onCurrentLocationUpdateCancelled");
 //    }
 
+
+    public void setCall_ib(ImageButton call_ib) {
+        this.call_ib = call_ib;
+    }
+
+    public void setCategory_tv(TextView category_tv) {
+        this.category_tv = category_tv;
+    }
+
+    public void setCreatedDate_tv(TextView createdDate_tv) {
+        this.createdDate_tv = createdDate_tv;
+    }
+
+    public void setMemoContent_tv(TextView memoContent_tv) {
+        this.memoContent_tv = memoContent_tv;
+    }
+
+    public void setMemoDetail_tv(Button memoDetail_tv) {
+        this.memoDetail_tv = memoDetail_tv;
+    }
+
+    public void setMemoInfo_ll(LinearLayout memoInfo_ll) {
+        this.memoInfo_ll = memoInfo_ll;
+    }
+
+    public void setMemoName_tv(TextView memoName_tv) {
+        this.memoName_tv = memoName_tv;
+    }
+
+    public void setShare_ib(ImageButton share_ib) {
+        this.share_ib = share_ib;
+    }
 }
