@@ -69,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton currentLocation_fab;
 
+    //하단탭
+    LinearLayout memoInfo_ll;
+    TextView createdDate_tv;
+    TextView category_tv;
+    TextView memoName_tv;
+    TextView memoContent_tv;
+    Button memoDetail_bt;
+    ImageButton call_ib;
+    ImageButton share_ib;
+
     Realm realm;
 
     PermissionListener permissionListener;
@@ -80,17 +90,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        functionTool_LL=(LinearLayout)findViewById(R.id.main_fuctionTool_LinearLayout);
+        functionTool_LL = (LinearLayout) findViewById(R.id.main_fuctionTool_LinearLayout);
         searchView_et = (EditText) findViewById(R.id.main_search_editText);
         menu_ib = (ImageButton) findViewById(R.id.main_menu_ImageButton);
         mainMap_fl = (FrameLayout) findViewById(R.id.main_map_replace);
         currentLocation_fab = (FloatingActionButton) findViewById(R.id.main_currentLocation_floatButton);
         search_ib = (ImageButton) findViewById(R.id.main_search_ImageButton);
         circleProgressBar = (CircleProgressBar) findViewById(R.id.main_progressbar);
-        fullScreen_ib=(ImageButton)findViewById(R.id.main_fullscreen_ImageButton);
-        close_ib=(ImageButton)findViewById(R.id.main_close_ImageButton);
-        searchHistory_bt=(ImageButton)findViewById(R.id.main_history_ImageButton);
-        list_button=(Button)findViewById(R.id.main_memoList_Button);
+        fullScreen_ib = (ImageButton) findViewById(R.id.main_fullscreen_ImageButton);
+        close_ib = (ImageButton) findViewById(R.id.main_close_ImageButton);
+        searchHistory_bt = (ImageButton) findViewById(R.id.main_history_ImageButton);
+        list_button = (Button) findViewById(R.id.main_memoList_Button);
+        memoInfo_ll=(LinearLayout)findViewById(R.id.main_memoInfo_LinearLayout);
+        createdDate_tv=(TextView)findViewById(R.id.main_createDate_textView);
+        category_tv=(TextView)findViewById(R.id.main_category_textView);
+        memoName_tv=(TextView)findViewById(R.id.main_memoTitle_textView);
+        memoContent_tv=(TextView)findViewById(R.id.main_memoContent_textView);
+        memoDetail_bt=(Button)findViewById(R.id.main_memoDetail_textView);
+        call_ib=(ImageButton)findViewById(R.id.main_call_imageButton);
+        share_ib=(ImageButton)findViewById(R.id.main_share_imageButton);
+
 
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //퍼미션 설정
@@ -114,27 +133,21 @@ public class MainActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-
-        //TODO 스크린 락 관련 내용 및 메뉴들이 이동 내용
-//        ((Switch) navigationView.getMenu().findItem(R.id.drawer_lock_screen).getActionView()).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if (b) {
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    startService(intent);
-//                } else {
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    stopService(intent);
-//                }
-//            }
-//        });
-//
         //다음 지도 초기화
         customMapView = new CustomMapView(this);
+        customMapView.setMemoInfo_ll(this.memoInfo_ll);
+        customMapView.setCreatedDate_tv(this.createdDate_tv);
+        customMapView.setCategory_tv(this.category_tv);
+        customMapView.setMemoName_tv(this.memoName_tv);
+        customMapView.setMemoContent_tv(this.memoContent_tv);
+        customMapView.setMemoDetail_tv(this.memoDetail_bt);
+        customMapView.setCall_ib(this.call_ib);
+        customMapView.setShare_ib(this.share_ib);
+
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.main_map_replace);
         mapViewContainer.addView(customMapView);
         customMapView.setCurrentLocationEventListener(currentLocationEventListener);
-        customMapView.setCalloutBalloonAdapter(new CustomBallonAdapter());
+//        customMapView.setCalloutBalloonAdapter(new CustomBallonAdapter());
 
         //검색 버튼 클릭
         search_ib.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         list_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), MemoListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MemoListActivity.class);
                 startActivity(intent);
             }
         });
@@ -169,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         fullScreen_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(functionTool_LL.getVisibility()==View.VISIBLE)
+                if (functionTool_LL.getVisibility() == View.VISIBLE)
                     functionTool_LL.setVisibility(View.INVISIBLE);
                 else functionTool_LL.setVisibility(View.VISIBLE);
             }
@@ -187,7 +200,11 @@ public class MainActivity extends AppCompatActivity {
         menu_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 Intent intent=new Intent(MainActivity.this, MenuActivity.class);
+=======
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+>>>>>>> 5d5d8adf94caef752aa08ac2221a321eeb8935f2
                 startActivity(intent);
             }
         });
@@ -253,22 +270,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SEARCH_QUERY_INTENT && resultCode == SEARCH_QUERY_INTENT && data.hasExtra("searchResult")) {
-            if (requestCode == SEARCH_QUERY_INTENT && data.hasExtra("searchResult")) {
+        if (requestCode == SEARCH_QUERY_INTENT && resultCode == SEARCH_QUERY_INTENT) {
+            if ( data.hasExtra("searchResult")) {
                 MemoDatabase memoDatabase = new Gson().fromJson(data.getStringExtra("searchResult"), MemoDatabase.class);
                 customMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x())), true);
                 tempCustomMarker = new CustomMarker(memoDatabase, MARKER_TAG_NEW);
                 customMapView.addPOIItem(tempCustomMarker);
-                customMapView.notify();
+//                customMapView.notify();
+            }else{
+                Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == ADD_MEMO_INTENT) {
-            if (resultCode == ADD_MEMO_INTENT && data.hasExtra("addMemoResult")) {
+        } else if (requestCode == ADD_MEMO_INTENT &&resultCode == ADD_MEMO_INTENT ) {
+            if (data.hasExtra("addMemoResult")) {
                 MemoDatabase newMemo = realm.where(MemoDatabase.class).equalTo("memo_no", data.getIntExtra("addMemoResult", 0)).findFirst();
+                customMapView.removeLastPOI();
                 customMapView.addPOIItem(new CustomMarker(newMemo, newMemo.getMemo_category()));
 
+            }else{
+                Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
+        } else{
+
         }
     }
 

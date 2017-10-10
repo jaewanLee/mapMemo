@@ -78,11 +78,11 @@ public class AddMemoActivity extends AppCompatActivity {
 //                    MemoDatabase lastDatbase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
                     int lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
 
-                    memoDatabase.setMemo_no(lastData);
+                    memoDatabase.setMemo_no(lastData+1);
                     memoDatabase.setMemo_own_user_id("guest");
                     memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
-                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
+//                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
                     memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
                     memoDatabase.setMemo_category(TranscHash.spinnerToMarkerTag.get(memoCategory.getSelectedItemPosition()));
                     memoDatabase.setMemo_content(memoContent.getText().toString());

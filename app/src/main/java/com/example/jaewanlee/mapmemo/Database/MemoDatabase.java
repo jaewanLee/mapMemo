@@ -1,6 +1,7 @@
 package com.example.jaewanlee.mapmemo.Database;
 
 import com.example.jaewanlee.mapmemo.Map.KeywordSearchRepo;
+import com.example.jaewanlee.mapmemo.Memo.MemoListDatabase;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -13,6 +14,7 @@ public class MemoDatabase extends RealmObject {
 
     @PrimaryKey
     private int memo_no;
+
     private int memo_category;
     private long memo_createDate;
     private String memo_own_user_id;
@@ -171,6 +173,26 @@ public class MemoDatabase extends RealmObject {
         this.memo_document_road_address_name = keyworDocuemnt.getRoad_address_name();
         this.memo_document_x = keyworDocuemnt.getX();
         this.memo_document_y = keyworDocuemnt.getY();
+    }
+
+    public void setDataFromMemoListDatabase(MemoListDatabase memoListDatabase){
+
+        this.memo_category=memoListDatabase.getMemo_category();
+        this.memo_createDate=memoListDatabase.getMemo_createDate();
+        this.memo_own_user_id=memoListDatabase.getMemo_own_user_id();
+        this.memo_content=memoListDatabase.getMemo_content();
+        this.memo_document_place_name=memoListDatabase.getMemo_document_place_name();
+        this.memo_document_distance=memoListDatabase.getMemo_document_distance();
+        this.memo_document_place_url=memoListDatabase.getMemo_document_place_url();
+        this.memo_document_category_name=memoListDatabase.getMemo_document_category_name();
+        this.memo_document_address_name=memoListDatabase.getMemo_document_address_name();
+        this.memo_document_road_address_name=memoListDatabase.getMemo_document_road_address_name();
+        this.memo_document_id=memoListDatabase.getMemo_document_id();
+        this.memo_document_phone=memoListDatabase.getMemo_document_phone();
+        this.memo_document_category_group_code=memoListDatabase.getMemo_document_category_group_code();
+        this.memo_document_x=memoListDatabase.getMemo_document_x();
+        this.memo_document_y=memoListDatabase.getMemo_document_y();
+
     }
 //    public void setDataFromMemoDatabase(MemoDatabase memoDatabase){
 //        this.memo_document_address_name = memoDatabase.getMemo_document_address_name();
