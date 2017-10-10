@@ -200,11 +200,8 @@ public class MainActivity extends AppCompatActivity {
         menu_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< HEAD
-                Intent intent=new Intent(MainActivity.this, MenuActivity.class);
-=======
+
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
->>>>>>> 5d5d8adf94caef752aa08ac2221a321eeb8935f2
                 startActivity(intent);
             }
         });

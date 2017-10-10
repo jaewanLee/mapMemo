@@ -171,7 +171,7 @@ public class MemoListActivity extends AppCompatActivity {
 
                     }
                 });
-<<<<<<< HEAD
+
 
 //                retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/").build();
 //                sharedMemoInterface = retrofit.create(SharedMemoInterface.class);
@@ -188,8 +188,7 @@ public class MemoListActivity extends AppCompatActivity {
 //                    }
 //                });
 
-=======
->>>>>>> 5d5d8adf94caef752aa08ac2221a321eeb8935f2
+
 
                 //다시 원상 복귀
                 sharelayout_LL.setVisibility(View.INVISIBLE);

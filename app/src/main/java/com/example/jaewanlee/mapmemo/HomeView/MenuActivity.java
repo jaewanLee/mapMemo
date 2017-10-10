@@ -95,7 +95,7 @@ public class MenuActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("Config",MODE_PRIVATE);
 
         userImage = (ImageView) findViewById(R.id.menu_profile_image);
-        userName = (TextView) findViewById(R.id.menu_userName_TextView);
+        userName = (TextView) findViewById(R.id.user_profile_name);
         userId = (TextView) findViewById(R.id.menu_userId_TextView);
         cancelButton = (Button) findViewById(R.id.menu_cancle_button);
         okButton = (Button) findViewById(R.id.menu_ok_button);

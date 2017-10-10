@@ -94,10 +94,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".AddMemoView.AddMemoActivity" />
         <activity android:name=".HomeView.MenuActivity" />
-<<<<<<< HEAD
-        <activity android:name=".Memo.MemoListActivity"></activity>
 
-=======
         <activity android:name=".Memo.MemoListActivity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -110,7 +107,6 @@
 
         </activity>
         <activity android:name=".Shared.SharedActivity"></activity>
->>>>>>> 5d5d8adf94caef752aa08ac2221a321eeb8935f2
     </application>
 
 </manifest>
