@@ -153,6 +153,7 @@ public class MemoListActivity extends AppCompatActivity {
 
                     }
                 });
+
 //                retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/").build();
 //                sharedMemoInterface = retrofit.create(SharedMemoInterface.class);
 //                Call<String> request = sharedMemoInterface.getResult("testGID");

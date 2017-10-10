@@ -49,6 +49,13 @@ public class KeywordSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keyword_search);
 
+        layoutInit();
+
+        functionInit();
+
+    }
+
+    private void layoutInit() {
         back_img_btn = (ImageButton) findViewById(R.id.keyword_search_back_btn);
         search_edit_text = (EditText) findViewById(R.id.keyword_search_search_editText);
         searchResult_recyclerView = (RecyclerView) findViewById(R.id.keyword_search_recyclerView);
@@ -62,6 +69,13 @@ public class KeywordSearchActivity extends AppCompatActivity {
         recyclerView_adpaer = new SearchResultAdapter(KeywordSearchActivity.this);
         searchResult_recyclerView.setAdapter(recyclerView_adpaer);
         searchResult_recyclerView.addItemDecoration(new RecyclerViewDecoration(25));
+    }
+
+    private void functionInit() {
+        //전달받은 쿼리로 검색결과 보여주기
+        Intent getintent = getIntent();
+        setSearchResult(getintent.getStringExtra("search_query"));
+
 
         final GestureDetector gestureDetector = new GestureDetector(KeywordSearchActivity.this, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -103,10 +117,6 @@ public class KeywordSearchActivity extends AppCompatActivity {
 
             }
         });
-
-        //전달받은 쿼리로 검색결과 보여주기
-        Intent getintent = getIntent();
-        setSearchResult(getintent.getStringExtra("search_query"));
 
 
         //검색버튼을 추가로 누를 경우

@@ -1,15 +1,19 @@
 package com.example.jaewanlee.mapmemo.Core;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.jaewanlee.mapmemo.Map.KeywordSearchInterface;
+import com.example.jaewanlee.mapmemo.Util.KakaoSDKAdapter;
 import com.example.jaewanlee.mapmemo.Util.TranscHash;
+import com.kakao.auth.KakaoSDK;
 import com.tsengvn.typekit.Typekit;
 
 import io.airbridge.AirBridge;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 /**
@@ -18,13 +22,19 @@ import io.realm.Realm;
 
 public class MainApplication extends Application {
 
+    private static volatile MainApplication instance = null;
+    private static volatile Activity currentActivity = null;
+
     Realm UserData;
-    SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
     private KeywordSearchInterface keywordSearchInterface;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        instance = this;
+
         Typekit.getInstance().addNormal(Typekit.createFromAsset(this,"BMHANNA_11yrs_otf.otf"));
         AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
         AirBridge.setDebugMode(true);
@@ -36,7 +46,26 @@ public class MainApplication extends Application {
         //CategoryHash init
         TranscHash.init();
 
+//        Realm.init(this);
+        initRealm();
+        userDataInit();
+
+
+        KakaoSDK.init(new KakaoSDKAdapter());
+
+    }
+
+
+    // Realm Object 초기화
+    public void initRealm()  {
         Realm.init(this);
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
+
     }
 
     public void userDataInit(){
@@ -47,9 +76,31 @@ public class MainApplication extends Application {
     public static Context getContext(){
         return getContext();
     }
+
+    // singleton application object 획득이 목적
+    public static MainApplication getMainApplicationContext() {
+        if(null == instance ) {
+            throw new IllegalStateException("state error");
+        }
+
+        return instance;
+
+    }
+
+    public static void setCurrentActivity(Activity activity) {
+        MainApplication.currentActivity = currentActivity;
+    }
+
+
+
     public KeywordSearchInterface getKeywordSearchInterface(){
         return this.keywordSearchInterface;
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
 
+        instance = null;
+    }
 }

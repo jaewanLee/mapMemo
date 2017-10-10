@@ -14,7 +14,8 @@ public class UserDatabase extends RealmObject {
     @PrimaryKey
     String userNo;
     String userId;
-    String userProfileImg;
+    String userOriginalImg;
+    String userThumnailImg;
     String userName;
     String userNickName;
     String userEmail;
@@ -22,6 +23,7 @@ public class UserDatabase extends RealmObject {
     String userRegisterType;
     String userLastSesionDate;
     String userPushAgreement;
+
     @Nullable
     String userSex;
     @Nullable
@@ -56,9 +58,6 @@ public class UserDatabase extends RealmObject {
         return userNo;
     }
 
-    public String getUserProfileImg() {
-        return userProfileImg;
-    }
 
     public String getUserPushAgreement() {
         return userPushAgreement;
@@ -105,9 +104,6 @@ public class UserDatabase extends RealmObject {
         this.userNo = userNo;
     }
 
-    public void setUserProfileImg(String userProfileImg) {
-        this.userProfileImg = userProfileImg;
-    }
 
     public void setUserPushAgreement(String userPushAgreement) {
         this.userPushAgreement = userPushAgreement;
@@ -123,5 +119,21 @@ public class UserDatabase extends RealmObject {
 
     public void setUserSingUpDate(String userSingUpDate) {
         this.userSingUpDate = userSingUpDate;
+    }
+
+    public String getUserOriginalImg() {
+        return userOriginalImg;
+    }
+
+    public void setUserOriginalImg(String userOriginalImg) {
+        this.userOriginalImg = userOriginalImg;
+    }
+
+    public String getUserThumnailImg() {
+        return userThumnailImg;
+    }
+
+    public void setUserThumnailImg(String userThumnailImg) {
+        this.userThumnailImg = userThumnailImg;
     }
 }

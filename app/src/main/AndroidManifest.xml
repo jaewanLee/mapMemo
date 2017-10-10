@@ -19,9 +19,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/DUAM_API_KEY" />
+            android:value="@string/DAUM_API_KEY" />
 
         <activity
             android:name=".HomeView.MainActivity"
@@ -29,7 +30,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,7 +38,12 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <activity android:name=".Login.Login" />
+        <activity
+            android:name=".Login.Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Login.SocialSignupActivity"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".LockScreen.BoradcastReceiver.RestartReceiver" />
         <receiver
@@ -84,10 +89,13 @@
         <activity
             android:name=".HomeView.AccessTermActivity"
             android:launchMode="standard" />
-        <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
+        <activity
+            android:name=".KeywordSearchView.KeywordSearchActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".AddMemoView.AddMemoActivity" />
         <activity android:name=".HomeView.MenuActivity" />
         <activity android:name=".Memo.MemoListActivity"></activity>
+
     </application>
 
 </manifest>
