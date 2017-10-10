@@ -87,7 +87,18 @@
         <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
         <activity android:name=".AddMemoView.AddMemoActivity" />
         <activity android:name=".HomeView.MenuActivity" />
-        <activity android:name=".Memo.MemoListActivity"></activity>
+        <activity android:name=".Memo.MemoListActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="mapmemo" />
+                <data android:host="shared_memo" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".Shared.SharedActivity"></activity>
     </application>
 
 </manifest>

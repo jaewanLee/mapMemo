@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jaewanlee.mapmemo.Database.MemoDatabase;
 import com.example.jaewanlee.mapmemo.R;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class MemoListShareAdapter  extends RecyclerView.Adapter<MemoListShareAda
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final MemoDatabase memoDatabase=memoDatabases.get(position).getMemoDatabase();
+        final MemoListDatabase memoDatabase=memoDatabases.get(position);
 
         holder.memoTitle_tv.setText(memoDatabase.getMemo_document_place_name());
         holder.memoCategory_iv.setImageResource(R.drawable.ic_action_back);

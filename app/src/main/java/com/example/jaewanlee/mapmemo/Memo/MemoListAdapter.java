@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jaewanlee.mapmemo.Database.MemoDatabase;
 import com.example.jaewanlee.mapmemo.R;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MemoDatabase memoDatabase=memoDatabases.get(position).getMemoDatabase();
+        MemoListDatabase memoDatabase=memoDatabases.get(position);
         holder.memoTitle_tv.setText(memoDatabase.getMemo_document_place_name());
         holder.memoCategory_iv.setImageResource(R.drawable.ic_action_back);
         holder.createDate_tv.setText(new Date(memoDatabase.getMemo_createDate()).toString());
@@ -55,6 +54,11 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             }
         });
 
+        if(memoDatabase.getIsNew()){
+            holder.newMemo_iv.setVisibility(View.VISIBLE);
+            memoDatabase.setIsNew(false);
+        }
+
     }
 
     @Override
@@ -70,6 +74,8 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         ImageButton phoneCall_ib;
         ImageButton blogWeb_ib;
 
+        ImageView newMemo_iv;
+
         public ViewHolder(View itemView) {
             super(itemView);
             memoTitle_tv = (TextView) itemView.findViewById(R.id.memoListRecy_title_TextView);
@@ -78,6 +84,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             memoContent_tv = (TextView) itemView.findViewById(R.id.memoListRecy_memoContent_TextView);
             phoneCall_ib = (ImageButton) itemView.findViewById(R.id.memoListRecy_call_ImageButton);
             blogWeb_ib = (ImageButton) itemView.findViewById(R.id.memoListRecy_web_ImageButton);
+            newMemo_iv=(ImageView)itemView.findViewById(R.id.memoListRecy_newMemo_ImageView);
 
         }
     }

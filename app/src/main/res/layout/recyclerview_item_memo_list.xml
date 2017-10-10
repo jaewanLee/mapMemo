@@ -7,10 +7,13 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,6 +38,13 @@
                 android:id="@+id/memoListRecy_date_TextView"/>
 
         </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="#ec4a4a"
+                android:id="@+id/memoListRecy_newMemo_ImageView"
+                android:visibility="invisible"/>
+        </FrameLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
