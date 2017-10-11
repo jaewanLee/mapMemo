@@ -176,11 +176,11 @@ public class MemoListActivity extends AppCompatActivity {
                             }
                         });
                         //이러고 나서 카카오쪽으로 보내기
-                        String kakao_link_title="";
-                        for(MemoListDatabase requestMemoList: requestValue){
-                            kakao_link_title=kakao_link_title+" # "+requestMemoList.getMemo_document_place_name();
+                        String kakao_link_title = "";
+                        for (MemoListDatabase requestMemoList : requestValue) {
+                            kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
                         }
-                        sendDefaultFeedTemplate("myValue",kakao_link_title);
+                        sendDefaultFeedTemplate("KaKaoValue", kakao_link_title);
 
                     }
                 });
@@ -202,7 +202,6 @@ public class MemoListActivity extends AppCompatActivity {
 //                });
 
 
-
                 //다시 원상 복귀
                 sharelayout_LL.setVisibility(View.INVISIBLE);
                 memoListAdapter = new MemoListAdapter(getApplicationContext(), memoDatabases);
@@ -222,17 +221,17 @@ public class MemoListActivity extends AppCompatActivity {
 
     }
 
-    private void sendDefaultFeedTemplate(String memo_no,String memo_titles) {
+    private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
         FeedTemplate params = FeedTemplate
                 .newBuilder(ContentObject.newBuilder("그때 거기",
                         "http://115.71.236.6/glide_testing_image.jpg",
-                        LinkObject.newBuilder().setMobileWebUrl("mapmemo://deeplink").build())
+                        LinkObject.newBuilder()
+                                .setAndroidExecutionParams("key=" + memo_no)
+                                .build())
                         .setDescrption(memo_titles)
                         .build())
                 .addButton(new ButtonObject("앱으로 보기", LinkObject.newBuilder()
-                        .setMobileWebUrl("mapmemo://deeplink")
-                        .setAndroidExecutionParams("key="+memo_no)
-                        .setIosExecutionParams("key="+memo_no)
+                        .setAndroidExecutionParams("key=" + memo_no)
                         .build()))
                 .build();
 
@@ -263,6 +262,12 @@ public class MemoListActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Toast.makeText(this, "deepLink Clicked", Toast.LENGTH_SHORT).show();
+        String data=intent.getDataString();
+        Logger.d(data);
+        int valuePosition=data.indexOf("key");
+        Logger.d(String.valueOf(valuePosition));
+        data=data.substring(valuePosition+4);
+        Logger.d(data);
         //여기다가 MemoDatabaseARrayList에다가 가져온 데이터 추가하고 adapter에다가 notify보내기
         NetworkManager networkManager = NetworkManager.getInstance();
         OkHttpClient client = networkManager.getClient();
@@ -314,7 +319,7 @@ public class MemoListActivity extends AppCompatActivity {
 
                                 }
                                 MemoDatabase memoDatabase = new MemoDatabase();
-                                memoDatabase.setMemo_no(lastData+1);
+                                memoDatabase.setMemo_no(lastData + 1);
                                 memoDatabase.setDataFromMemoListDatabase(shared_memoListDatabase);
                                 realm.beginTransaction();
                                 memoDatabase = realm.copyToRealm(memoDatabase);

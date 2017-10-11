@@ -13,7 +13,7 @@
     <string name="DAUM_SEARCH_API_KEY">13154e096c55ada7691f4e2df3c5c9f4</string>
     <string name="KAKAO_CLIENT_SECRET_VALUE">5dUZvKAiHddhe9MGEqZbeoF7v0tIiUYg</string>
     <string name="kakao_scheme">kakao8ad4fb7aef2c1880a254d05f9a171904</string>
-    <string name="kakaolink_host">kakaodemo</string>
+    <string name="kakaolink_host">kakaolink</string>
     <string name="spinnerPromptCategory">분류를 선택하세요</string>
     <string name="title_activity_memo_list">MemoListActivity</string>
     <string name="user_profile_name_title">사용자 이름: </string>
