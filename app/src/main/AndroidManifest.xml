@@ -106,8 +106,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="mapmemo" />
-                <data android:host="shared_memo" />
+                <data android:scheme="@string/kakao_scheme" />
+                <data android:host="@string/kakaolink_host" />
             </intent-filter>
 
         </activity>
