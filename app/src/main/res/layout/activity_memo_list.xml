@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.jaewanlee.mapmemo.Memo.MemoListActivity">
+    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.Memo.MemoListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -11,7 +11,7 @@ allprojects {
         compileSdkVersion 25
         buildToolsVersion "26.0.0"
         defaultConfig {
-            applicationId "com.example.jaewanlee.mapmemo"
+            applicationId "product.dp.io.ab180blog"
             minSdkVersion 15
             targetSdkVersion 26
             versionCode 1

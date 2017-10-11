@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/setting_bg_color"
-    tools:context="com.example.jaewanlee.mapmemo.HomeView.MenuActivity">
+    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.HomeView.MenuActivity">
 
     <include layout="@layout/header_layout"/>
 
@@ -59,16 +59,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <Button
-                            android:id="@+id/profile_cancel_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/cancel_button_title"
-                            android:textSize="14sp"
-                            android:textColor="@color/black"
-                            android:layout_weight="1"/>
-                        <Button
-                            android:id="@+id/profile_done_button"
+
+                        <com.kakao.usermgmt.LoginButton
+                            android:id="@+id/menu_kakaologin_button"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -77,7 +70,7 @@
                             android:layout_weight="1"/>
                     </LinearLayout>
             </RelativeLayout>
-            <ImageVie
+            <ImageView
                 android:id="@+id/profile_line_imgae"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -87,7 +80,6 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginRight="9dp"
                 />
-
             <RelativeLayout
                 android:id="@+id/setting_layer"
                 android:layout_width="match_parent"
@@ -97,91 +89,157 @@
                 <TextView
                     android:id="@+id/setting_sub_title"
                     android:textSize="14sp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/setting_sub_title"
                     android:gravity="left"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/setting_sub_title_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:id="@+id/preview_set_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/setting_sub_title"
+                    >
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_memo_preview_title"
+                        android:textColor="@color/black"
+                        />
+                    <Switch
+                        android:id="@+id/switch_memo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/lock_set_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/preview_set_lay"
+                    >
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_awake_title"
+                        android:textColor="@color/black"
+                        />
+                    <Switch
+                        android:id="@+id/switch_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/format_set_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/lock_set_lay"
+                    >
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_memo_title"
+                        android:textColor="@color/black"
+                        />
+                    <ImageButton
+                        android:id="@+id/format_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+            <ImageView
+                android:id="@+id/setting_line_imgae"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/setting_line_color"
+                android:layout_below="@+id/setting_layer"
+                android:layout_marginTop="28dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
+
+            <RelativeLayout
+                android:id="@+id/customer_service_layer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/setting_line_imgae">
+
+                <TextView
+                    android:id="@+id/customer_service_title"
+                    android:textSize="14sp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/cs_sub_title"
+                    android:gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/setting_sub_title_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:id="@+id/faq_set_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/customer_service_title"
+                    >
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cs_faq_title"
+                        android:textColor="@color/black"
+                        />
+                    <ImageButton
+                        android:id="@+id/faq_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/userterm_set_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/faq_set_lay"
+                    >
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_memo_title"
+                        android:textColor="@color/black"
+                        />
+                    <ImageButton
+                        android:id="@+id/user_term_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"/>
+                </RelativeLayout>
             </RelativeLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="ian_hodge@ab180.co"
-                    android:id="@+id/menu_userId_TextView"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:text="Cancle"
-                    android:id="@+id/menu_cancle_button"/>
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:text="OK"
-                    android:id="@+id/menu_ok_button"/>
-            </LinearLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Type" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Type something"
-                android:id="@+id/menu_type1_button"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Type something"
-                android:id="@+id/menu_type2_button"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Type something"
-                android:id="@+id/menu_type3_button"/>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

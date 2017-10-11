@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jaewanlee.mapmemo.HomeView.SettingActivity"
+    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.HomeView.SettingActivity"
     android:orientation="vertical"
     android:weightSum="10">
     <TextView

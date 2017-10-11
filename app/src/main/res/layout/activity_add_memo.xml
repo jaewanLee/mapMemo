@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jaewanlee.mapmemo.AddMemoView.AddMemoActivity"
+    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.AddMemoView.AddMemoActivity"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -48,24 +48,7 @@
             android:gravity="center_vertical"
             android:id="@+id/add_memo_addr"/>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_select_category"
-            android:background="#ffffffff"/>
-        <Spinner
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:text="분류"
-            android:id="@+id/add_memo_category"/>
-    </LinearLayout>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
