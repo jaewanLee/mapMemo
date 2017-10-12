@@ -82,6 +82,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(product.dp.io.ab180blog.R.layout.activity_main);
 
+        // 레이아웃 init
+        initLayout();
+
+        // 버튼리스터 init
+        initButtonListener();
+
+        // 퍼미션 세팅
+        setPermissionIssue();
+
+        // 커스텀 맵 init
+        initCustomMap();
+
+        // realm init
+        realm = Realm.getDefaultInstance();
+
+    }
+
+    private void initLayout() {
         functionTool_LL = (LinearLayout) findViewById(product.dp.io.ab180blog.R.id.main_fuctionTool_LinearLayout);
         searchView_et = (EditText) findViewById(product.dp.io.ab180blog.R.id.main_search_editText);
         menu_ib = (ImageButton) findViewById(product.dp.io.ab180blog.R.id.main_menu_ImageButton);
@@ -101,31 +119,9 @@ public class MainActivity extends AppCompatActivity {
         memoDetail_bt=(Button)findViewById(product.dp.io.ab180blog.R.id.main_memoDetail_textView);
         call_ib=(ImageButton)findViewById(product.dp.io.ab180blog.R.id.main_call_imageButton);
         share_ib=(ImageButton)findViewById(product.dp.io.ab180blog.R.id.main_share_imageButton);
+    }
 
-
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //퍼미션 설정
-
-        permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(MainActivity.this, "permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        new TedPermission(this)
-                .setPermissionListener(permissionListener)
-                .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission\n")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_COARSE_LOCATION)
-                .check();
-
-        realm = Realm.getDefaultInstance();
-
-        //다음 지도 초기화
+    private void initCustomMap() {
         customMapView = new CustomMapView(this);
         customMapView.setMemoInfo_ll(this.memoInfo_ll);
         customMapView.setCreatedDate_tv(this.createdDate_tv);
@@ -139,7 +135,11 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup mapViewContainer = (ViewGroup) findViewById(product.dp.io.ab180blog.R.id.main_map_replace);
         mapViewContainer.addView(customMapView);
         customMapView.setCurrentLocationEventListener(currentLocationEventListener);
-//        customMapView.setCalloutBalloonAdapter(new CustomBallonAdapter());
+        //        customMapView.setCalloutBalloonAdapter(new CustomBallonAdapter());
+    }
+
+    private void initButtonListener() {
+        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         //검색 버튼 클릭
         search_ib.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(searchKeywordIntent, Constant.SEARCH_QUERY_INTENT);
             }
         });
+
         //memo list 버튼 클릭
         list_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         //창모드 on/off
         fullScreen_ib.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,8 +198,29 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
+
+    private void setPermissionIssue() {
+        //퍼미션 설정
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        new TedPermission(this)
+                .setPermissionListener(permissionListener)
+                .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission\n")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_COARSE_LOCATION)
+                .check();
+    }
+
+
 
     private boolean isGPSOn(LocationManager locationManager) {
         boolean isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

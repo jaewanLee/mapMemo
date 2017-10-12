@@ -13,10 +13,7 @@
         android:layout_height="36dp"
         android:background="@drawable/main_topbackground_head">
 
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
+
 
         <ImageButton
             android:id="@+id/main_fullscreen_ImageButton"
