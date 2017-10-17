@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kakao.auth.ApiResponseCallback;
 import com.kakao.auth.AuthService;
-import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.auth.network.response.AccessTokenInfoResponse;
@@ -27,8 +26,16 @@ import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.LockScreen.Service.ScreenService;
+import product.dp.io.ab180blog.Shared.NetworkManager;
 import product.dp.io.ab180blog.Util.AsyncTaskAttatchImage;
 import product.dp.io.ab180blog.Util.Logger;
 
@@ -147,6 +154,7 @@ public class MenuActivity extends AppCompatActivity {
 //                next_intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //
 //                startActivity(next_intent);
+//                openKaKaoLogin();
 
 
             }
@@ -159,14 +167,10 @@ public class MenuActivity extends AppCompatActivity {
 
         Session.getCurrentSession().addCallback(_kakaoSessionCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
-        if(!Session.getCurrentSession().isOpened()){
-            Session.getCurrentSession().open(AuthType.KAKAO_TALK_EXCLUDE_NATIVE_LOGIN, this);
-        }else{
-            Toast.makeText(this, "저장되어 있음", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
-    // 카카오 세션 콜백
+    // 카카오 세션 콜백,앱에 카카오 로그인이 성공한 경우(기존 로그인시에는 checkAndImplicitopen으로 자동 실행
     private class KakaoSessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
@@ -177,8 +181,8 @@ public class MenuActivity extends AppCompatActivity {
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             if(null != exception) {
-//                Logger.e(exception.toString());
-                Log.d("sociallogin", exception.toString());
+                Toast.makeText(MenuActivity.this, "네트워크를 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
+//                Log.d("sociallogin", exception.toString());
             }
 
             setContentView(product.dp.io.ab180blog.R.layout.activity_menu);
@@ -215,10 +219,6 @@ public class MenuActivity extends AppCompatActivity {
             public void onSuccess(UserProfile result) {
                 _kakao_login_bool = true;
 
-
-                String _result_message = "카카오 로그인에 성공했습니다!";
-                Toast.makeText(getApplicationContext(), _result_message, Toast.LENGTH_SHORT).show();
-
                 setUserDataBase(result);
 
 
@@ -234,6 +234,7 @@ public class MenuActivity extends AppCompatActivity {
         String _thumnail_img_url = profile.getThumbnailImagePath();
         String _original_img_url = profile.getProfileImagePath();
 
+
 //        Log.d("Login", thumnail_img_url);
 //        Log.d("Login", original_img_url);
 
@@ -245,6 +246,7 @@ public class MenuActivity extends AppCompatActivity {
 //        Bitmap _profile_bitmap = getBitmapViaURL(thumnail_img_url);
 //        userImage.setImageBitmap(_profile_bitmap);
         setProfileInfo(_user_name, _email, _original_img_url);
+        sendUserProfile(_user_name, _email, _original_img_url);
 
         AuthService.requestAccessTokenInfo(new ApiResponseCallback<AccessTokenInfoResponse>() {
             @Override
@@ -271,6 +273,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 long expiresInMilis = accessTokenInfoResponse.getExpiresInMillis();
                 Logger.d("this access token expires after " + expiresInMilis + " milliseconds.");
+                kakaoLogin.setActivated(false);
     }
         });
 
@@ -283,6 +286,60 @@ public class MenuActivity extends AppCompatActivity {
         Glide.with(this).load(image_url).apply(RequestOptions.circleCropTransform()).into(userImage);
 
         new AsyncTaskAttatchImage(userImage,this).execute(image_url);
+    }
+    private void sendUserProfile(String user_name,String email,String image_url){
+        NetworkManager networkManager = NetworkManager.getInstance();
+        OkHttpClient client = networkManager.getClient();
+        HttpUrl.Builder builder = new HttpUrl.Builder();
+
+        builder.scheme("http");
+        builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
+        builder.port(80);
+        builder.addPathSegment("mapmo");
+        builder.addPathSegment("users");
+        builder.addPathSegment("kakao");
+        builder.addPathSegment("post.php");
+
+        //TODO myValue에다가 내 아이디랑 시간 써서 넣기
+        FormBody.Builder formBuilder = new FormBody.Builder()
+                .add("user_email", email)
+                .add("user_name",user_name)
+                .add("user_image_url",image_url);
+
+        RequestBody body = formBuilder.build();
+
+        final Request request = new Request.Builder()
+                .url(builder.build())
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MenuActivity.this, "request Err", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
+                final String result = response.body().string();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.contains("200")) {
+                            Toast.makeText(MenuActivity.this, result, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MenuActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            }
+        });
     }
 
     @Override
