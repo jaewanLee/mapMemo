@@ -5,7 +5,7 @@ package product.dp.io.ab180blog.Util;
  */
 
 public class Constant {
-    public static final String LOG_TAG="MAP_MEMO";
+    public static final String LOG_TAG="MapMo";
 
     //marker tag constant
 //    public static final int MARKER_TAG_RESTAURNAT=9107;
@@ -34,11 +34,15 @@ public class Constant {
 
     public static String DEVICE_INFO_FETCHED="1024";
 
-    public static String GUEST_LOGIN="GUEST_LOGIN";
+    public static final int GUEST_LOGIN=0;
 
-    public static String GOOGLE_LOGIN;
+    public static final int KAKAO_LOGIN=1;
 
-    public static String FACEBOOK_LOGIN;
+    public static final int GOOGLE_LOGIN=2;
+
+    public static final int FACEBOOK_LOGIN=3;
+
+    public static final String USER_SHARED="shared_preference_user_profile_key";
 
 
 

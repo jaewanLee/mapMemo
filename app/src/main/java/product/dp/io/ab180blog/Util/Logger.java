@@ -6,6 +6,8 @@ import java.util.MissingFormatArgumentException;
 
 import io.airbridge.AirBridge;
 
+import static product.dp.io.ab180blog.Util.Constant.LOG_TAG;
+
 /**
  * Created by jaewanlee on 2017. 8. 4..
  */
@@ -23,7 +25,7 @@ public class Logger {
         }
 
         if (!AirBridge.isDebugMode) return;
-        Log.v(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message);
+        Log.v(LOG_TAG, message);
     }
 
     public static void d(String format, Object ...args) {
@@ -36,7 +38,7 @@ public class Logger {
         }
 
         if (!AirBridge.isAppDebuggable) return;
-        Log.d(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message);
+        Log.d(LOG_TAG, message);
     }
 
     public static void i(String format, Object ...args) {
@@ -47,22 +49,22 @@ public class Logger {
         } catch (MissingFormatArgumentException e) {
             message = format;
         }
-        Log.i(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message);
+        Log.i(LOG_TAG, message);
     }
 
     public static void w(String message) {
-        Log.w(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message);
+        Log.w(LOG_TAG, message);
     }
 
     public static void w(String message, Throwable error) {
 
 
-        Log.w(product.dp.io.ab180blog.Core.Constant.LOG_TAG, "Warning: " + message, error);
+        Log.w(LOG_TAG, "Warning: " + message, error);
     }
 
     public static void e(String message, Throwable error) {
 
-        Log.e(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message, error);
+        Log.e(LOG_TAG, message, error);
     }
 
     public static void e(String message) {
@@ -76,7 +78,7 @@ public class Logger {
      */
     public static void wtf(String message, Throwable error) {
         try{
-            Log.e(product.dp.io.ab180blog.Core.Constant.LOG_TAG, message, error);
+            Log.e(LOG_TAG, message, error);
         }
         catch (Exception e){
         }
