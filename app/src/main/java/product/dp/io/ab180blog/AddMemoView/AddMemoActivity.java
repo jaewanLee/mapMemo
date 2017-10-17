@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import io.realm.Realm;
+import product.dp.io.ab180blog.Core.MainApplication;
 import product.dp.io.ab180blog.Database.MemoDatabase;
 import product.dp.io.ab180blog.Map.KeywordSearchRepo;
 import product.dp.io.ab180blog.R;
@@ -64,13 +65,13 @@ public class AddMemoActivity extends AppCompatActivity {
 
                     realm.beginTransaction();
                     int lastData = -1;
-                    //TODO 해당 유저 아이디로 바꿔주기
 //                    MemoDatabase lastDatbase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
-                    if (realm.where(MemoDatabase.class).max("memo_no")!=null)
+                    if (realm.where(MemoDatabase.class).max("memo_no") != null)
                         lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
                     memoDatabase.setMemo_no(lastData + 1);
-                    //TODO 사용자 이름으로 바꿔주기
-                    memoDatabase.setMemo_own_user_id("guest");
+
+
+                    memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
                     memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
 //                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
