@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         // realm init
         realm = Realm.getDefaultInstance();
 
+
     }
 
     private void initLayout() {

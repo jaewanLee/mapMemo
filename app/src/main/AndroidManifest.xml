@@ -23,11 +23,10 @@
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/DAUM_API_KEY"
-            />
+            android:value="@string/DAUM_API_KEY" />
         <meta-data
             android:name="com.kakao.sdk.ClientSecret"
-            android:value="@string/KAKAO_CLIENT_SECRET_VALUE"/>
+            android:value="@string/KAKAO_CLIENT_SECRET_VALUE" />
 
         <activity
             android:name="product.dp.io.ab180blog.HomeView.MainActivity"
@@ -62,8 +61,8 @@
         <service android:name="product.dp.io.ab180blog.LockScreen.Service.ScreenService" />
 
         <activity
-            android:name="product.dp.io.ab180blog.HomeView.LocationBaseActivity"
-            android:launchMode="singleTask">
+            android:name="product.dp.io.ab180blog.HomeView.TimeBaseActivity"
+            android:launchMode="singleTop">
             <intent-filter>
 
                 <!-- Sets the intent action to view the activity -->
@@ -75,16 +74,14 @@
                 <!-- URI mapmemo://deeplink -->
                 <data
                     android:host="deeplink"
-                    android:scheme="mapmemo" />
+                    android:scheme="intent" />
                 <!-- URI http://www.mapmemo.com -->
                 <data
                     android:host="www.mapmemo.com"
-                    android:scheme="http" />
+                    android:scheme="intent://baemin" />
             </intent-filter>
+
         </activity>
-        <activity
-            android:name="product.dp.io.ab180blog.HomeView.TimeBaseActivity"
-            android:launchMode="singleTop" />
         <activity
             android:name="product.dp.io.ab180blog.HomeView.SettingActivity"
             android:launchMode="singleInstance" />
@@ -93,16 +90,17 @@
             android:launchMode="standard" />
         <activity
             android:name="product.dp.io.ab180blog.HomeView.AccessTermActivity"
-            android:launchMode="standard" />
+            android:launchMode="singleTask" />
         <activity
             android:name="product.dp.io.ab180blog.KeywordSearchView.KeywordSearchActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="product.dp.io.ab180blog.AddMemoView.AddMemoActivity" />
         <activity android:name="product.dp.io.ab180blog.HomeView.MenuActivity" />
 
         <activity android:name="product.dp.io.ab180blog.Memo.MemoListActivity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 

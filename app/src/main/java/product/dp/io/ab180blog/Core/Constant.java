@@ -5,7 +5,7 @@ package product.dp.io.ab180blog.Core;
  */
 
 public class Constant {
-    public static String LOG_TAG="MAP_MEMO";
+    public static String LOG_TAG="map_memo";
 
     public static String DEVICE_INFO_FETCHED="1024";
 

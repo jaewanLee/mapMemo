@@ -30,15 +30,6 @@ public class FAQActivity extends AppCompatActivity {
             }
         });
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LocationBaseActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
