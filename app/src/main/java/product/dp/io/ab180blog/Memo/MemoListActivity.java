@@ -39,6 +39,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import product.dp.io.ab180blog.Core.MainApplication;
 import product.dp.io.ab180blog.Database.MemoDatabase;
 import product.dp.io.ab180blog.Shared.NetworkManager;
 import product.dp.io.ab180blog.Util.Logger;
@@ -69,6 +70,8 @@ public class MemoListActivity extends AppCompatActivity {
     ArrayList<MemoListDatabase> memoDatabases;
     MemoListAdapter memoListAdapter;
     MemoListShareAdapter memoListShareAdapter;
+
+    String shared_memo_key;
 
 
     @Override
@@ -121,8 +124,9 @@ public class MemoListActivity extends AppCompatActivity {
         confirmSharing_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                shared_memo_key=MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email()+ System.currentTimeMillis();
                 final ArrayList<MemoListDatabase> requestValue = new ArrayList<>();
-                //TODO 여기서 서버로 보내기
+
                 for (MemoListDatabase memoListDatabase : memoListShareAdapter.memoDatabases) {
                     if (memoListDatabase.isChecked) {
                         requestValue.add(memoListDatabase);
@@ -136,14 +140,18 @@ public class MemoListActivity extends AppCompatActivity {
                 HttpUrl.Builder builder = new HttpUrl.Builder();
 
                 builder.scheme("http");
-                builder.host("115.71.236.6");
+                builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
                 builder.port(80);
-                builder.addPathSegment("MapMemo");
-                builder.addPathSegment("shared_data_post.php");
+                builder.addPathSegment("mapmo");
+                builder.addPathSegment("memo");
+                builder.addPathSegment("share");
+                builder.addPathSegment("post.php");
 
                 String requestString = new Gson().toJson(requestValue);
                 //TODO myValue에다가 내 아이디랑 시간 써서 넣기
-                FormBody.Builder formBuilder = new FormBody.Builder().add("key", "myValue").add("value", requestString);
+                FormBody.Builder formBuilder = new FormBody.Builder()
+                        .add("key", shared_memo_key)
+                        .add("value", requestString);
                 RequestBody body = formBuilder.build();
 
                 final Request request = new Request.Builder()
@@ -180,7 +188,7 @@ public class MemoListActivity extends AppCompatActivity {
                         for (MemoListDatabase requestMemoList : requestValue) {
                             kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
                         }
-                        sendDefaultFeedTemplate("KaKaoValue", kakao_link_title);
+                        sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
 
                     }
                 });
@@ -222,8 +230,9 @@ public class MemoListActivity extends AppCompatActivity {
     }
 
     private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
+        //TODO templet 이름 및 이미지 바꾸기
         FeedTemplate params = FeedTemplate
-                .newBuilder(ContentObject.newBuilder("그때 거기",
+                .newBuilder(ContentObject.newBuilder("MapMo",
                         "http://115.71.236.6/glide_testing_image.jpg",
                         LinkObject.newBuilder()
                                 .setAndroidExecutionParams("key=" + memo_no)
@@ -263,11 +272,9 @@ public class MemoListActivity extends AppCompatActivity {
 
         Toast.makeText(this, "deepLink Clicked", Toast.LENGTH_SHORT).show();
         String data=intent.getDataString();
-        Logger.d(data);
         int valuePosition=data.indexOf("key");
-        Logger.d(String.valueOf(valuePosition));
-        data=data.substring(valuePosition+4);
-        Logger.d(data);
+        String shared_memo_key=data.substring(valuePosition+4);
+        Logger.d("deeplink shared key : "+shared_memo_key);
         //여기다가 MemoDatabaseARrayList에다가 가져온 데이터 추가하고 adapter에다가 notify보내기
         NetworkManager networkManager = NetworkManager.getInstance();
         OkHttpClient client = networkManager.getClient();
@@ -276,9 +283,11 @@ public class MemoListActivity extends AppCompatActivity {
         builder.scheme("http");
         builder.host("115.71.236.6");
         builder.port(80);
-        builder.addPathSegment("MapMemo");
-        builder.addPathSegment("shared_data_get.php");
-        builder.addQueryParameter("key", "myValue");
+        builder.addPathSegment("mapmo");
+        builder.addPathSegment("memo");
+        builder.addPathSegment("share");
+        builder.addPathSegment("get.php");
+        builder.addQueryParameter("key", shared_memo_key);
 
         Logger.d(builder.build().toString());
 
