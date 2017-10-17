@@ -11,9 +11,13 @@ import com.tsengvn.typekit.Typekit;
 import io.airbridge.AirBridge;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.Map.KeywordSearchInterface;
 import product.dp.io.ab180blog.Util.KakaoSDKAdapter;
 import product.dp.io.ab180blog.Util.TranscHash;
+
+import static product.dp.io.ab180blog.Util.Constant.USER_SHARED;
 
 
 /**
@@ -25,9 +29,10 @@ public class MainApplication extends Application {
     private static volatile MainApplication instance = null;
     private static volatile Activity currentActivity = null;
 
-    Realm UserData;
     public SharedPreferences sharedPreferences;
+    public UserDatabase onUserDatabase;
     private KeywordSearchInterface keywordSearchInterface;
+    Realm realm;
 
     @Override
     public void onCreate() {
@@ -35,13 +40,12 @@ public class MainApplication extends Application {
 
         instance = this;
 
-        Typekit.getInstance().addNormal(Typekit.createFromAsset(this,"BMHANNA_11yrs_otf.otf"));
+        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
         AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
         AirBridge.setDebugMode(true);
 
-
         //키워드 중심 검색
-        keywordSearchInterface=KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
+        keywordSearchInterface = KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
 
         //CategoryHash init
         TranscHash.init();
@@ -50,14 +54,13 @@ public class MainApplication extends Application {
         initRealm();
         userDataInit();
 
-
         KakaoSDK.init(new KakaoSDKAdapter());
 
     }
 
 
     // Realm Object 초기화
-    public void initRealm()  {
+    public void initRealm() {
         Realm.init(this);
 
         RealmConfiguration realmConfiguration = new RealmConfiguration
@@ -68,18 +71,32 @@ public class MainApplication extends Application {
 
     }
 
-    public void userDataInit(){
-//        this.UserData=Realm.getInstance();
-//        RealmResults<UserDatabase> userDatabases=this.UserData.where(UserDatabase.class).findAll();
+    public void userDataInit() {
+        sharedPreferences = getSharedPreferences(USER_SHARED, MODE_PRIVATE);
+        if (!sharedPreferences.getBoolean("isAutoLogin", false)) {
+            onUserDatabase = new UserDatabase();
+            onUserDatabase.setUser_email("guest");
+        } else {
+            String user_email = sharedPreferences.getString("user_email", "");
+            if (!user_email.equals("")) {
+                this.realm = Realm.getDefaultInstance();
+                RealmResults<UserDatabase> userDatabases = realm.where(UserDatabase.class).equalTo("user_email", user_email).findAll();
+                onUserDatabase = userDatabases.first();
+            } else {
+                onUserDatabase = new UserDatabase();
+                onUserDatabase.setUser_email("guest");
+            }
+
+        }
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return getContext();
     }
 
     // singleton application object 획득이 목적
     public static MainApplication getMainApplicationContext() {
-        if(null == instance ) {
+        if (null == instance) {
             throw new IllegalStateException("state error");
         }
 
@@ -92,8 +109,7 @@ public class MainApplication extends Application {
     }
 
 
-
-    public KeywordSearchInterface getKeywordSearchInterface(){
+    public KeywordSearchInterface getKeywordSearchInterface() {
         return this.keywordSearchInterface;
     }
 
@@ -102,5 +118,13 @@ public class MainApplication extends Application {
         super.onTerminate();
 
         instance = null;
+    }
+
+    public UserDatabase getOnUserDatabase() {
+        return onUserDatabase;
+    }
+
+    public void setOnUserDatabase(UserDatabase onUserDatabase) {
+        this.onUserDatabase = onUserDatabase;
     }
 }
