@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -28,11 +27,14 @@ import com.kakao.util.exception.KakaoException;
 
 import java.io.IOException;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import product.dp.io.ab180blog.Core.MainApplication;
 import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.LockScreen.Service.ScreenService;
 import product.dp.io.ab180blog.Shared.NetworkManager;
@@ -54,7 +56,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public UserDatabase _user_db = new UserDatabase();
     private KakaoSessionCallback _kakaoSessionCallback;
-    private boolean _kakao_login_bool = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,17 +106,17 @@ public class MenuActivity extends AppCompatActivity {
 
 
     private void initLayout() {
-        sharedPreferences = getSharedPreferences("Config",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("Config", MODE_PRIVATE);
 
         userImage = (ImageView) findViewById(product.dp.io.ab180blog.R.id.menu_profile_image);
         userName = (TextView) findViewById(product.dp.io.ab180blog.R.id.user_profile_name);
         userId = (TextView) findViewById(product.dp.io.ab180blog.R.id.user_profile_email);
-        kakaoLogin=(LoginButton)findViewById(product.dp.io.ab180blog.R.id.menu_kakaologin_button);
+        kakaoLogin = (LoginButton) findViewById(product.dp.io.ab180blog.R.id.menu_kakaologin_button);
         lockScreen = (Switch) findViewById(product.dp.io.ab180blog.R.id.menu_Lockscreen_Switch);
 
         Glide.with(this).load(product.dp.io.ab180blog.R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
 
-        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen",false));
+        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen", false));
 
     }
 
@@ -123,14 +125,14 @@ public class MenuActivity extends AppCompatActivity {
         lockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                if(b){
-                    editor.putBoolean("lockScreen",true);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (b) {
+                    editor.putBoolean("lockScreen", true);
                     editor.apply();
                     Intent intent = new Intent(getApplicationContext(), ScreenService.class);
                     startService(intent);
-                }else{
-                    editor.putBoolean("lockScreen",false);
+                } else {
+                    editor.putBoolean("lockScreen", false);
                     editor.apply();
                     Intent intent = new Intent(getApplicationContext(), ScreenService.class);
                     stopService(intent);
@@ -139,26 +141,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(true  == _kakao_login_bool) {
-
-                    String _message = "이미 카카오톡 로그인이 되어 있습니다~";
-                    Toast.makeText(getApplicationContext(), _message, Toast.LENGTH_SHORT).show();
-
-                    return;
-                }
-//                final Intent next_intent = new Intent(MenuActivity.this, Login.class);
-//                next_intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//
-//                startActivity(next_intent);
-//                openKaKaoLogin();
-
-
-            }
-        });
 
     }
 
@@ -180,7 +162,7 @@ public class MenuActivity extends AppCompatActivity {
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(null != exception) {
+            if (null != exception) {
                 Toast.makeText(MenuActivity.this, "네트워크를 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
 //                Log.d("sociallogin", exception.toString());
             }
@@ -195,12 +177,11 @@ public class MenuActivity extends AppCompatActivity {
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
-                _kakao_login_bool = true;
 
                 int _error_code = errorResult.getErrorCode();
                 int _network_error_code = -777;
 
-                if(_network_error_code == _error_code) {
+                if (_network_error_code == _error_code) {
                     String _error_message = "카카오톡의 서버 네트워트가 불안정합니다. 다시 시도해 주세요.";
                     Toast.makeText(getApplicationContext(), _error_message, Toast.LENGTH_SHORT).show();
 
@@ -211,18 +192,14 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onNotSignedUp() {
-                _kakao_login_bool = false;
 
             }
 
             @Override
             public void onSuccess(UserProfile result) {
-                _kakao_login_bool = true;
 
                 setUserDataBase(result);
 
-
-//                redirectLogin();
             }
         });
     }
@@ -234,19 +211,15 @@ public class MenuActivity extends AppCompatActivity {
         String _thumnail_img_url = profile.getThumbnailImagePath();
         String _original_img_url = profile.getProfileImagePath();
 
-
-//        Log.d("Login", thumnail_img_url);
-//        Log.d("Login", original_img_url);
-
-        _user_db.setUserName(_user_name);
-        _user_db.setUserEmail(_email);
-        _user_db.setUserOriginalImg(_original_img_url);
+        _user_db.setUser_name(_user_name);
+        _user_db.setUser_email(_email);
+        _user_db.setUser_image_url(_original_img_url);
         _user_db.setUserThumnailImg(_thumnail_img_url);
 
-//        Bitmap _profile_bitmap = getBitmapViaURL(thumnail_img_url);
-//        userImage.setImageBitmap(_profile_bitmap);
+
         setProfileInfo(_user_name, _email, _original_img_url);
         sendUserProfile(_user_name, _email, _original_img_url);
+        setUserDatabase(_user_db);
 
         AuthService.requestAccessTokenInfo(new ApiResponseCallback<AccessTokenInfoResponse>() {
             @Override
@@ -264,7 +237,8 @@ public class MenuActivity extends AppCompatActivity {
                 super.onFailure(errorResult);
                 String message = "failed to get access token info. msg=" + errorResult;
                 Logger.e(message);
-                Toast.makeText(MenuActivity.this, message, Toast.LENGTH_SHORT).show();     }
+                Toast.makeText(MenuActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
 
             @Override
             public void onSuccess(AccessTokenInfoResponse accessTokenInfoResponse) {
@@ -274,20 +248,48 @@ public class MenuActivity extends AppCompatActivity {
                 long expiresInMilis = accessTokenInfoResponse.getExpiresInMillis();
                 Logger.d("this access token expires after " + expiresInMilis + " milliseconds.");
                 kakaoLogin.setActivated(false);
-    }
+            }
         });
 
     }
 
+    private void setUserDatabase(UserDatabase userDatabase){
+        Realm realm= Realm.getDefaultInstance();
+        RealmResults<UserDatabase> saveUserDatabase=realm.where(UserDatabase.class).equalTo("user_email",userDatabase.getUser_email()).findAll();
+        if(saveUserDatabase.size()>0){
+            //이미 데이터베이스가 있는 경우
+            realm.beginTransaction();
+            UserDatabase updateUserDatabse=saveUserDatabase.first();
+            updateUserDatabse.setUser_image_url(userDatabase.getUser_image_url());
+            realm.commitTransaction();
 
-    private void  setProfileInfo(String user_name,  String email, String image_url) {
+        }else{
+            //새로운 유저인 경우
+            realm.beginTransaction();
+            UserDatabase newUserDatabase=realm.copyToRealm(userDatabase);
+            realm.commitTransaction();
+        }
+        //메인 어플리케이션의 UserDatabase를 수정해줌
+        MainApplication.getMainApplicationContext().setOnUserDatabase(userDatabase);
+
+        SharedPreferences sharedPreferences=getSharedPreferences("USER_SHARED",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("isAutoLogin",true);
+        editor.putString("user_email",userDatabase.getUser_email());
+        editor.apply();
+
+    }
+
+
+    private void setProfileInfo(String user_name, String email, String image_url) {
         userName.setText(user_name);
         userId.setText(email);
         Glide.with(this).load(image_url).apply(RequestOptions.circleCropTransform()).into(userImage);
 
-        new AsyncTaskAttatchImage(userImage,this).execute(image_url);
+        new AsyncTaskAttatchImage(userImage, this).execute(image_url);
     }
-    private void sendUserProfile(String user_name,String email,String image_url){
+
+    private void sendUserProfile(String user_name, String email, String image_url) {
         NetworkManager networkManager = NetworkManager.getInstance();
         OkHttpClient client = networkManager.getClient();
         HttpUrl.Builder builder = new HttpUrl.Builder();
@@ -303,8 +305,8 @@ public class MenuActivity extends AppCompatActivity {
         //TODO myValue에다가 내 아이디랑 시간 써서 넣기
         FormBody.Builder formBuilder = new FormBody.Builder()
                 .add("user_email", email)
-                .add("user_name",user_name)
-                .add("user_image_url",image_url);
+                .add("user_name", user_name)
+                .add("user_image_url", image_url);
 
         RequestBody body = formBuilder.build();
 
