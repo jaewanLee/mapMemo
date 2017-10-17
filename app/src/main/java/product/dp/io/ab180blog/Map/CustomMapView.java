@@ -71,7 +71,6 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     @Override
     public void onMapViewInitialized(MapView mapView) {
 
-        //TODO
         Logger.d("mapView init");
 
 //        markerDetailLayout.setVisibility(View.INVISIBLE);

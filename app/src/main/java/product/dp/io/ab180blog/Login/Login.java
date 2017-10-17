@@ -124,9 +124,9 @@ public class Login extends AppCompatActivity {
 
 
         _user_db = new UserDatabase();
-        _user_db.setUserName(user_name);
-        _user_db.setUserEmail(email);
-        _user_db.setUserOriginalImg(original_img_url);
+        _user_db.setUser_name(user_name);
+        _user_db.setUser_email(email);
+        _user_db.setUser_image_url(original_img_url);
         _user_db.setUserThumnailImg(thumnail_img_url);
     }
 

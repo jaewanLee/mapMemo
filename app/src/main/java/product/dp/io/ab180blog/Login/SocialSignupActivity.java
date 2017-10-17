@@ -72,9 +72,9 @@ public class SocialSignupActivity  extends AppCompatActivity {
 
 
         user_db = new UserDatabase();
-        user_db.setUserName(user_name);
-        user_db.setUserEmail(email);
-        user_db.setUserOriginalImg(original_img_url);
+        user_db.setUser_name(user_name);
+        user_db.setUser_email(email);
+        user_db.setUser_image_url(original_img_url);
         user_db.setUserThumnailImg(thumnail_img_url);
     }
 
