@@ -1,7 +1,9 @@
 package product.dp.io.ab180blog.Memo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
@@ -17,6 +19,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import product.dp.io.ab180blog.AddMemoView.AddMemoActivity;
+import product.dp.io.ab180blog.Database.MemoDatabase;
+import product.dp.io.ab180blog.Util.Constant;
 import saschpe.android.customtabs.CustomTabsHelper;
 import saschpe.android.customtabs.WebViewFallback;
 
@@ -29,11 +36,13 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     ArrayList<MemoListDatabase> memoDatabases;
     Activity activity;
     MemoListDatabase currentMemoListDatabase;
+    MemoListAdapter instance;
 
     public MemoListAdapter(Activity activity, Context context, ArrayList<MemoListDatabase> memoDatabases) {
         this.activity = activity;
         this.context = context;
         this.memoDatabases = memoDatabases;
+        instance=this;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         currentMemoListDatabase = memoDatabases.get(position);
 
         holder.memoTitle_tv.setText(currentMemoListDatabase.getMemo_document_place_name());
@@ -86,8 +95,13 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-           //해당 아이템 선택시
+                //해당 아이템 선택시
+                //TODO 여기뿐만 아니라 메모관련 내용들 중에서 만일 변경될경우 해당 내용들 변경하는거 해줘야함
                 Toast.makeText(context, "걍클릭", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
+                intent.putExtra("memo_no", currentMemoListDatabase.getMemo_no());
+                intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
+                activity.startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
 
             }
         });
@@ -96,6 +110,39 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             @Override
             public boolean onLongClick(View view) {
                 Toast.makeText(context, "롱클릭", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("title");
+                builder.setMessage("이거 삭제할꺼냐");
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Realm realm = Realm.getDefaultInstance();
+                        final RealmResults<MemoDatabase> realmResults = realm.where(MemoDatabase.class).equalTo("memo_no", currentMemoListDatabase.getMemo_no()).findAll();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realmResults.deleteAllFromRealm();
+                            }
+                        });
+                        //TODO adapter 바꾸기
+                        instance.memoDatabases.remove(position);
+                        instance.notifyItemRemoved(position);
+
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 return true;
             }
         });
