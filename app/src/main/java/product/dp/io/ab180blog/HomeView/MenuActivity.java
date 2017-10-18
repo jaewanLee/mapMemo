@@ -169,11 +169,19 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Long result) {
                         super.onSuccess(result);
+
                         kakaoLogin.setClickable(true);
                         kakaoLogin.setVisibility(View.VISIBLE);
                         logout_bt.setVisibility(View.INVISIBLE);
+
                         Logger.d(String.valueOf("onSuccess result: "+result));
-                        Toast.makeText(MenuActivity.this, "로그아웃 성공시", Toast.LENGTH_SHORT).show();
+
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                        UserDatabase guestUser=new UserDatabase();
+                        guestUser.setUser_email("guest");
+                        MainApplication.getMainApplicationContext().setOnUserDatabase(guestUser);
                     }
 
 
