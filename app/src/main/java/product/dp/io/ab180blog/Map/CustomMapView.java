@@ -2,6 +2,7 @@ package product.dp.io.ab180blog.Map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -46,8 +47,6 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     Realm realm;
 
     Activity activity;
-
-    MapPOIItem lastClickedPOI;
 
     public CustomMapView(Activity activity, LinearLayout linearLayout) {
         super(activity);
@@ -134,23 +133,23 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     //POI item을 선택할 시
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-        lastClickedPOI = mapPOIItem;
+        //TODO POI item이 없거나 MemoDAtabse가 null인 경우 예외처리 하기
+        currentMarker = (CustomMarker) mapPOIItem;
 
         this.memoInfo_ll.setVisibility(VISIBLE);
 
         if (mapPOIItem.getTag() == Constant.MARKER_TAG_NEW) {
             final MemoDatabase selectedMemoDatabase = ((CustomMarker) mapPOIItem).getMemoDatabase();
             this.createdDate_tv.setText(new Date(System.currentTimeMillis()).toString());
-            String raw_category=selectedMemoDatabase.getMemo_document_category_group_code();
+            String raw_category = selectedMemoDatabase.getMemo_document_category_group_code();
             this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
             this.memoName_tv.setText(selectedMemoDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText("새로운 메모입니다");
             this.memoDetail_tv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CustomMarker customMarker = (CustomMarker) lastClickedPOI;
                     Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
-                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(customMarker.getMemoDatabase()));
+                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(currentMarker.getMemoDatabase()));
                     intent.putExtra("Tag", Constant.MARKER_TAG_NEW);
                     activity.startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
@@ -158,7 +157,12 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
             this.call_ib.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(activity, selectedMemoDatabase.getMemo_document_phone(), Toast.LENGTH_SHORT).show();
+                    if (selectedMemoDatabase.getMemo_document_phone().equals("") || selectedMemoDatabase.getMemo_document_phone() == null)
+                        Toast.makeText(activity, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
+                    else {
+                        String tel = "tel:" + selectedMemoDatabase.getMemo_document_phone();
+                        activity.startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
+                    }
                 }
             });
             this.share_ib.setOnClickListener(new OnClickListener() {
@@ -167,58 +171,31 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
                     Toast.makeText(activity, "먼저 메모를 저장해 주세요", Toast.LENGTH_SHORT).show();
                 }
             });
-            //TODO 삭
-//
-//
-//            final KeywordSearchRepo.KeywordDocuments keywordDocuments = ((CustomMarker) mapPOIItem).getKeywordDocuments();
-//            this.createdDate_tv.setText(new Date(System.currentTimeMillis()).toString());
-//            this.category_tv.setText(keywordDocuments.getCategory_name());
-//            this.memoName_tv.setText(keywordDocuments.getPlace_name());
-//            this.memoContent_tv.setText("새로운 메모입니다");
-//            this.memoDetail_tv.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    CustomMarker customMarker = (CustomMarker) lastClickedPOI;
-//                    Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
-//                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(customMarker.getMemoDatabase()));
-//                    intent.putExtra("Tag", MARKER_TAG_NEW);
-//                    activity.startActivityForResult(intent, ADD_MEMO_INTENT);
-//                }
-//            });
-//            this.call_ib.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(activity, keywordDocuments.getPhone(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            this.share_ib.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(activity, "먼저 메모를 저장해 주세요", Toast.LENGTH_SHORT).show();
-//                }
-//            });
         } else {
             final MemoDatabase memoDatabase = ((CustomMarker) mapPOIItem).getMemoDatabase();
             this.createdDate_tv.setText(new Date(memoDatabase.getMemo_createDate()).toString());
-            String raw_category=memoDatabase.getMemo_document_category_group_code();
+            String raw_category = memoDatabase.getMemo_document_category_group_code();
             this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
             this.memoName_tv.setText(memoDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText(memoDatabase.getMemo_content());
             this.memoDetail_tv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CustomMarker customMarker = (CustomMarker) lastClickedPOI;
                     Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
-                    intent.putExtra("memo_no", customMarker.getMemoDatabase().getMemo_no());
-                    intent.putExtra("Tag", customMarker.getTag());
-//            mapView.removePOIItem(mapPOIItem);
+                    intent.putExtra("memo_no", currentMarker.getMemoDatabase().getMemo_no());
+                    intent.putExtra("Tag", currentMarker.getTag());
                     activity.startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
             });
             this.call_ib.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(activity, memoDatabase.getMemo_document_phone(), Toast.LENGTH_SHORT).show();
+                    if (memoDatabase.getMemo_document_phone().equals("") || memoDatabase.getMemo_document_phone() == null)
+                        Toast.makeText(activity, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
+                    else {
+                        String tel = "tel:" + memoDatabase.getMemo_document_phone();
+                        activity.startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
+                    }
                 }
             });
             this.share_ib.setOnClickListener(new OnClickListener() {
@@ -270,7 +247,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     }
 
     public void removeLastPOI() {
-        this.removePOIItem(this.lastClickedPOI);
+        this.removePOIItem(this.currentMarker);
     }
 
     //현재 내 위치 트래킹시, 위치 변경되었을 경우 사용

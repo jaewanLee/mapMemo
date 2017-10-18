@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         memoDetail_bt=(Button)findViewById(product.dp.io.ab180blog.R.id.main_memoDetail_textView);
         call_ib=(ImageButton)findViewById(product.dp.io.ab180blog.R.id.main_call_imageButton);
         share_ib=(ImageButton)findViewById(product.dp.io.ab180blog.R.id.main_share_imageButton);
+
+        memoInfo_ll.setVisibility(View.INVISIBLE);
     }
 
     private void initCustomMap() {
@@ -199,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     private void setPermissionIssue() {

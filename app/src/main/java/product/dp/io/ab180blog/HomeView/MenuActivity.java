@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -21,6 +23,7 @@ import com.kakao.auth.network.response.AccessTokenInfoResponse;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
@@ -37,6 +40,7 @@ import okhttp3.RequestBody;
 import product.dp.io.ab180blog.Core.MainApplication;
 import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.LockScreen.Service.ScreenService;
+import product.dp.io.ab180blog.R;
 import product.dp.io.ab180blog.Shared.NetworkManager;
 import product.dp.io.ab180blog.Util.AsyncTaskAttatchImage;
 import product.dp.io.ab180blog.Util.Logger;
@@ -50,6 +54,7 @@ public class MenuActivity extends AppCompatActivity {
     com.kakao.usermgmt.LoginButton kakaoLogin;
     //TODO typeSomething 버튼들 만들기
     Switch lockScreen;
+    Button logout_bt;
 
 
     SharedPreferences sharedPreferences;
@@ -113,6 +118,8 @@ public class MenuActivity extends AppCompatActivity {
         userId = (TextView) findViewById(product.dp.io.ab180blog.R.id.user_profile_email);
         kakaoLogin = (LoginButton) findViewById(product.dp.io.ab180blog.R.id.menu_kakaologin_button);
         lockScreen = (Switch) findViewById(product.dp.io.ab180blog.R.id.menu_Lockscreen_Switch);
+        logout_bt=(Button)findViewById(R.id.menu_logout_button);
+        logout_bt.setVisibility(View.INVISIBLE);
 
         Glide.with(this).load(product.dp.io.ab180blog.R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
 
@@ -138,6 +145,40 @@ public class MenuActivity extends AppCompatActivity {
                     stopService(intent);
                 }
 
+            }
+        });
+
+        logout_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserManagement.requestLogout(new LogoutResponseCallback() {
+                    @Override
+                    public void onCompleteLogout() {
+                        Toast.makeText(MenuActivity.this, "성공적으로 로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+                        kakaoLogin.setClickable(true);
+                        logout_bt.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFailure(ErrorResult errorResult) {
+                        super.onFailure(errorResult);
+                        Logger.d("err code: "+errorResult.getErrorMessage());
+                        Toast.makeText(MenuActivity.this, "로그아웃에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(Long result) {
+                        super.onSuccess(result);
+                        kakaoLogin.setClickable(true);
+                        kakaoLogin.setVisibility(View.VISIBLE);
+                        logout_bt.setVisibility(View.INVISIBLE);
+                        Logger.d(String.valueOf("onSuccess result: "+result));
+                        Toast.makeText(MenuActivity.this, "로그아웃 성공시", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                });
+                Logger.d("로그아웃 버튼 클릭");
             }
         });
 
@@ -172,6 +213,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 
+
+
     // 카카오 세션 호출
     protected void KakaoRequestMe() {
         UserManagement.requestMe(new MeResponseCallback() {
@@ -199,6 +242,9 @@ public class MenuActivity extends AppCompatActivity {
             public void onSuccess(UserProfile result) {
 
                 setUserDataBase(result);
+                kakaoLogin.setClickable(false);
+                kakaoLogin.setVisibility(View.INVISIBLE);
+                logout_bt.setVisibility(View.VISIBLE);
 
             }
         });
@@ -247,7 +293,6 @@ public class MenuActivity extends AppCompatActivity {
 
                 long expiresInMilis = accessTokenInfoResponse.getExpiresInMillis();
                 Logger.d("this access token expires after " + expiresInMilis + " milliseconds.");
-                kakaoLogin.setActivated(false);
             }
         });
 
@@ -329,6 +374,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                 final String result = response.body().string();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
