@@ -16,6 +16,7 @@ import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.Map.KeywordSearchInterface;
 import product.dp.io.ab180blog.Util.KakaoSDKAdapter;
 import product.dp.io.ab180blog.Util.TranscHash;
+import saschpe.android.customtabs.CustomTabsActivityLifecycleCallbacks;
 
 import static product.dp.io.ab180blog.Util.Constant.USER_SHARED;
 
@@ -55,6 +56,8 @@ public class MainApplication extends Application {
         userDataInit();
 
         KakaoSDK.init(new KakaoSDKAdapter());
+
+        registerActivityLifecycleCallbacks(new CustomTabsActivityLifecycleCallbacks());
 
     }
 

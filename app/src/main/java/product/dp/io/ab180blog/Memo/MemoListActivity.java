@@ -103,7 +103,7 @@ public class MemoListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         memoDatabases = new ArrayList<>();
-        memoListAdapter = new MemoListAdapter(this, memoDatabases);
+        memoListAdapter = new MemoListAdapter(this,this, memoDatabases);
 
         DatabaseInit(memoDatabases, memoListAdapter, recyclerView);
 
@@ -212,7 +212,7 @@ public class MemoListActivity extends AppCompatActivity {
 
                 //다시 원상 복귀
                 sharelayout_LL.setVisibility(View.INVISIBLE);
-                memoListAdapter = new MemoListAdapter(getApplicationContext(), memoDatabases);
+                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
 
             }
@@ -222,7 +222,7 @@ public class MemoListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sharelayout_LL.setVisibility(View.INVISIBLE);
-                memoListAdapter = new MemoListAdapter(getApplicationContext(), memoDatabases);
+                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
             }
         });

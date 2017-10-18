@@ -201,6 +201,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
             this.share_ib.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO 공유하기 기능 추가
                     Toast.makeText(activity, "shared!", Toast.LENGTH_SHORT).show();
                 }
             });
