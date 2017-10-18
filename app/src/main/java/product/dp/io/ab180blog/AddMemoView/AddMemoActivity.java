@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import product.dp.io.ab180blog.Core.MainApplication;
 import product.dp.io.ab180blog.Database.MemoDatabase;
 import product.dp.io.ab180blog.Map.KeywordSearchRepo;
@@ -58,62 +59,65 @@ public class AddMemoActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm = Realm.getDefaultInstance();
-                if (tag == 1 || tag == Constant.MARKER_TAG_NEW) {
-                    Number number = realm.where(MemoDatabase.class).max("memo_no");
-                    if (number == null) number = -1;
-
-                    realm.beginTransaction();
-                    int lastData = -1;
+                RealmResults<MemoDatabase> realmResults = realm.where(MemoDatabase.class).findAll();
+                String user_id = MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email();
+                if (realmResults.size() > 10 && user_id.equals("guest")) {
+                    Toast.makeText(AddMemoActivity.this, "현재 손님계정이십니다 추가 메모를 사용하기 위해서는 로그인을 해주세요", Toast.LENGTH_LONG).show();
+                } else {
+                    realm = Realm.getDefaultInstance();
+                    if (tag == 1 || tag == Constant.MARKER_TAG_NEW) {
+                        realm.beginTransaction();
+                        int lastData = -1;
 //                    MemoDatabase lastDatbase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
-                    if (realm.where(MemoDatabase.class).max("memo_no") != null)
-                        lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
-                    memoDatabase.setMemo_no(lastData + 1);
+                        if (realmResults.max("memo_no") != null)
+                            lastData = realmResults.max("memo_no").intValue();
+                        memoDatabase.setMemo_no(lastData + 1);
 
-
-                    memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
-                    memoDatabase.setMemo_createDate(System.currentTimeMillis());
+                        memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
+                        memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
 //                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
-                    memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
-                    memoDatabase.setMemo_content(memoContent.getText().toString());
-                    memo_no = memoDatabase.getMemo_no();
+                        memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
+                        memoDatabase.setMemo_content(memoContent.getText().toString());
+                        memo_no = memoDatabase.getMemo_no();
 
-                    memoDatabase = realm.copyToRealm(memoDatabase);
+                        memoDatabase = realm.copyToRealm(memoDatabase);
 
-                    realm.commitTransaction();
+                        realm.commitTransaction();
 
-                    Intent intent = new Intent();
-                    intent.putExtra("addMemoResult", memo_no);
-                    setResult(Constant.ADD_MEMO_INTENT, intent);
-                    Logger.d("정상적으로 저장되었습니다");
-                    finish();
+                        Intent intent = new Intent();
+                        intent.putExtra("addMemoResult", memo_no);
+                        setResult(Constant.ADD_MEMO_INTENT, intent);
+                        Logger.d("정상적으로 저장되었습니다");
+                        finish();
 
-                } else {
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
-                            memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
-                            memoDatabase.setMemo_content(memoContent.getText().toString());
-                            memo_no = memoDatabase.getMemo_no();
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            Intent intent = new Intent();
-                            intent.putExtra("addMemoResult", memo_no);
-                            setResult(Constant.ADD_MEMO_INTENT, intent);
-                            Logger.d("정상적으로 저장되었습니다");
-                            finish();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            Toast.makeText(AddMemoActivity.this, "옛날꺼 업데이트 오류", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    } else {
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
+                                memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
+                                memoDatabase.setMemo_content(memoContent.getText().toString());
+                                memo_no = memoDatabase.getMemo_no();
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Intent intent = new Intent();
+                                intent.putExtra("addMemoResult", memo_no);
+                                setResult(Constant.ADD_MEMO_INTENT, intent);
+                                Logger.d("정상적으로 저장되었습니다");
+                                finish();
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+                                Toast.makeText(AddMemoActivity.this, "옛날꺼 업데이트 오류", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
+
             }
         });
 

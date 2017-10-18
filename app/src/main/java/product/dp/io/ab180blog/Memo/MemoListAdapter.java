@@ -17,6 +17,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 
+import saschpe.android.customtabs.CustomTabsHelper;
+import saschpe.android.customtabs.WebViewFallback;
+
 /**
  * Created by jaewanlee on 2017. 9. 11..
  */
@@ -42,6 +45,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         currentMemoListDatabase = memoDatabases.get(position);
+
         holder.memoTitle_tv.setText(currentMemoListDatabase.getMemo_document_place_name());
         holder.memoCategory_iv.setImageResource(product.dp.io.ab180blog.R.drawable.ic_action_back);
         holder.createDate_tv.setText(new Date(currentMemoListDatabase.getMemo_createDate()).toString());
@@ -55,24 +59,44 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
                     String tel = "tel:" + currentMemoListDatabase.getMemo_document_phone();
                     activity.startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
                 }
-                Toast.makeText(context, "phone call", Toast.LENGTH_SHORT).show();
             }
         });
         holder.blogWeb_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
-                        .addDefaultShareMenuItem()
-                        .setShowTitle(true)
-                        .build();
+                String url = currentMemoListDatabase.getMemo_document_place_url();
+                if (url.equals("") || url == null) {
+                    Toast.makeText(context, "홈페이지가 없는 장소입니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                            .addDefaultShareMenuItem()
+                            .setShowTitle(true)
+                            .build();
 
-// This is optional but recommended
-                CustomTabsHelper.addKeepAliveExtra(activity, customTabsIntent.intent);
+                    CustomTabsHelper.addKeepAliveExtra(activity, customTabsIntent.intent);
 
-// This is where the magic happens...
-                CustomTabsHelper.openCustomTab(activity, customTabsIntent,
-                        Uri.parse("https://github.com/saschpe/android-customtabs"),
-                        new WebViewFallback());
+                    CustomTabsHelper.openCustomTab(activity, customTabsIntent,
+                            Uri.parse(url),
+                            new WebViewFallback());
+                }
+
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+           //해당 아이템 선택시
+                Toast.makeText(context, "걍클릭", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(context, "롱클릭", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 

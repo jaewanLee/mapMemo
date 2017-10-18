@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.kakao.auth.KakaoSDK;
-import com.tsengvn.typekit.Typekit;
 
 import io.airbridge.AirBridge;
 import io.realm.Realm;
@@ -15,6 +14,7 @@ import io.realm.RealmResults;
 import product.dp.io.ab180blog.Database.UserDatabase;
 import product.dp.io.ab180blog.Map.KeywordSearchInterface;
 import product.dp.io.ab180blog.Util.KakaoSDKAdapter;
+import product.dp.io.ab180blog.Util.Logger;
 import product.dp.io.ab180blog.Util.TranscHash;
 import saschpe.android.customtabs.CustomTabsActivityLifecycleCallbacks;
 
@@ -41,7 +41,7 @@ public class MainApplication extends Application {
 
         instance = this;
 
-        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
+//        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
         AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
         AirBridge.setDebugMode(true);
 
@@ -91,6 +91,7 @@ public class MainApplication extends Application {
             }
 
         }
+        Logger.d("Login User : "+onUserDatabase.getUser_email());
     }
 
     public static Context getContext() {
@@ -128,6 +129,8 @@ public class MainApplication extends Application {
     }
 
     public void setOnUserDatabase(UserDatabase onUserDatabase) {
+        Logger.d("Login User change: "+this.onUserDatabase.getUser_email()+"-> "+onUserDatabase.getUser_email());
         this.onUserDatabase = onUserDatabase;
+
     }
 }
