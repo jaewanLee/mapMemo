@@ -3,7 +3,7 @@ package product.dp.io.ab180blog.Database;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import product.dp.io.ab180blog.Map.KeywordSearchRepo;
-import product.dp.io.ab180blog.Memo.MemoListDatabase;
+import product.dp.io.ab180blog.MemoList.MemoListDatabase;
 
 /**
  * Created by jaewanlee on 2017. 8. 9..

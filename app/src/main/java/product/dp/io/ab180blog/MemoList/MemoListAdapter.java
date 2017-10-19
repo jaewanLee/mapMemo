@@ -1,4 +1,4 @@
-package product.dp.io.ab180blog.Memo;
+package product.dp.io.ab180blog.MemoList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -152,6 +152,10 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             currentMemoListDatabase.setIsNew(false);
         }
 
+    }
+
+    public void setMemoDatabases(ArrayList<MemoListDatabase> memoDatabases) {
+        this.memoDatabases = memoDatabases;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package product.dp.io.ab180blog.Memo;
+package product.dp.io.ab180blog.MemoList;
 
 import product.dp.io.ab180blog.Database.MemoDatabase;
 

@@ -1,4 +1,4 @@
-package product.dp.io.ab180blog.Memo;
+package product.dp.io.ab180blog.MemoList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -227,6 +227,15 @@ public class MemoListActivity extends AppCompatActivity {
             }
         });
 
+        search_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                memoDatabases=keywordSearch(search_et.getText().toString());
+                memoListAdapter.setMemoDatabases(memoDatabases);
+                memoListAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
@@ -264,6 +273,23 @@ public class MemoListActivity extends AppCompatActivity {
         }
         recyclerView.setAdapter(memoListAdapter);
 
+    }
+
+    public ArrayList<MemoListDatabase> keywordSearch(String keyWord) {
+        ArrayList<MemoListDatabase> memoDatabaseArrayList = new ArrayList();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<MemoDatabase> addressSearchResults = realm
+                .where(MemoDatabase.class)
+                .contains("memo_document_road_address_name", keyWord)
+                .or()
+                .contains("memo_document_address_name", keyWord)
+                .findAll();
+        if (addressSearchResults.size() > 0) {
+            for (MemoDatabase memoDatabase : addressSearchResults) {
+                memoDatabaseArrayList.add(new MemoListDatabase(memoDatabase));
+            }
+        }
+        return memoDatabaseArrayList;
     }
 
     @Override

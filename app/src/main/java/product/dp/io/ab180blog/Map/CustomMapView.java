@@ -3,6 +3,7 @@ package product.dp.io.ab180blog.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -16,7 +17,9 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -39,7 +42,9 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     TextView category_tv;
     TextView memoName_tv;
     TextView memoContent_tv;
-    Button memoDetail_tv;
+    FloatingActionButton memoDetail_bt;
+    FloatingActionButton list_fab;
+    FloatingActionButton currentLocation_fab;
     ImageButton call_ib;
     ImageButton share_ib;
 
@@ -98,6 +103,9 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         this.memoInfo_ll.setVisibility(INVISIBLE);
+        this.list_fab.show();
+        this.currentLocation_fab.show();
+        this.memoDetail_bt.hide();
     }
 
     //지도 두번 터
@@ -145,7 +153,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
             this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
             this.memoName_tv.setText(selectedMemoDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText("새로운 메모입니다");
-            this.memoDetail_tv.setOnClickListener(new OnClickListener() {
+            this.memoDetail_bt.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
@@ -173,12 +181,15 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
             });
         } else {
             final MemoDatabase memoDatabase = ((CustomMarker) mapPOIItem).getMemoDatabase();
-            this.createdDate_tv.setText(new Date(memoDatabase.getMemo_createDate()).toString());
+            SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
+            Date currentTime = new Date (memoDatabase.getMemo_createDate());
+            String dTime = formatter.format ( currentTime );
+            this.createdDate_tv.setText(dTime);
             String raw_category = memoDatabase.getMemo_document_category_group_code();
             this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
             this.memoName_tv.setText(memoDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText(memoDatabase.getMemo_content());
-            this.memoDetail_tv.setOnClickListener(new OnClickListener() {
+            this.memoDetail_bt.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
@@ -187,6 +198,9 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
                     activity.startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
             });
+            this.memoDetail_bt.show();
+            this.currentLocation_fab.hide();
+            this.list_fab.hide();
             this.call_ib.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -205,6 +219,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
                     Toast.makeText(activity, "shared!", Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
 
     }
@@ -296,8 +311,8 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
         this.memoContent_tv = memoContent_tv;
     }
 
-    public void setMemoDetail_tv(Button memoDetail_tv) {
-        this.memoDetail_tv = memoDetail_tv;
+    public void setMemoDetail_bt(FloatingActionButton memoDetail_bt) {
+        this.memoDetail_bt = memoDetail_bt;
     }
 
     public void setMemoInfo_ll(LinearLayout memoInfo_ll) {
@@ -310,5 +325,13 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
 
     public void setShare_ib(ImageButton share_ib) {
         this.share_ib = share_ib;
+    }
+
+    public void setList_fab(FloatingActionButton list_fab) {
+        this.list_fab = list_fab;
+    }
+
+    public void setCurrentLocation_fab(FloatingActionButton currentLocation_fab) {
+        this.currentLocation_fab = currentLocation_fab;
     }
 }

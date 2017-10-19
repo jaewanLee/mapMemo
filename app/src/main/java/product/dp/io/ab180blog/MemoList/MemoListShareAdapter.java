@@ -1,4 +1,4 @@
-package product.dp.io.ab180blog.Memo;
+package product.dp.io.ab180blog.MemoList;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
