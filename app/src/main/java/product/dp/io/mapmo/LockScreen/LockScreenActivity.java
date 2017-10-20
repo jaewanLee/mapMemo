@@ -75,7 +75,7 @@ public class LockScreenActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //TODO 펴미션 체크가 안되어 있다면 다시 퍼미션 체크 하기
-            Toast.makeText(this, "퍼미션 체크 안됬는데", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "정상적인 사용을 위해 권한설정을 해주세요", Toast.LENGTH_SHORT).show();
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1000, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, locationListener);

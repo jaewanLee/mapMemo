@@ -99,10 +99,8 @@ public class MainActivity extends AppCompatActivity {
         searchView_et = (EditText) findViewById(product.dp.io.mapmo.R.id.main_search_editText);
         menu_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_menu_ImageButton);
         mainMap_fl = (FrameLayout) findViewById(product.dp.io.mapmo.R.id.main_map_replace);
-        currentLocation_fab = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_currentLocation_floatButton);
         circleProgressBar = (CircleProgressBar) findViewById(product.dp.io.mapmo.R.id.main_progressbar);
         erase_bt = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_erase_ImageButton);
-        list_fab = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_memoList_Button);
         memoInfo_ll = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.main_memoInfo_LinearLayout);
         createdDate_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_createDate_textView);
         category_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_category_textView);

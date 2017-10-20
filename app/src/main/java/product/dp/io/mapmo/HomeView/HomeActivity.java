@@ -5,16 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +49,7 @@ import product.dp.io.mapmo.AddMemoView.AddMemoActivity;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
+import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.TranscHash;
 
@@ -52,22 +59,23 @@ import static android.view.View.VISIBLE;
  * Created by jaewanlee on 2017. 10. 19..
  */
 
-public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
     //상담 탭
     LinearLayout functionTool_LL;
+    ImageButton back_ib;
     ImageButton menu_ib;
     EditText searchView_et;
-    ImageButton erase_bt;
-
-    FloatingActionButton list_fab;
-    FloatingActionButton currentLocation_fab;
+    ImageButton erase_ib;
+    ImageButton init_ib;
 
     //Map관련
     MapFragment mapFragment;
     GoogleMap mGoogleMap;
     Marker tempMarker;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
-    //하단탭
+    //메모 디테일 탭
     LinearLayout memoInfo_ll;
     TextView createdDate_tv;
     TextView category_tv;
@@ -76,6 +84,13 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     FloatingActionButton memoDetail_bt;
     ImageButton call_ib;
     ImageButton share_ib;
+
+    //하단 탭
+    LinearLayout bottom_ll;
+    ImageButton memoList_ib;
+    ImageView splitbar_iv;
+    TextView simpleMemoTitle_tv;
+
 
     Realm realm;
 
@@ -114,10 +129,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         functionTool_LL = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.main_fuctionTool_LinearLayout);
         searchView_et = (EditText) findViewById(product.dp.io.mapmo.R.id.main_search_editText);
         menu_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_menu_ImageButton);
-        currentLocation_fab = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_currentLocation_floatButton);
         circleProgressBar = (CircleProgressBar) findViewById(product.dp.io.mapmo.R.id.main_progressbar);
-        erase_bt = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_erase_ImageButton);
-        list_fab = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_memoList_Button);
+        erase_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_erase_ImageButton);
         memoInfo_ll = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.main_memoInfo_LinearLayout);
         createdDate_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_createDate_textView);
         category_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_category_textView);
@@ -127,11 +140,52 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         memoDetail_bt.hide();
         call_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_call_imageButton);
         share_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_share_imageButton);
+        back_ib = (ImageButton) findViewById(R.id.main_back_ImageButton);
+        init_ib = (ImageButton) findViewById(R.id.main_initSearch_ImageButton);
+        bottom_ll=(LinearLayout)findViewById(R.id.main_bottom_linearlayout);
+        memoList_ib=(ImageButton)findViewById(R.id.main_memoList_imageButton);
+        splitbar_iv=(ImageView)findViewById(R.id.main_splitBar_ImgaeView);
+        simpleMemoTitle_tv=(TextView)findViewById(R.id.main_simpleMemoTitle_TextView);
+
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
 
         permissionShared = getSharedPreferences("permission", MODE_PRIVATE);
         isPermissionGranted = permissionShared.getBoolean("permission", false);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                double lon = location.getLongitude();
+                double lat = location.getLatitude();
+                LatLng currentLatLng = new LatLng(lat, lon);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                circleProgressBar.onAnimationEnd();
+                circleProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Toast.makeText(HomeActivity.this, "onStatusChanged", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Toast.makeText(HomeActivity.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(HomeActivity.this, "onProviderDisabled", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                circleProgressBar.onAnimationEnd();
+                circleProgressBar.setVisibility(View.INVISIBLE);
+
+            }
+        };
+
     }
 
     private void initCustomMap() {
@@ -141,7 +195,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void initButtonListener() {
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
 
         searchView_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -154,26 +208,31 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        //memo list 버튼 클릭
-        list_fab.setOnClickListener(new View.OnClickListener() {
+        searchView_et.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MemoListActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                menu_ib.setVisibility(View.INVISIBLE);
+                back_ib.setVisibility(VISIBLE);
             }
         });
 
-        //현재 위치로 이동
-//        currentLocation_fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //GPs 퍼미션 여부GPS 설정 여부 확인
-//                //TODO 현재위치 관련 내용
-//                if (isGPSOn(locationManager)) {
-//                    setCurrentLocation();
-//                }
-//            }
-//        });
+        searchView_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count > 0)
+                    erase_ib.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         //메뉴 버튼
         menu_ib.setOnClickListener(new View.OnClickListener() {
@@ -184,12 +243,41 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        erase_bt.setOnClickListener(new View.OnClickListener() {
+        back_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu_ib.setVisibility(VISIBLE);
+                back_ib.setVisibility(View.INVISIBLE);
+                erase_ib.setVisibility(View.INVISIBLE);
+                init_ib.setVisibility(View.INVISIBLE);
+                searchView_et.setText("");
+            }
+        });
+
+        erase_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO 현재 적은 text의 내용과 아래 layout이 올라와 있따면 다지우기
+                searchView_et.setText("");
             }
         });
+
+        init_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView_et.setText("");
+                init_ib.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        bottom_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MemoListActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -221,34 +309,38 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-//    private boolean isGPSOn(LocationManager locationManager) {
-//        boolean isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        if (isGPS) {
-//            return true;
-//        } else {
-//            Toast.makeText(this, getString(R.string.permission_deny_message),
-//                    Toast.LENGTH_LONG).show();
-//            startActivity(new Intent(
-//                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//        }
-//        return false;
-//    }
+    private boolean isGPSOn(LocationManager locationManager) {
+        boolean isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (isGPS) {
+            return true;
+        } else {
+            Toast.makeText(this, "GPS를 켜주세요",
+                    Toast.LENGTH_LONG).show();
+            startActivity(new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+        return false;
+    }
 
     //권한설정 확인한 뒤 현재 위치 알아오기
     //TODO 구글로 다바꿔야함
-//    private void setCurrentLocation() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            new TedPermission(this)
-//                    .setPermissionListener(permissionListener)
-//                    .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission\n")
-//                    .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                    .check();
-//            Logger.d("if state ment");
-//        }
-//        customMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-//        circleProgressBar.setVisibility(VISIBLE);
-//        circleProgressBar.onAnimationStart();
-//    }
+    private void setCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            new TedPermission(this)
+                    .setPermissionListener(permissionListener)
+                    .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission\n")
+                    .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    .check();
+        }
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Toast.makeText(this, String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT).show();
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*60, 10, locationListener);
+//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, locationListener);
+
+        circleProgressBar.setVisibility(VISIBLE);
+        circleProgressBar.onAnimationStart();
+    }
 //
 //    MapView.CurrentLocationEventListener currentLocationEventListener = new MapView.CurrentLocationEventListener() {
 //        @Override
@@ -284,9 +376,20 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (requestCode == Constant.SEARCH_QUERY_INTENT && resultCode == Constant.SEARCH_QUERY_INTENT) {
             if (data.hasExtra("searchResult")) {
                 MemoDatabase memoDatabase = new Gson().fromJson(data.getStringExtra("searchResult"), MemoDatabase.class);
-                LatLng tempLatLng = new LatLng(Double.valueOf(memoDatabase.getMemo_document_x()), Double.valueOf(memoDatabase.getMemo_document_y()));
+                LatLng tempLatLng = new LatLng(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()));
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(tempLatLng));
                 tempMarker = makeAndAddMarker(memoDatabase, tempLatLng);
+
+                menu_ib.setVisibility(VISIBLE);
+                back_ib.setVisibility(View.INVISIBLE);
+                erase_ib.setVisibility(View.INVISIBLE);
+                init_ib.setVisibility(VISIBLE);
+
+                memoDetailLayoutInit(memoDatabase);
+                this.memoDetail_bt.show();
+
+
+
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             }
@@ -294,7 +397,19 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (data.hasExtra("addMemoResult")) {
                 MemoDatabase newMemo = realm.where(MemoDatabase.class).equalTo("memo_no", data.getIntExtra("addMemoResult", 0)).findFirst();
                 tempMarker.remove();
-                makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_x()), Double.valueOf(newMemo.getMemo_document_y())));
+                makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
+                menu_ib.setVisibility(VISIBLE);
+                back_ib.setVisibility(View.INVISIBLE);
+                erase_ib.setVisibility(View.INVISIBLE);
+                init_ib.setVisibility(VISIBLE);
+
+                simpleMemoTitle_tv.setText(newMemo.getMemo_document_place_name());
+                simpleMemoTitle_tv.setVisibility(VISIBLE);
+                splitbar_iv.setVisibility(VISIBLE);
+                bottom_ll.setVisibility(View.INVISIBLE);
+
+                memoDetailLayoutInit(newMemo);
+                this.memoDetail_bt.show();
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
@@ -325,8 +440,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         MemoDatabaseInit(googleMap);
         googleMap.setOnMarkerClickListener(this);
         setMyLocationEnable();
-
-
+        googleMap.setOnMapClickListener(this);
     }
 
     public void MemoDatabaseInit(GoogleMap googleMap) {
@@ -334,26 +448,38 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         RealmResults<MemoDatabase> memoDatabases = realm.where(MemoDatabase.class).findAll();
         for (MemoDatabase memoDatabase : memoDatabases) {
-            LatLng savedDataLat = new LatLng(Long.valueOf(memoDatabase.getMemo_document_x()), Long.valueOf(memoDatabase.getMemo_document_y()));
+            LatLng savedDataLat = new LatLng(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()));
             makeAndAddMarker(memoDatabase, savedDataLat);
         }
+
+        LatLng lastMemoLocation = null;
+        if (memoDatabases.size() > 0) {
+            MemoDatabase lastMemo = memoDatabases.get(memoDatabases.size() - 1);
+            lastMemoLocation = new LatLng(Double.valueOf(lastMemo.getMemo_document_y()), Double.valueOf(lastMemo.getMemo_document_x()));
+            simpleMemoTitle_tv.setText(lastMemo.getMemo_document_place_name());
+        } else {
+            lastMemoLocation = new LatLng(37.525535, 126.896801);
+            splitbar_iv.setVisibility(View.INVISIBLE);
+            simpleMemoTitle_tv.setVisibility(View.INVISIBLE);
+        }
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastMemoLocation, 16));
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         //마커에서 데이터베이스 빼내옴
         //빼낸 데이터베이스를 바탕으로 레이아웃 수정 및 클릭 리스너 등록
+        Toast.makeText(this, "마커클릭", Toast.LENGTH_SHORT).show();
 
         MemoDatabase markerDatabase = (MemoDatabase) marker.getTag();
         memoDetailLayoutInit(markerDatabase);
 
         this.memoDetail_bt.show();
-        this.currentLocation_fab.hide();
-        this.list_fab.hide();
         return true;
 
         //TODO 그냥 맵을 클릭한 경우 확인
     }
+
 
     public void memoDetailLayoutInit(MemoDatabase memoDatabase) {
 
@@ -380,6 +506,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
 
         } else {
+            this.memoInfo_ll.setVisibility(VISIBLE);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
             Date currentTime = new Date(markerDatabase.getMemo_createDate());
             String dTime = formatter.format(currentTime);
@@ -415,8 +542,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
+        bottom_ll.setVisibility(View.INVISIBLE);
 
     }
 
@@ -430,11 +557,23 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
-        }else{
-            if(mGoogleMap!=null){
+        } else {
+            if (mGoogleMap != null) {
                 mGoogleMap.setMyLocationEnabled(true);
             }
         }
+
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        memoInfo_ll.setVisibility(View.INVISIBLE);
+        this.memoDetail_bt.hide();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView_et.getWindowToken(), 0);
+        back_ib.setVisibility(View.INVISIBLE);
+        menu_ib.setVisibility(VISIBLE);
+        bottom_ll.setVisibility(VISIBLE);
 
     }
 
