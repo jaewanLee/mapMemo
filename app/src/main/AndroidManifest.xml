@@ -53,10 +53,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="product.dp.io.mapmo.Login.Login"
+            android:name="product.dp.io.mapmo.Menu.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name="product.dp.io.mapmo.Login.SocialSignupActivity"
+            android:name="product.dp.io.mapmo.Menu.SocialSignupActivity"
             android:screenOrientation="portrait" />
 
         <receiver android:name="product.dp.io.mapmo.LockScreen.BoradcastReceiver.RestartReceiver" />
@@ -105,7 +105,7 @@
             android:name="product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name="product.dp.io.mapmo.AddMemoView.AddMemoActivity" />
-        <activity android:name="product.dp.io.mapmo.HomeView.MenuActivity" />
+        <activity android:name="product.dp.io.mapmo.Menu.MenuActivity" />
 
         <activity android:name="product.dp.io.mapmo.MemoList.MemoListActivity">
             <intent-filter android:autoVerify="true">

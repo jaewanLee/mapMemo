@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import product.dp.io.mapmo.Map.KeywordSearchRepo;
+import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Util.TranscHash;
 
 /**
@@ -46,11 +48,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         final KeywordSearchRepo.KeywordDocuments keywordDocument = keywordDocuments.get(position);
 
+            //TODO 텍스트에서 이미지로 바꾸는 과정 필요
         holder.title.setText(keywordDocument.getPlace_name());
         if (keywordDocument.getCategory_group_code().equals("") || keywordDocument.getCategory_group_code() == null) {
-            holder.category.setText("");
+            holder.category.setImageResource(R.drawable.ic_category_default);
+            holder.category_name.setText("");
         } else {
-            holder.category.setText(TranscHash.categoryHash.get(keywordDocument.getCategory_group_code()));
+            holder.category.setImageResource(TranscHash.rawToImageCategory(keywordDocument.getCategory_group_code()));
+            holder.category_name.setText(TranscHash.rawToreFinedCategory(keywordDocument.getCategory_group_code()));
         }
         if (keywordDocument.getRoad_address_name() == "" || keywordDocument.getRoad_address_name() == null) {
             if (keywordDocument.getAddress_name() == "" || keywordDocument.getAddress_name() == null) {
@@ -60,16 +65,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             }
         } else {
             holder.addr.setText(keywordDocument.getRoad_address_name());
-        }
-        if (keywordDocument.getPhone() == null || keywordDocument.getPhone() == "") {
-            holder.phone.setText("업데이트 중");
-        } else {
-            holder.phone.setText(keywordDocument.getPhone());
-        }
-        if (keywordDocument.getPlace_url() == null || keywordDocument.getPlace_url().equals("")) {
-            holder.url.setText("업데이트 중");
-        } else {
-            holder.url.setText(keywordDocument.getPlace_url());
         }
     }
 
@@ -83,19 +78,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
         public TextView title;
-        public TextView category;
+        public ImageView category;
         public TextView addr;
-        public TextView phone;
-        public TextView url;
+        public TextView category_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view=itemView;
             title = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_name_text);
-            category = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_category_text);
+            category = (ImageView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_category_text);
             addr = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_addr_text);
-            phone = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_phone_text);
-            url = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.keyword_search_result_cardview_url_text);
+            category_name=(TextView)itemView.findViewById(R.id.keyword_search_category_name_textView);
         }
     }
 

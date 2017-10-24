@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical"
-    android:weightSum="10"
-    android:background="#eaeaea">
+    android:weightSum="10">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#f2f2f2"
-        android:paddingRight="20dp"
-        android:paddingLeft="10dp">
+        android:background="@drawable/search_view_background"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
         <ImageButton
+            android:id="@+id/keyword_search_back_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/keyword_search_back_btn"
-            android:src="@drawable/ic_action_back"
-            android:background="#00000000"/>
-        <EditText
+            android:background="#00000000"
+            android:src="@drawable/ic_arrow_back" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
-            android:hint="Search"
-            android:id="@+id/keyword_search_search_editText"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
+            android:layout_weight="6">
+
+            <EditText
+                android:id="@+id/keyword_search_search_editText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:hint="Search"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingLeft="16dp"
+                android:paddingRight="5dp"
+                android:background="@null"/>
+
+            <ImageButton
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_cancel"
+                android:id="@+id/keyword_search_cancle_btn"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/keyword_search_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="11dp"
         android:layout_weight="9"
-        android:id="@+id/keyword_search_recyclerView"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        >
+        android:paddingLeft="24dp"
+        android:paddingTop="12dp"
+        android:paddingRight="2dp"
+        android:background="@drawable/keyword_search_recycler_view_background"
+>
 
     </android.support.v7.widget.RecyclerView>
 

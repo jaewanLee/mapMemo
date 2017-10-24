@@ -36,6 +36,7 @@ import product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity;
 import product.dp.io.mapmo.Map.CustomMapView;
 import product.dp.io.mapmo.Map.CustomMarker;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
+import product.dp.io.mapmo.Menu.MenuActivity;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.Logger;
 
@@ -108,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
         memoContent_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_memoContent_textView);
         memoDetail_bt = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_memoDetail_textView);
         memoDetail_bt.hide();
-        call_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_call_imageButton);
-        share_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_share_imageButton);
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
     }

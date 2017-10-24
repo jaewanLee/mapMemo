@@ -32,6 +32,8 @@ public class Constant {
 
     public static final int DETAIL_MEMO_INTENT=9404;
 
+    public static final int MENU_INTENT=9405;
+
     public static String DEVICE_INFO_FETCHED="1024";
 
     public static final int GUEST_LOGIN=0;

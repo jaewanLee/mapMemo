@@ -26,7 +26,7 @@
     <string name="setting_awake_title">화면 자동 꺼짐 방지하기 </string>
     <string name="setting_memo_format_title">화면 자동 꺼짐 방지하기</string>
     <string name="setting_memo_format_hint">(배터리 감소 주의)</string>
-    <string name="setting_memo_title">메모 포맷하기 </string>
+    <string name="setting_memo_title">이용약관 </string>
     <string name="cs_sub_title">고객지원</string>
     <string name="cs_faq_title">FAQ</string>
     <string name="cs_userterm_title">이용약관</string>

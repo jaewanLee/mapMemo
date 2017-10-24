@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -49,11 +51,13 @@ import product.dp.io.mapmo.AddMemoView.AddMemoActivity;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
+import product.dp.io.mapmo.Menu.MenuActivity;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.TranscHash;
 
 import static android.view.View.VISIBLE;
+import static product.dp.io.mapmo.Util.Constant.MENU_INTENT;
 
 /**
  * Created by jaewanlee on 2017. 10. 19..
@@ -82,8 +86,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView memoName_tv;
     TextView memoContent_tv;
     FloatingActionButton memoDetail_bt;
-    ImageButton call_ib;
-    ImageButton share_ib;
+    FloatingActionButton call_bt;
+    FloatingActionButton share_bt;
 
     //하단 탭
     LinearLayout bottom_ll;
@@ -138,14 +142,16 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         memoContent_tv = (TextView) findViewById(product.dp.io.mapmo.R.id.main_memoContent_textView);
         memoDetail_bt = (FloatingActionButton) findViewById(product.dp.io.mapmo.R.id.main_memoDetail_textView);
         memoDetail_bt.hide();
-        call_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_call_imageButton);
-        share_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.main_share_imageButton);
         back_ib = (ImageButton) findViewById(R.id.main_back_ImageButton);
         init_ib = (ImageButton) findViewById(R.id.main_initSearch_ImageButton);
         bottom_ll=(LinearLayout)findViewById(R.id.main_bottom_linearlayout);
         memoList_ib=(ImageButton)findViewById(R.id.main_memoList_imageButton);
         splitbar_iv=(ImageView)findViewById(R.id.main_splitBar_ImgaeView);
         simpleMemoTitle_tv=(TextView)findViewById(R.id.main_simpleMemoTitle_TextView);
+        call_bt=(FloatingActionButton) findViewById(R.id.main_call_floatingbutton);
+        call_bt.hide();
+        share_bt=(FloatingActionButton)findViewById(R.id.main_share_floatingbutton);
+        share_bt.hide();
 
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
@@ -239,7 +245,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, MenuActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,MENU_INTENT);
             }
         });
 
@@ -387,8 +393,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(memoDatabase);
                 this.memoDetail_bt.show();
-
-
+                this.call_bt.show();
+                this.share_bt.show();
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
@@ -410,11 +416,20 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(newMemo);
                 this.memoDetail_bt.show();
+                this.call_bt.show();
+                this.share_bt.show();
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             }
-        } else {
+        }else if(requestCode==Constant.MENU_INTENT){
+            RealmResults realmResults=realm.where(MemoDatabase.class).findAll();
+            if(realmResults.size()<1){
+
+                mGoogleMap.clear();
+            }
+        }
+        else {
 
         }
     }
@@ -474,7 +489,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         MemoDatabase markerDatabase = (MemoDatabase) marker.getTag();
         memoDetailLayoutInit(markerDatabase);
 
+        if(markerDatabase.getMemo_no()!=-1){
+            this.memoDetail_bt.setBackgroundTintList(ColorStateList.valueOf(Color
+                    .parseColor("#8e24aa")));
+            this.memoDetail_bt.setImageResource(R.drawable.ic_edit_memo);
+        }
         this.memoDetail_bt.show();
+        this.call_bt.show();
+        this.share_bt.show();
         return true;
 
         //TODO 그냥 맵을 클릭한 경우 확인
@@ -524,9 +546,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
             });
-            this.call_ib.setOnClickListener(new View.OnClickListener() {
+            this.call_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     if (markerDatabase.getMemo_document_phone().equals("") || markerDatabase.getMemo_document_phone() == null)
                         Toast.makeText(HomeActivity.this, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
                     else {
@@ -535,13 +557,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             });
-            this.share_ib.setOnClickListener(new View.OnClickListener() {
+            this.share_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     //TODO 공유하기 기능 추가
                     Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
         bottom_ll.setVisibility(View.INVISIBLE);
 
@@ -569,6 +592,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapClick(LatLng latLng) {
         memoInfo_ll.setVisibility(View.INVISIBLE);
         this.memoDetail_bt.hide();
+        this.call_bt.hide();
+        this.share_bt.hide();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView_et.getWindowToken(), 0);
         back_ib.setVisibility(View.INVISIBLE);

@@ -2,14 +2,15 @@ package product.dp.io.mapmo.Util;
 
 import java.util.HashMap;
 
+import product.dp.io.mapmo.R;
+
 /**
  * Created by jaewanlee on 2017. 8. 8..
  */
 
 public class TranscHash {
     public static HashMap<String, String> categoryHash;
-    public static HashMap<Integer,Integer> spinnerToMarkerTag;
-    public static HashMap<Integer,Integer> markerTagToSpinner;
+    public static HashMap<String,Integer> categoryToImage;
     public static TranscHash instance;
 
     TranscHash() {
@@ -26,6 +27,10 @@ public class TranscHash {
 
     static public String rawToreFinedCategory(String raw_category){
         return categoryHash.get(raw_category);
+    }
+
+    static public int rawToImageCategory(String raw_category){
+        return categoryToImage.get(raw_category);
     }
 
     static public void init() {
@@ -50,6 +55,27 @@ public class TranscHash {
         categoryHash.put("CE7", "카페");
         categoryHash.put("HP8", "병원");
         categoryHash.put("PM9", "약국");
+
+        categoryToImage=new HashMap<>();
+
+        categoryToImage.put("HM1", R.drawable.ic_category_shoppingcart);
+        categoryToImage.put("CS2", R.drawable.ic_category_convenince_store);
+        categoryToImage.put("PS3", R.drawable.ic_category_kinder_garden);
+        categoryToImage.put("SC4", R.drawable.ic_category_school);
+        categoryToImage.put("AC5", R.drawable.ic_category_school);
+        categoryToImage.put("PK6", R.drawable.ic_category_parking);
+        categoryToImage.put("OL7", R.drawable.ic_category_gas_station);
+        categoryToImage.put("SW8", R.drawable.ic_category_gas_station);
+        categoryToImage.put("BK9", R.drawable.ic_category_bank);
+        categoryToImage.put("CT1", R.drawable.ic_category_facility);
+        categoryToImage.put("AG2", R.drawable.ic_category_facility);
+        categoryToImage.put("PO3", R.drawable.ic_category_facility);
+        categoryToImage.put("AT4", R.drawable.ic_category_attration);
+        categoryToImage.put("AD5", R.drawable.ic_category_hotel);
+        categoryToImage.put("FD6", R.drawable.ic_category_restaunrant);
+        categoryToImage.put("CE7", R.drawable.ic_category_cafe);
+        categoryToImage.put("HP8", R.drawable.ic_category_hospital);
+        categoryToImage.put("PM9", R.drawable.ic_category_pharmacy);
 
 //        spinnerToMarkerTag=new HashMap<>();
 //        spinnerToMarkerTag.put(0,9107);
