@@ -57,6 +57,8 @@ public class MainApplication extends Application {
 
         KakaoSDK.init(new KakaoSDKAdapter());
 
+
+        // Preload CUstom Tabs Service for Improved Perfomance
         registerActivityLifecycleCallbacks(new CustomTabsActivityLifecycleCallbacks());
 
     }

@@ -162,15 +162,18 @@
                     android:layout_marginTop="28dp"
                     android:layout_below="@+id/lock_set_lay"
                     >
+
                     <TextView
-                        android:layout_marginLeft="20dp"
-                        android:layout_centerVertical="true"
+                        android:id="@+id/menu_memo_reset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:text="메모 포맷하기"
-                        android:textColor="@color/black"
-                        android:id="@+id/menu_memo_reset"
-                        />
+                        android:textColor="@color/black" />
                     <ImageButton
                         android:id="@+id/format_arrow"
                         android:layout_width="wrap_content"

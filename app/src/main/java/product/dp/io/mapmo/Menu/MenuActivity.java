@@ -1,10 +1,12 @@
-package product.dp.io.mapmo.HomeView;
+package product.dp.io.mapmo.Menu;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +52,8 @@ import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.AsyncTaskAttatchImage;
 import product.dp.io.mapmo.Util.Logger;
+import saschpe.android.customtabs.CustomTabsHelper;
+import saschpe.android.customtabs.WebViewFallback;
 
 import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
 
@@ -57,13 +62,13 @@ public class MenuActivity extends AppCompatActivity {
 
     private ImageView userImage;
     TextView userName;
-    TextView userId;
+//    TextView userId;
     com.kakao.usermgmt.LoginButton kakaoLogin;
     //TODO typeSomething 버튼들 만들기
     Switch lockScreen;
     Button logout_bt;
-    TextView resetMemo_tv;
-
+//    TextView resetMemo_tv;
+    RelativeLayout reset_layout, faq_layout, userterm_layout;
 
     SharedPreferences sharedPreferences;
 
@@ -82,39 +87,6 @@ public class MenuActivity extends AppCompatActivity {
 
         socialLogin();
 
-//        userImage = (ImageButton) findViewById(R.id.menu_imgae_ImageButton);
-//        userName = (TextView) findViewById(R.id.menu_userName_TextView);
-//        userId = (TextView) findViewById(R.id.menu_userId_TextView);
-//        cancelButton = (Button) findViewById(R.id.menu_cancle_button);
-//        okButton = (Button) findViewById(R.id.menu_ok_button);
-//        lockScreen = (Switch) findViewById(R.id.menu_Lockscreen_Switch);
-//
-//        sharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-//
-//        Glide.with(this).load(R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
-//
-//        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen",false));
-//
-//        lockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                SharedPreferences.Editor editor=sharedPreferences.edit();
-//                if(b){
-//                    editor.putBoolean("lockScreen",true);
-//                    editor.apply();
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    startService(intent);
-//                }else{
-//                    editor.putBoolean("lockScreen",false);
-//                    editor.apply();
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    stopService(intent);
-//                }
-//
-//            }
-//        });
-
-
     }
 
 
@@ -124,10 +96,10 @@ public class MenuActivity extends AppCompatActivity {
         userImage = (ImageView) findViewById(product.dp.io.mapmo.R.id.menu_profile_image);
         userName = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_name);
         kakaoLogin = (LoginButton) findViewById(product.dp.io.mapmo.R.id.menu_kakaologin_button);
-        logout_bt=(Button)findViewById(R.id.menu_logout_button);
-        logout_bt.setVisibility(View.INVISIBLE);
-
-//        Glide.with(this).load(product.dp.io.mapmo.R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
+        reset_layout = (RelativeLayout) findViewById(R.id.format_set_lay);
+        faq_layout = (RelativeLayout) findViewById(R.id.faq_set_lay);
+        userterm_layout = (RelativeLayout) findViewById(R.id.userterm_set_lay);
+        logout_bt= (Button)findViewById(R.id.menu_logout_button);
 
         lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen", false));
 
@@ -195,7 +167,8 @@ public class MenuActivity extends AppCompatActivity {
                 Logger.d("로그아웃 버튼 클릭");
             }
         });
-        resetMemo_tv.setOnClickListener(new View.OnClickListener() {
+
+        reset_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
@@ -227,6 +200,25 @@ public class MenuActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+            }
+        });
+
+        faq_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int index = 0;
+
+                callToChromeCustomTab(index);
+            }
+        });
+
+
+        userterm_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int index = 0;
+
+                callToChromeCustomTab(index);
             }
         });
 
@@ -377,7 +369,6 @@ public class MenuActivity extends AppCompatActivity {
 
     private void setProfileInfo(final String user_name, String email, String image_url) {
         userName.setText(user_name);
-        userId.setText(email);
         Glide.with(this)
                 .load(image_url)
                 .centerCrop()
@@ -460,19 +451,49 @@ public class MenuActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // redirect to 로그인 뷰
-//    protected void redirectLogin() {
-//        final Intent next_intent = new Intent(this, MenuActivity.class);
-//        next_intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//        startActivity(next_intent);
-//        finish();
-//
-//    }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Session.getCurrentSession().removeCallback(_kakaoSessionCallback);
     }
+
+    private void callToChromeCustomTab(int index) {
+
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                .addDefaultShareMenuItem()
+                .setToolbarColor(this.getResources().getColor(R.color.colorPrimary))
+                .setShowTitle(true)
+//                .setCloseButtonIcon(backArrow)
+                .build();
+
+// This is optional but recommended
+        CustomTabsHelper.addKeepAliveExtra(this, customTabsIntent.intent);
+
+
+        switch(index) {
+
+            case 0 :
+
+                CustomTabsHelper.openCustomTab(this, customTabsIntent,
+                        Uri.parse("https://airbridge.io"),
+                        new WebViewFallback());
+
+                break;
+
+            case 1 :
+
+                CustomTabsHelper.openCustomTab(this, customTabsIntent,
+                        Uri.parse("https://bitbucket.org/teamteheranslippers/mapmo"),
+                        new WebViewFallback());
+
+
+
+                break;
+
+        }
+
+
+    }
+
 }
