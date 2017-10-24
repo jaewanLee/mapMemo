@@ -23,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.ActionBar.Transparent">
 
+        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/Google_Aip_Key"/>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -31,9 +33,9 @@
             android:name="com.kakao.sdk.ClientSecret"
             android:value="@string/KAKAO_CLIENT_SECRET_VALUE" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/Google_Aip_Key" />
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="@string/Google_Aip_Key" />-->
 
         <activity
             android:name="product.dp.io.mapmo.HomeView.MainActivity"
