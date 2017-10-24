@@ -1,11 +1,10 @@
-package product.dp.io.mapmo.Menu;
+package product.dp.io.mapmo.HomeView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,10 +32,7 @@ import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -51,6 +47,7 @@ import product.dp.io.mapmo.Database.UserDatabase;
 import product.dp.io.mapmo.LockScreen.Service.ScreenService;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
+import product.dp.io.mapmo.Util.AsyncTaskAttatchImage;
 import product.dp.io.mapmo.Util.Logger;
 
 import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
@@ -126,34 +123,13 @@ public class MenuActivity extends AppCompatActivity {
 
         userImage = (ImageView) findViewById(product.dp.io.mapmo.R.id.menu_profile_image);
         userName = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_name);
-        userId = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_email);
         kakaoLogin = (LoginButton) findViewById(product.dp.io.mapmo.R.id.menu_kakaologin_button);
-        lockScreen = (Switch) findViewById(product.dp.io.mapmo.R.id.menu_Lockscreen_Switch);
-        logout_bt = (Button) findViewById(R.id.menu_logout_button);
+        logout_bt=(Button)findViewById(R.id.menu_logout_button);
         logout_bt.setVisibility(View.INVISIBLE);
-        resetMemo_tv = (TextView) findViewById(R.id.menu_memo_reset);
+
+//        Glide.with(this).load(product.dp.io.mapmo.R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
 
         lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen", false));
-
-        _user_db=MainApplication.getMainApplicationContext().getOnUserDatabase();
-        if(_user_db!=null){
-            if(_user_db.getUser_image_url()!=null&&!_user_db.getUser_email().equals("guest")){
-                File file=new File(_user_db.getUser_image_url());
-                if(file.canRead()){
-                    Glide.with(this)
-                            .load(file)
-                            .centerCrop()
-                            .into(userImage);
-                    userName.setText(_user_db.getUser_email());
-                    userId.setText(_user_db.getUser_email());
-                }
-            }
-            else
-                _user_db=new UserDatabase();
-        }else
-            _user_db=new UserDatabase();
-
-
 
     }
 
@@ -192,7 +168,7 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(ErrorResult errorResult) {
                         super.onFailure(errorResult);
-                        Logger.d("err code: " + errorResult.getErrorMessage());
+                        Logger.d("err code: "+errorResult.getErrorMessage());
                         Toast.makeText(MenuActivity.this, "로그아웃에 실패하였습니다", Toast.LENGTH_SHORT).show();
                     }
 
@@ -204,12 +180,12 @@ public class MenuActivity extends AppCompatActivity {
                         kakaoLogin.setVisibility(View.VISIBLE);
                         logout_bt.setVisibility(View.INVISIBLE);
 
-                        Logger.d(String.valueOf("onSuccess result: " + result));
+                        Logger.d(String.valueOf("onSuccess result: "+result));
 
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
                         editor.clear();
                         editor.apply();
-                        UserDatabase guestUser = new UserDatabase();
+                        UserDatabase guestUser=new UserDatabase();
                         guestUser.setUser_email("guest");
                         MainApplication.getMainApplicationContext().setOnUserDatabase(guestUser);
                     }
@@ -258,12 +234,11 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void socialLogin() {
-
-
         _kakaoSessionCallback = new KakaoSessionCallback();
 
         Session.getCurrentSession().addCallback(_kakaoSessionCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
+
     }
 
     // 카카오 세션 콜백,앱에 카카오 로그인이 성공한 경우(기존 로그인시에는 checkAndImplicitopen으로 자동 실행
@@ -284,6 +259,8 @@ public class MenuActivity extends AppCompatActivity {
             setContentView(product.dp.io.mapmo.R.layout.activity_menu);
         }
     }
+
+
 
 
     // 카카오 세션 호출
@@ -411,37 +388,11 @@ public class MenuActivity extends AppCompatActivity {
                 .into(new SimpleTarget<Bitmap>(SIZE_ORIGINAL,SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        saveImage(resource,user_name);
+//                        saveImage(resource,user_name);
                     }
                 });
 
-    }
-
-    private void saveImage(Bitmap image,String user_name){
-        String savedImagePath = null;
-
-        String imageFileName = "JPEG_" + user_name + ".jpg";
-        File storageDir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/MapMo");
-        boolean success = true;
-        if (!storageDir.exists()) {
-            success = storageDir.mkdirs();
-        }
-        if (success) {
-            File imageFile = new File(storageDir, imageFileName);
-            savedImagePath = imageFile.getAbsolutePath();
-            try {
-                OutputStream fOut = new FileOutputStream(imageFile);
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                fOut.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        }
-        _user_db.setUser_image_url(savedImagePath);
+        new AsyncTaskAttatchImage(userImage, this).execute(image_url);
     }
 
     private void sendUserProfile(String user_name, String email, String image_url) {

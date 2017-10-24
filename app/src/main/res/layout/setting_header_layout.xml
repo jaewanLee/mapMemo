@@ -6,7 +6,7 @@
     android:gravity="center_vertical">
 
     <ImageButton
-        android:id="@+id/header_init_button"
+        android:id="@+id/header_back_button"
         android:layout_marginLeft="16dp"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -16,24 +16,14 @@
     <TextView
         android:id="@+id/header_title"
         android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/header_init_button"
+        android:layout_toRightOf="@+id/header_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textSize="14sp"
         android:textColor="@color/black"
+        android:text="@string/setting_menu_title"
         />
-
-    <ImageButton
-        android:id="@+id/header_dismiss_button"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_centerVertical="true"
-        android:background="@drawable/ic_close"/>
-
-
     <!--<Button-->
         <!--android:id="@+id/dismiss_button"-->
         <!--android:layout_width="22dp"-->
