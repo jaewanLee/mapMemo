@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -50,12 +51,12 @@ public class MenuActivity extends AppCompatActivity {
 
     private ImageView userImage;
     TextView userName;
-    TextView userId;
+//    TextView userId;
     com.kakao.usermgmt.LoginButton kakaoLogin;
     //TODO typeSomething 버튼들 만들기
     Switch lockScreen;
     Button logout_bt;
-
+    ImageButton format_button, faq_button, agreement_button;
 
     SharedPreferences sharedPreferences;
 
@@ -74,39 +75,6 @@ public class MenuActivity extends AppCompatActivity {
 
         socialLogin();
 
-//        userImage = (ImageButton) findViewById(R.id.menu_imgae_ImageButton);
-//        userName = (TextView) findViewById(R.id.menu_userName_TextView);
-//        userId = (TextView) findViewById(R.id.menu_userId_TextView);
-//        cancelButton = (Button) findViewById(R.id.menu_cancle_button);
-//        okButton = (Button) findViewById(R.id.menu_ok_button);
-//        lockScreen = (Switch) findViewById(R.id.menu_Lockscreen_Switch);
-//
-//        sharedPreferences=getSharedPreferences("Config",MODE_PRIVATE);
-//
-//        Glide.with(this).load(R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
-//
-//        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen",false));
-//
-//        lockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                SharedPreferences.Editor editor=sharedPreferences.edit();
-//                if(b){
-//                    editor.putBoolean("lockScreen",true);
-//                    editor.apply();
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    startService(intent);
-//                }else{
-//                    editor.putBoolean("lockScreen",false);
-//                    editor.apply();
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    stopService(intent);
-//                }
-//
-//            }
-//        });
-
-
     }
 
 
@@ -115,11 +83,12 @@ public class MenuActivity extends AppCompatActivity {
 
         userImage = (ImageView) findViewById(product.dp.io.mapmo.R.id.menu_profile_image);
         userName = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_name);
-        userId = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_email);
+//        userId = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_email);
         kakaoLogin = (LoginButton) findViewById(product.dp.io.mapmo.R.id.menu_kakaologin_button);
         lockScreen = (Switch) findViewById(product.dp.io.mapmo.R.id.menu_Lockscreen_Switch);
-        logout_bt=(Button)findViewById(R.id.menu_logout_button);
-        logout_bt.setVisibility(View.INVISIBLE);
+        logout_bt= (Button)findViewById(R.id.menu_logout_button);
+
+//        logout_bt.setVisibility(View.INVISIBLE);
 
         Glide.with(this).load(product.dp.io.mapmo.R.drawable.glide_testing_image).apply(RequestOptions.circleCropTransform()).into(userImage);
 
@@ -336,7 +305,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private void setProfileInfo(String user_name, String email, String image_url) {
         userName.setText(user_name);
-        userId.setText(email);
+//        userId.setText(email);
         Glide.with(this).load(image_url).apply(RequestOptions.circleCropTransform()).into(userImage);
 
         new AsyncTaskAttatchImage(userImage, this).execute(image_url);
