@@ -65,7 +65,7 @@ public class MenuActivity extends AppCompatActivity {
 //    TextView userId;
     com.kakao.usermgmt.LoginButton kakaoLogin;
     //TODO typeSomething 버튼들 만들기
-    Switch lockScreen;
+//    Switch lockScreen;
     Button logout_bt;
 //    TextView resetMemo_tv;
     RelativeLayout reset_layout, faq_layout, userterm_layout;
@@ -101,30 +101,30 @@ public class MenuActivity extends AppCompatActivity {
         userterm_layout = (RelativeLayout) findViewById(R.id.userterm_set_lay);
         logout_bt= (Button)findViewById(R.id.menu_logout_button);
 
-        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen", false));
+//        lockScreen.setChecked(sharedPreferences.getBoolean("lockScreen", false));
 
     }
 
 
     private void initFunction() {
-        lockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (b) {
-                    editor.putBoolean("lockScreen", true);
-                    editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-                    startService(intent);
-                } else {
-                    editor.putBoolean("lockScreen", false);
-                    editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-                    stopService(intent);
-                }
-
-            }
-        });
+//        lockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                if (b) {
+//                    editor.putBoolean("lockScreen", true);
+//                    editor.apply();
+//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
+//                    startService(intent);
+//                } else {
+//                    editor.putBoolean("lockScreen", false);
+//                    editor.apply();
+//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
+//                    stopService(intent);
+//                }
+//
+//            }
+//        });
 
         logout_bt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,7 +216,7 @@ public class MenuActivity extends AppCompatActivity {
         userterm_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int index = 0;
+                int index = 1;
 
                 callToChromeCustomTab(index);
             }
