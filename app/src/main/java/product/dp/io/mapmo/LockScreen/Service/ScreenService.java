@@ -5,14 +5,13 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import product.dp.io.mapmo.LockScreen.BoradcastReceiver.RestartReceiver;
-import product.dp.io.mapmo.LockScreen.BoradcastReceiver.ScreenReceiver;
+import product.dp.io.mapmo.R;
 
 /**
  * Created by jaewanlee on 2017. 8. 2..
@@ -20,7 +19,7 @@ import product.dp.io.mapmo.LockScreen.BoradcastReceiver.ScreenReceiver;
 public class ScreenService extends Service {
 
 
-    private ScreenReceiver screenRecevier = null;
+
 
     @Nullable
     @Override
@@ -32,10 +31,6 @@ public class ScreenService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        screenRecevier = new ScreenReceiver();
-        IntentFilter intentFilte = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(screenRecevier, intentFilte);
-
         registerRestartAlarm(true);
     }
 
@@ -43,33 +38,37 @@ public class ScreenService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
+//        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, HomeActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Notification.Builder mBuilder = new Notification.Builder(this);
+//        BitmapDrawable drawable=(BitmapDrawable)getResources().getDrawable(R.drawable.launchicon);
+//        Bitmap bitmap=drawable.getBitmap();
+//        mBuilder.setLargeIcon(bitmap);
+//        mBuilder.setWhen(System.currentTimeMillis());
+//        mBuilder.setContentTitle("Notification.Builder Title");
+//        mBuilder.setContentText("Notification.Builder Massage");
+//        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+//        mBuilder.setContentIntent(pendingIntent);
+//        mBuilder.setAutoCancel(true);
+//        nm.notify(111, mBuilder.build());
+//
+
         NotificationCompat.Builder mBuilder =   new NotificationCompat.Builder(this)
-                .setSmallIcon(product.dp.io.mapmo.R.drawable.ic_action_name) // notification icon
-                .setContentTitle("Notification!") // title for notification
-                .setContentText("Hello word") // message for notification
+                .setSmallIcon(R.drawable.launchicon) // notification icon
+                .setContentTitle("MemoTitle") // title for notification
+                .setContentText("Memo Context") // message for notification
+                .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true);
         Notification notification=mBuilder.build();
-        startForeground(1,notification);
+        startForeground(111,notification);
 
-        if (intent != null) {
-            if (intent.getAction() == null) {
-                if (screenRecevier == null) {
-                    screenRecevier = new ScreenReceiver();
-                    IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-                    registerReceiver(screenRecevier, intentFilter);
-                }
-            }
-        }
         return START_REDELIVER_INTENT;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        if(screenRecevier!=null){
-            unregisterReceiver(screenRecevier);
-        }
 
         registerRestartAlarm(false);
     }

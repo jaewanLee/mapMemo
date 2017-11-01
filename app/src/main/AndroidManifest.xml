@@ -122,7 +122,6 @@
 
         </activity>
         <activity android:name="product.dp.io.mapmo.Shared.SharedActivity"></activity>
-        <activity android:name=".PushMessage.PushActivity"></activity>
     </application>
 
 </manifest>

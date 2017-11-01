@@ -53,7 +53,6 @@ import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.Database.UserDatabase;
 import product.dp.io.mapmo.LockScreen.Service.ScreenService;
-import product.dp.io.mapmo.PushMessage.PushActivity;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Logger;
@@ -135,10 +134,10 @@ public class MenuActivity extends AppCompatActivity {
 
                     editor.putBoolean("lockScreen", true);
                     editor.apply();
-                    Intent intent=new Intent(getApplicationContext(), PushActivity.class);
-                    startActivity(intent);
-//                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-//                    startService(intent);
+//                    Intent intent=new Intent(getApplicationContext(), PushActivity.class);
+//                    startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
+                    startService(intent);
                 } else {
                     editor.putBoolean("lockScreen", false);
                     editor.apply();
