@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+
+import product.dp.io.mapmo.Util.TranscHash;
 
 /**
  * Created by jaewanlee on 2017. 9. 11..
@@ -38,8 +41,12 @@ public class MemoListShareAdapter  extends RecyclerView.Adapter<MemoListShareAda
         final MemoListDatabase memoDatabase=memoDatabases.get(position);
 
         holder.memoTitle_tv.setText(memoDatabase.getMemo_document_place_name());
-        holder.memoCategory_iv.setImageResource(product.dp.io.mapmo.R.drawable.ic_action_back);
-        holder.createDate_tv.setText(new Date(memoDatabase.getMemo_createDate()).toString());
+        String category=memoDatabase.getMemo_document_category_group_code();
+        holder.memoCategory_iv.setText(TranscHash.rawToreFinedCategory(category));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
+        Date currentTime = new Date(memoDatabase.getMemo_createDate());
+        String dTime = formatter.format(currentTime);
+        holder.createDate_tv.setText(dTime);
         holder.memoContent_tv.setText(memoDatabase.getMemo_content());
         holder.isSharable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -63,7 +70,7 @@ public class MemoListShareAdapter  extends RecyclerView.Adapter<MemoListShareAda
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView memoTitle_tv;
-        ImageView memoCategory_iv;
+        TextView memoCategory_iv;
         TextView createDate_tv;
         TextView memoContent_tv;
         CheckBox isSharable;
@@ -71,7 +78,7 @@ public class MemoListShareAdapter  extends RecyclerView.Adapter<MemoListShareAda
         public ViewHolder(final View itemView) {
             super(itemView);
             memoTitle_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_title_TextView);
-            memoCategory_iv = (ImageView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_category_ImageView);
+            memoCategory_iv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_category_ImageView);
             createDate_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_date_TextView);
             memoContent_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_memoContent_TextView);
             isSharable=(CheckBox) itemView.findViewById(product.dp.io.mapmo.R.id.memoListshare_share_CheckButton);

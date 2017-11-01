@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -41,28 +38,27 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
+import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Logger;
 
 public class MemoListActivity extends AppCompatActivity {
-    //상단 바
-    ImageButton full_ib;
-    ImageButton close_ib;
-    //상단 탭
-    LinearLayout tabBar_ll;
-    ImageButton menu_ib;
-    EditText search_et;
-    ImageButton searchHistory_ib;
-    Button share_bt;
-    ImageButton search_ib;
 
-    FrameLayout memolist_fl;
+    //상단 탭
+    LinearLayout default_ll;
+    ImageButton back_ib;
+    ImageButton share_ib;
+
+    LinearLayout shareTop_ll;
+    ImageButton close_ib;
 
     RecyclerView recyclerView;
 
+
     LinearLayout sharelayout_LL;
-    Button cancleSharing_bt;
-    Button confirmSharing_bt;
+    LinearLayout cancleSharing_ll;
+    LinearLayout confirmSharing_ll;
+
 
     Realm realm;
 
@@ -79,22 +75,18 @@ public class MemoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(product.dp.io.mapmo.R.layout.activity_memo_list);
 
-        full_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.memoList_full_ImageButton);
-        close_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.memoList_close_ImageButton);
+        default_ll=(LinearLayout)findViewById(R.id.memoList_default_LinearLayout);
+        back_ib=(ImageButton)findViewById(R.id.memoList_menu_ImageButtona);
+        share_ib=(ImageButton)findViewById(R.id.memoList_share_ImageButton);
 
-        tabBar_ll = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.memoList_tabBar_LinearLayout);
-        menu_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.memoList_menu_ImageButton);
-        search_et = (EditText) findViewById(product.dp.io.mapmo.R.id.memoList_searchView_editText);
-        searchHistory_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.memoList_searchHistory_ImageButton);
-        share_bt = (Button) findViewById(product.dp.io.mapmo.R.id.memoList_share_Button);
-        search_ib = (ImageButton) findViewById(product.dp.io.mapmo.R.id.memoList_search_ImageButton);
+        shareTop_ll=(LinearLayout)findViewById(R.id.memoList_share_linearLayout);
+        close_ib=(ImageButton)findViewById(R.id.memoList_close_imageButton);
 
         recyclerView = (RecyclerView) findViewById(product.dp.io.mapmo.R.id.memoList_memos_recyclerView);
 
-        memolist_fl = (FrameLayout) findViewById(product.dp.io.mapmo.R.id.memoList_list_FrameLayout);
         sharelayout_LL = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.memoList_share_LinearLayout);
-        cancleSharing_bt = (Button) findViewById(product.dp.io.mapmo.R.id.memoList_cancleSharing_Button);
-        confirmSharing_bt = (Button) findViewById(product.dp.io.mapmo.R.id.memoList_confirmSharing_Button);
+        cancleSharing_ll=(LinearLayout)findViewById(R.id.memoList_cancleSharing_Button);
+        confirmSharing_ll=(LinearLayout)findViewById(R.id.memoList_confirmSharing_Button);
 
         realm = Realm.getDefaultInstance();
 
@@ -112,16 +104,18 @@ public class MemoListActivity extends AppCompatActivity {
             onNewIntent(getIntent());
 
         }
-        share_bt.setOnClickListener(new View.OnClickListener() {
+        share_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sharelayout_LL.setVisibility(View.VISIBLE);
+                shareTop_ll.setVisibility(View.VISIBLE);
+                default_ll.setVisibility(View.INVISIBLE);
                 memoListShareAdapter = new MemoListShareAdapter(getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListShareAdapter);
             }
         });
 
-        confirmSharing_bt.setOnClickListener(new View.OnClickListener() {
+        confirmSharing_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 shared_memo_key=MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email()+ System.currentTimeMillis();
@@ -212,29 +206,51 @@ public class MemoListActivity extends AppCompatActivity {
 
                 //다시 원상 복귀
                 sharelayout_LL.setVisibility(View.INVISIBLE);
+                default_ll.setVisibility(View.VISIBLE);
+                shareTop_ll.setVisibility(View.INVISIBLE);
                 memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
 
             }
         });
 
-        cancleSharing_bt.setOnClickListener(new View.OnClickListener() {
+        cancleSharing_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sharelayout_LL.setVisibility(View.INVISIBLE);
+                default_ll.setVisibility(View.VISIBLE);
+                shareTop_ll.setVisibility(View.INVISIBLE);
                 memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
             }
         });
 
-        search_ib.setOnClickListener(new View.OnClickListener() {
+        back_ib.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                memoDatabases=keywordSearch(search_et.getText().toString());
-                memoListAdapter.setMemoDatabases(memoDatabases);
-                memoListAdapter.notifyDataSetChanged();
+            public void onClick(View v) {
+                finish();
             }
         });
+
+        close_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharelayout_LL.setVisibility(View.INVISIBLE);
+                default_ll.setVisibility(View.VISIBLE);
+                shareTop_ll.setVisibility(View.INVISIBLE);
+                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
+                recyclerView.setAdapter(memoListAdapter);
+            }
+        });
+
+//        search_ib.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                memoDatabases=keywordSearch(search_et.getText().toString());
+//                memoListAdapter.setMemoDatabases(memoDatabases);
+//                memoListAdapter.notifyDataSetChanged();
+//            }
+//        });
 
     }
 

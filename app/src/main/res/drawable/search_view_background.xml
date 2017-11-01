@@ -1,20 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
     <!-- Bottom 2dp Shadow -->
-    <item android:left="2dp" >
+    <item android:bottom="0.5dp" >
         <shape  android:shape="rectangle">
 
-            <solid android:color="#e4e4e4" />
+            <solid android:color="#00000000" />
 
         </shape>
     </item>
     <!-- Bottom 2dp Shadow -->
+    <item android:bottom="1dp" >
+        <shape  android:shape="rectangle">
+
+            <solid android:color="#3c000000" />
+
+        </shape>
+    </item>
+    <!-- Bottom 2dp Shadow -->
+    <item android:bottom="1.5dp" >
+        <shape  android:shape="rectangle">
+
+            <solid android:color="#05000000" />
+
+        </shape>
+    </item>
+
+    <!-- Bottom 2dp Shadow -->
+    <item android:bottom="2dp" >
+        <shape  android:shape="rectangle">
+
+            <solid android:color="#35000000" />
+
+        </shape>
+    </item>
+
+    <!-- Bottom 2dp Shadow -->
+    <item android:bottom="2.5dp" >
+        <shape  android:shape="rectangle">
+
+            <solid android:color="#2d000000" />
+
+        </shape>
+    </item>
+    <!-- Bottom 2dp Shadow -->
+    <item android:bottom="3dp">
+        <shape  android:shape="rectangle">
+
+            <solid android:color="#01000000" />
+
+        </shape>
+    </item>
+
+    <!-- Bottom 2dp Shadow -->
     <item android:bottom="3.5dp">
         <shape  android:shape="rectangle">
 
-            <solid android:color="#949494" />
+            <solid android:color="#0c000000" />
 
         </shape>
     </item>

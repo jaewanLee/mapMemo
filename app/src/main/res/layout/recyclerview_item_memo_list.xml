@@ -1,74 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    android:paddingBottom="12dp"
+    android:paddingLeft="19dp"
+    android:paddingRight="16dp"
+    android:paddingTop="12dp"
+    android:id="@+id/memoList_layout"
+    android:background="@drawable/keyword_search_recycler_view_underbar">
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
+
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="memoTitle"
-                android:gravity="center_vertical"
-                android:id="@+id/memoListRecy_title_TextView"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_category_restaurant"
-                android:scaleType="fitCenter"
-                android:id="@+id/memoListRecy_category_ImageView"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="17:08:17"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/memoListRecy_date_TextView"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="118dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/memoListRecy_title_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="19dp"
+                        android:gravity="center_vertical"
+                        android:text="memoTitle"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/memoListRecy_memoContent_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="18dp"
+                        android:gravity="center_vertical"
+                        android:text="memo something"
+                        android:textColor="#8e24aa"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/memoListRecy_category_ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="음식점"
+                        android:textColor="#949494"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/memoListRecy_date_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="17:08:17" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
             <ImageView
+                android:id="@+id/memoListRecy_newMemo_ImageView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="#ec4a4a"
-                android:id="@+id/memoListRecy_newMemo_ImageView"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </FrameLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="memo something"
-            android:gravity="center_vertical"
-            android:id="@+id/memoListRecy_memoContent_TextView"/>
+
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_call_phoneimage"
+            android:id="@+id/memoListRecy_call_ImageButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="#00000000"
-            android:id="@+id/memoListRecy_call_ImageButton"/>
+            android:layout_marginRight="16dp"
+            android:scaleType="center"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_call_biolet" />
+
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_web_blogpage"
+            android:id="@+id/memoListRecy_web_ImageButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="#00000000"
-            android:id="@+id/memoListRecy_web_ImageButton"/>
+            android:scaleType="center"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_web" />
 
     </LinearLayout>
 

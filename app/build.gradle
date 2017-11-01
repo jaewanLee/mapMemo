@@ -12,7 +12,7 @@ allprojects {
         buildToolsVersion '26.0.2'
         defaultConfig {
             applicationId "product.dp.io.mapmo"
-            minSdkVersion 15
+            minSdkVersion 19
             targetSdkVersion 26
             versionCode 1
             versionName "1.0"

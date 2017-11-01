@@ -8,8 +8,8 @@
     <color name="setting_hint_color">#4c000000</color>
     <color name="setting_bg_color">#d8d8d8</color>
     <color name="setting_header_bg_color">#979797</color>
-    <color name="setting_sub_title_color">#e6e6e6</color>
+    <color name="setting_sub_title_color">#afafaf</color>
     <color name="setting_line_color">#23000000</color>
     <color name="social_login_color">#e7fb00</color>
-
+    <color name="letter_black">#000000</color>
 </resources>

@@ -22,6 +22,7 @@ import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.Map.KeywordSearchInterface;
 import product.dp.io.mapmo.Map.KeywordSearchRepo;
+import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.Logger;
 import retrofit2.Call;
@@ -33,6 +34,7 @@ public class KeywordSearchActivity extends AppCompatActivity {
     ImageButton back_img_btn;
     EditText search_edit_text;
     KeywordSearchInterface keywordSearchInterface;
+    ImageButton search_cancle;
     MainApplication mainApplication;
 
     RecyclerView searchResult_recyclerView;
@@ -55,6 +57,7 @@ public class KeywordSearchActivity extends AppCompatActivity {
     private void layoutInit() {
         back_img_btn = (ImageButton) findViewById(product.dp.io.mapmo.R.id.keyword_search_back_btn);
         search_edit_text = (EditText) findViewById(product.dp.io.mapmo.R.id.keyword_search_search_editText);
+        search_cancle = (ImageButton) findViewById(R.id.keyword_search_cancle_btn);
         searchResult_recyclerView = (RecyclerView) findViewById(product.dp.io.mapmo.R.id.keyword_search_recyclerView);
         //어플리케이션 데이터가져오기
         mainApplication = (MainApplication) getApplication();
@@ -129,11 +132,18 @@ public class KeywordSearchActivity extends AppCompatActivity {
                 finish();
             }
         });
+        search_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search_edit_text.setText("");
+            }
+        });
 
     }
 
     //처음 데이터가 날라온 경우
     public void setSearchResult(String query) {
+        search_edit_text.setText(query);
         Call<KeywordSearchRepo> call = keywordSearchInterface.getKeywordSearchRepo(query);
 
         call.enqueue(new Callback<KeywordSearchRepo>() {
@@ -156,7 +166,6 @@ public class KeywordSearchActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

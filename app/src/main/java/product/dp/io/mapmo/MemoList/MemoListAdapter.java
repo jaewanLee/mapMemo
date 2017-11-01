@@ -16,14 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import product.dp.io.mapmo.AddMemoView.AddMemoActivity;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.Util.Constant;
+import product.dp.io.mapmo.Util.TranscHash;
 import saschpe.android.customtabs.CustomTabsHelper;
 import saschpe.android.customtabs.WebViewFallback;
 
@@ -54,10 +57,13 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         currentMemoListDatabase = memoDatabases.get(position);
-
         holder.memoTitle_tv.setText(currentMemoListDatabase.getMemo_document_place_name());
-        holder.memoCategory_iv.setImageResource(product.dp.io.mapmo.R.drawable.ic_action_back);
-        holder.createDate_tv.setText(new Date(currentMemoListDatabase.getMemo_createDate()).toString());
+        String category_name=currentMemoListDatabase.getMemo_document_category_group_code();
+        holder.memoCategory_tv.setText(TranscHash.rawToreFinedCategory(category_name));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
+        Date currentTime = new Date(currentMemoListDatabase.getMemo_createDate());
+        String dTime = formatter.format(currentTime);
+        holder.createDate_tv.setText(dTime);
         holder.memoContent_tv.setText(currentMemoListDatabase.getMemo_content());
         holder.phoneCall_ib.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,18 +171,17 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView memoTitle_tv;
-        ImageView memoCategory_iv;
-        TextView createDate_tv;
         TextView memoContent_tv;
+        TextView memoCategory_tv;
+        TextView createDate_tv;
         ImageButton phoneCall_ib;
         ImageButton blogWeb_ib;
-
         ImageView newMemo_iv;
 
         public ViewHolder(View itemView) {
             super(itemView);
             memoTitle_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_title_TextView);
-            memoCategory_iv = (ImageView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_category_ImageView);
+            memoCategory_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_category_ImageView);
             createDate_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_date_TextView);
             memoContent_tv = (TextView) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_memoContent_TextView);
             phoneCall_ib = (ImageButton) itemView.findViewById(product.dp.io.mapmo.R.id.memoListRecy_call_ImageButton);

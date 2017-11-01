@@ -30,6 +30,7 @@ public class TranscHash {
     }
 
     static public int rawToImageCategory(String raw_category){
+        Logger.d(raw_category);
         return categoryToImage.get(raw_category);
     }
 
@@ -37,7 +38,7 @@ public class TranscHash {
 
         categoryHash = new HashMap<>();
 
-        categoryHash.put("HM1", "대형마트");
+        categoryHash.put("MT1", "대형마트");
         categoryHash.put("CS2", "편의점");
         categoryHash.put("PS3", "어린이집,유치원");
         categoryHash.put("SC4", "학교");
@@ -58,7 +59,7 @@ public class TranscHash {
 
         categoryToImage=new HashMap<>();
 
-        categoryToImage.put("HM1", R.drawable.ic_category_shoppingcart);
+        categoryToImage.put("MT1", R.drawable.ic_category_shoppingcart);
         categoryToImage.put("CS2", R.drawable.ic_category_convenince_store);
         categoryToImage.put("PS3", R.drawable.ic_category_kinder_garden);
         categoryToImage.put("SC4", R.drawable.ic_category_school);

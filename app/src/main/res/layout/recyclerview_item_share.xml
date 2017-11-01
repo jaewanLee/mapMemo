@@ -1,60 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal">
+
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="321dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="20dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="28dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/memoListshare_title_TextView"
+                android:layout_width="146dp"
                 android:layout_height="match_parent"
-                android:text="memoTitle"
+                android:layout_marginTop="11dp"
                 android:gravity="center_vertical"
-                android:id="@+id/memoListshare_title_TextView"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_category_restaurant"
-                android:scaleType="fitCenter"
-                android:id="@+id/memoListshare_category_ImageView"
-                />
+                android:text="memoTitle"
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
             <TextView
+                android:id="@+id/memoListshare_category_ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="17:08:17"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/memoListshare_date_TextView"/>
+                android:layout_marginTop="12dp"
+                android:text="음식점"
+                android:textSize="12sp"
+                android:textColor="#949494"/>
 
         </LinearLayout>
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="memo something"
-            android:gravity="center_vertical"
-            android:id="@+id/memoListshare_memoContent_TextView"/>
+            android:layout_height="20dp">
+
+            <TextView
+                android:id="@+id/memoListshare_memoContent_TextView"
+                android:layout_width="146dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="memo something"
+
+                android:textSize="12sp"
+                android:textColor="#9e24aa"/>
+
+            <TextView
+                android:id="@+id/memoListshare_date_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="17:08:17"
+                android:textSize="12sp"
+                android:textColor="#949494"/>
+        </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
+
+    <CheckBox
+        android:id="@+id/memoListshare_share_CheckButton"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_call_phoneimage"
-            android:background="#00000000"
-            android:id="@+id/memoListshare_share_CheckButton"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_call_phoneimage"
+        android:layout_gravity="center_vertical"
+        android:buttonTint="#ffc400" />
 
 
 </LinearLayout>

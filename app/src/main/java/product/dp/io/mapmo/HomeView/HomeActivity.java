@@ -412,12 +412,13 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 simpleMemoTitle_tv.setText(newMemo.getMemo_document_place_name());
                 simpleMemoTitle_tv.setVisibility(VISIBLE);
                 splitbar_iv.setVisibility(VISIBLE);
-                bottom_ll.setVisibility(View.INVISIBLE);
+                bottom_ll.setVisibility(View.VISIBLE);
 
                 memoDetailLayoutInit(newMemo);
-                this.memoDetail_bt.show();
-                this.call_bt.show();
-                this.share_bt.show();
+                this.memoDetail_bt.hide();
+                this.call_bt.hide();
+                this.share_bt.hide();
+                memoInfo_ll.setVisibility(View.INVISIBLE);
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
