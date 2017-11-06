@@ -1,7 +1,5 @@
 package product.dp.io.mapmo.LockScreen;
 
-import product.dp.io.mapmo.Util.Logger;
-
 /**
  * Created by jaewanlee on 2017. 8. 11..
  */
@@ -23,14 +21,9 @@ public class CalculateDistance {
         this.currentLon = currentLon;
     }
 
-    public boolean calculate(double markerLat, double markerLon) {
+    public Double calculate(double markerLat, double markerLon) {
         double value = 6371 * Math.acos(Math.cos(Math.toRadians(currentLat)) * Math.cos(Math.toRadians(markerLat)) * Math.cos(Math.toRadians(markerLon) - Math.toRadians(currentLon)) + Math.sin(Math.toRadians(currentLat)) * Math.sin(Math.toRadians(markerLat)));
-        if (value < 1.0) {
-            Logger.d("제대로됨");
-            return true;
-        } else {
-            return false;
-        }
+        return  value;
     }
 
 

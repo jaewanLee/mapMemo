@@ -122,8 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="191dp"
             android:layout_below="@+id/profile_line_imgae"
-
-            android:paddingLeft="20dp">
+            android:layout_marginLeft="20dp">
 
             <TextView
                 android:id="@+id/setting_sub_title"
@@ -147,7 +146,6 @@
                     android:layout_height="20dp"
                     android:textSize="14sp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
                     android:text="주변 메모 푸쉬 설정"
                     android:textColor="@color/black" />
 
@@ -170,10 +168,11 @@
                     android:layout_width="142dp"
                     android:layout_height="21dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
                     android:text="데이터 백업"
                     android:textSize="14sp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
 
                 <ImageButton
                     android:id="@+id/menu_backup_imagebutton"
@@ -181,7 +180,10 @@
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="48dp"
-                    android:background="@drawable/ic_navigate_next_black" />
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:background="@drawable/ic_navigate_next_black"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -198,10 +200,10 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
                     android:text="메모 포맷"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
 
                 <ImageButton
                     android:id="@+id/format_arrow"
@@ -209,7 +211,9 @@
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="48dp"
-                    android:background="@drawable/ic_navigate_next_black" />
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -249,9 +253,10 @@
                     android:layout_width="27dp"
                     android:layout_height="21dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
                     android:text="@string/cs_faq_title"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
 
                 <ImageButton
                     android:id="@+id/faq_arrow"
@@ -259,7 +264,9 @@
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="48dp"
-                    android:background="@drawable/ic_navigate_next_black" />
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -274,9 +281,10 @@
                     android:layout_height="21dp"
                     android:textSize="14sp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
                     android:text="@string/cs_userterm_title"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
 
                 <ImageButton
                     android:id="@+id/user_term_arrow"
@@ -284,7 +292,9 @@
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="48dp"
-                    android:background="@drawable/ic_navigate_next_black" />
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
             </RelativeLayout>
         </RelativeLayout>
 

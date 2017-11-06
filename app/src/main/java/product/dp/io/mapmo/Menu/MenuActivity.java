@@ -3,6 +3,7 @@ package product.dp.io.mapmo.Menu;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,7 +53,8 @@ import okhttp3.RequestBody;
 import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.Database.UserDatabase;
-import product.dp.io.mapmo.LockScreen.Service.ScreenService;
+import product.dp.io.mapmo.PushMessage.PersistentService;
+import product.dp.io.mapmo.PushMessage.RestartService;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Logger;
@@ -86,6 +88,7 @@ public class MenuActivity extends AppCompatActivity {
     private UserDatabase mainApplication_userdb;
     private KakaoSessionCallback _kakaoSessionCallback;
 
+    RestartService restartService;
 
 
     @Override
@@ -104,23 +107,24 @@ public class MenuActivity extends AppCompatActivity {
 
     private void initLayout() {
         sharedPreferencesConfig = getSharedPreferences("Config", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(USER_SHARED, MODE_PRIVATE);
 
-        back_ib=(ImageButton)findViewById(R.id.header_back_button);
+        back_ib = (ImageButton) findViewById(R.id.header_back_button);
         userImage = (ImageView) findViewById(product.dp.io.mapmo.R.id.menu_profile_image);
         userName = (TextView) findViewById(product.dp.io.mapmo.R.id.user_profile_name);
         kakaoLogin = (LoginButton) findViewById(product.dp.io.mapmo.R.id.menu_kakaologin_button);
-        loginFake=(Button)findViewById(R.id.menu_kakaologinfake_button);
-        logout_bt= (Button)findViewById(R.id.menu_logout_button);
+        loginFake = (Button) findViewById(R.id.menu_kakaologinfake_button);
+        logout_bt = (Button) findViewById(R.id.menu_logout_button);
 
         format_layout = (RelativeLayout) findViewById(R.id.format_set_lay);
-        backup_rl=(RelativeLayout)findViewById(R.id.memu_backup_relativelayout);
+        backup_rl = (RelativeLayout) findViewById(R.id.memu_backup_relativelayout);
         faq_layout = (RelativeLayout) findViewById(R.id.faq_set_lay);
         userterm_layout = (RelativeLayout) findViewById(R.id.userterm_set_lay);
 
-        lockScreen=(Switch)findViewById(R.id.switch_memo);
+        lockScreen = (Switch) findViewById(R.id.switch_memo);
         lockScreen.setChecked(sharedPreferencesConfig.getBoolean("lockScreen", false));
 
-        mainApplication_userdb=MainApplication.getMainApplicationContext().getOnUserDatabase();
+        mainApplication_userdb = MainApplication.getMainApplicationContext().getOnUserDatabase();
 
     }
 
@@ -136,13 +140,22 @@ public class MenuActivity extends AppCompatActivity {
                     editor.apply();
 //                    Intent intent=new Intent(getApplicationContext(), PushActivity.class);
 //                    startActivity(intent);
-                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
+                    restartService = new RestartService();
+                    Intent intent = new Intent(getApplicationContext(), PersistentService.class);
+
+                    IntentFilter intentFilter = new IntentFilter("product.dp.io.mapmo.PushMessage.PersistentService");
+                    registerReceiver(restartService, intentFilter);
                     startService(intent);
                 } else {
                     editor.putBoolean("lockScreen", false);
                     editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), ScreenService.class);
-                    stopService(intent);
+                    if (restartService != null) {
+                        unregisterReceiver(restartService);
+                        Intent intent = new Intent(getApplicationContext(), PersistentService.class);
+                        stopService (intent);
+                    }
+
+
                 }
 
             }
@@ -154,7 +167,7 @@ public class MenuActivity extends AppCompatActivity {
                 UserManagement.requestLogout(new LogoutResponseCallback() {
                     @Override
                     public void onCompleteLogout() {
-                        Toast.makeText(MenuActivity.this, "성공적으로 로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MenuActivity.this, "성공적으로 로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
                         kakaoLogin.setClickable(true);
                         logout_bt.setVisibility(View.INVISIBLE);
                     }
@@ -162,8 +175,9 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(ErrorResult errorResult) {
                         super.onFailure(errorResult);
-                        Logger.d("err code: "+errorResult.getErrorMessage());
+                        Logger.d("err code: " + errorResult.getErrorMessage());
                         Toast.makeText(MenuActivity.this, "로그아웃에 실패하였습니다", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
@@ -174,15 +188,15 @@ public class MenuActivity extends AppCompatActivity {
                         kakaoLogin.setVisibility(View.VISIBLE);
                         logout_bt.setVisibility(View.INVISIBLE);
 
-                        Logger.d(String.valueOf("onSuccess result: "+result));
+                        Logger.d(String.valueOf("onSuccess result: " + result));
 
-                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.clear();
                         editor.apply();
-                        UserDatabase guestUser=new UserDatabase();
+                        UserDatabase guestUser = new UserDatabase();
                         guestUser.setUser_email("guest");
                         MainApplication.getMainApplicationContext().setOnUserDatabase(guestUser);
-                        mainApplication_userdb=guestUser;
+                        mainApplication_userdb = guestUser;
                         logout_bt.setVisibility(View.INVISIBLE);
                         loginFake.setVisibility(View.VISIBLE);
                         kakaoLogin.setVisibility(View.VISIBLE);
@@ -270,21 +284,21 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void socialLogin() {
-        String user_id=mainApplication_userdb.getUser_email();
+        String user_id = mainApplication_userdb.getUser_email();
         _kakaoSessionCallback = new KakaoSessionCallback();
         Session.getCurrentSession().addCallback(_kakaoSessionCallback);
-        if(!user_id.equals("guest")){
-            Bitmap bitmap=loadImage(user_id);
-            if(bitmap!=null){
+        if (!user_id.equals("guest")) {
+            Bitmap bitmap = loadImage(user_id);
+            if (bitmap != null) {
                 Glide.with(this)
                         .load(bitmap)
                         .centerCrop()
                         .into(userImage);
-                userName.setText(user_id);
-                kakaoLogin.setVisibility(View.INVISIBLE);
-                loginFake.setVisibility(View.INVISIBLE);
-                logout_bt.setVisibility(View.VISIBLE);
             }
+            userName.setText(user_id);
+            kakaoLogin.setVisibility(View.INVISIBLE);
+            loginFake.setVisibility(View.INVISIBLE);
+            logout_bt.setVisibility(View.VISIBLE);
             Session.getCurrentSession().checkAndImplicitOpen();
         }
     }
@@ -305,11 +319,8 @@ public class MenuActivity extends AppCompatActivity {
 //                Log.d("sociallogin", exception.toString());
             }
 
-            setContentView(product.dp.io.mapmo.R.layout.activity_menu);
         }
     }
-
-
 
 
     // 카카오 세션 호출
@@ -404,10 +415,10 @@ public class MenuActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(image_url)
                 .asBitmap()
-                .into(new SimpleTarget<Bitmap>(SIZE_ORIGINAL,SIZE_ORIGINAL) {
+                .into(new SimpleTarget<Bitmap>(SIZE_ORIGINAL, SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        saveImage(resource,user_name);
+                        saveImage(resource, user_name);
                     }
                 });
 
@@ -418,10 +429,10 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap resource, String user_name) {
-        Bitmap user_image=resource;
+        Bitmap user_image = resource;
         try {
-            FileOutputStream fos=openFileOutput(user_name+".png", Context.MODE_PRIVATE);
-            user_image.compress(Bitmap.CompressFormat.PNG,100,fos);
+            FileOutputStream fos = openFileOutput(user_name + ".png", Context.MODE_PRIVATE);
+            user_image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
         } catch (FileNotFoundException e) {
@@ -430,9 +441,10 @@ public class MenuActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private Bitmap loadImage(String user_name){
-        String imagepath="data/data"+"/product.dp.io.mapmo"+"/files/"+user_name+".png";
-        Bitmap user_image= BitmapFactory.decodeFile(imagepath);
+
+    private Bitmap loadImage(String user_name) {
+        String imagepath = "data/data" + "/product.dp.io.mapmo" + "/files/" + user_name + ".png";
+        Bitmap user_image = BitmapFactory.decodeFile(imagepath);
         return user_image;
     }
 
@@ -448,12 +460,18 @@ public class MenuActivity extends AppCompatActivity {
         builder.addPathSegment("users");
         builder.addPathSegment("kakao");
         builder.addPathSegment("post.php");
+        String user_image_url;
+        if(image_url==null||image_url.equals("")){
+            user_image_url="null";
+        }else{
+            user_image_url=image_url;
+        }
 
         //TODO myValue에다가 내 아이디랑 시간 써서 넣기
         FormBody.Builder formBuilder = new FormBody.Builder()
                 .add("user_email", email)
                 .add("user_name", user_name)
-                .add("user_image_url", image_url);
+                .add("user_image_url", user_image_url);
 
         RequestBody body = formBuilder.build();
 
@@ -495,21 +513,20 @@ public class MenuActivity extends AppCompatActivity {
     private void setUserDatabase(UserDatabase userDatabase) {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<UserDatabase> saveUserDatabase = realm.where(UserDatabase.class).equalTo("user_email", userDatabase.getUser_email()).findAll();
-        if (saveUserDatabase.size() > 0&&!mainApplication_userdb.getUser_email().equals("guest")) {
+        if (saveUserDatabase.size() > 0 && !mainApplication_userdb.getUser_email().equals("guest")) {
             //이미 로그인이 되어 있는 경우
             realm.beginTransaction();
             UserDatabase updateUserDatabse = saveUserDatabase.first();
             updateUserDatabse.setUser_image_url(userDatabase.getUser_image_url());
             realm.commitTransaction();
 
-        }else if(saveUserDatabase.size() > 0&&mainApplication_userdb.getUser_email().equals("guest")){
+        } else if (saveUserDatabase.size() > 0 && mainApplication_userdb.getUser_email().equals("guest")) {
             //이미 등록되어 있는 사용자가 다시 로그인하는 경우
             realm.beginTransaction();
             UserDatabase updateUserDatabse = saveUserDatabase.first();
             updateUserDatabse.setUser_image_url(userDatabase.getUser_image_url());
             realm.commitTransaction();
-        }
-        else {
+        } else {
             //새로운 유저인 경우
             realm.beginTransaction();
             UserDatabase newUserDatabase = realm.copyToRealm(userDatabase);
@@ -517,9 +534,8 @@ public class MenuActivity extends AppCompatActivity {
         }
         //메인 어플리케이션의 UserDatabase를 수정해줌
         MainApplication.getMainApplicationContext().setOnUserDatabase(userDatabase);
-        mainApplication_userdb=userDatabase;
+        mainApplication_userdb = userDatabase;
 
-        SharedPreferences sharedPreferences = getSharedPreferences(USER_SHARED, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isAutoLogin", true);
         editor.putString("user_email", userDatabase.getUser_email());
@@ -556,9 +572,9 @@ public class MenuActivity extends AppCompatActivity {
         CustomTabsHelper.addKeepAliveExtra(this, customTabsIntent.intent);
 
 
-        switch(index) {
+        switch (index) {
 
-            case 0 :
+            case 0:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
                         Uri.parse("https://airbridge.io"),
@@ -566,12 +582,11 @@ public class MenuActivity extends AppCompatActivity {
 
                 break;
 
-            case 1 :
+            case 1:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
                         Uri.parse("https://bitbucket.org/teamteheranslippers/mapmo"),
                         new WebViewFallback());
-
 
 
                 break;

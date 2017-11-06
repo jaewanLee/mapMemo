@@ -56,7 +56,6 @@ public class MemoListActivity extends AppCompatActivity {
 
 
     LinearLayout sharelayout_LL;
-    LinearLayout cancleSharing_ll;
     LinearLayout confirmSharing_ll;
 
 
@@ -75,18 +74,17 @@ public class MemoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(product.dp.io.mapmo.R.layout.activity_memo_list);
 
-        default_ll=(LinearLayout)findViewById(R.id.memoList_default_LinearLayout);
-        back_ib=(ImageButton)findViewById(R.id.memoList_menu_ImageButtona);
-        share_ib=(ImageButton)findViewById(R.id.memoList_share_ImageButton);
+        default_ll = (LinearLayout) findViewById(R.id.memoList_default_LinearLayout);
+        back_ib = (ImageButton) findViewById(R.id.memoList_menu_ImageButtona);
+        share_ib = (ImageButton) findViewById(R.id.memoList_share_ImageButton);
 
-        shareTop_ll=(LinearLayout)findViewById(R.id.memoList_share_linearLayout);
-        close_ib=(ImageButton)findViewById(R.id.memoList_close_imageButton);
+        shareTop_ll = (LinearLayout) findViewById(R.id.memoList_share_linearLayout);
+        close_ib = (ImageButton) findViewById(R.id.memoList_close_imageButton);
 
         recyclerView = (RecyclerView) findViewById(product.dp.io.mapmo.R.id.memoList_memos_recyclerView);
 
         sharelayout_LL = (LinearLayout) findViewById(product.dp.io.mapmo.R.id.memoList_share_LinearLayout);
-        cancleSharing_ll=(LinearLayout)findViewById(R.id.memoList_cancleSharing_Button);
-        confirmSharing_ll=(LinearLayout)findViewById(R.id.memoList_confirmSharing_Button);
+        confirmSharing_ll = (LinearLayout) findViewById(R.id.memoList_confirmSharing_Button);
 
         realm = Realm.getDefaultInstance();
 
@@ -95,7 +93,7 @@ public class MemoListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         memoDatabases = new ArrayList<>();
-        memoListAdapter = new MemoListAdapter(this,this, memoDatabases);
+        memoListAdapter = new MemoListAdapter(this, this, memoDatabases);
 
         DatabaseInit(memoDatabases, memoListAdapter, recyclerView);
 
@@ -118,7 +116,7 @@ public class MemoListActivity extends AppCompatActivity {
         confirmSharing_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shared_memo_key=MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email()+ System.currentTimeMillis();
+                shared_memo_key = MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email() + System.currentTimeMillis();
                 final ArrayList<MemoListDatabase> requestValue = new ArrayList<>();
 
                 for (MemoListDatabase memoListDatabase : memoListShareAdapter.memoDatabases) {
@@ -208,20 +206,9 @@ public class MemoListActivity extends AppCompatActivity {
                 sharelayout_LL.setVisibility(View.INVISIBLE);
                 default_ll.setVisibility(View.VISIBLE);
                 shareTop_ll.setVisibility(View.INVISIBLE);
-                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
+                memoListAdapter = new MemoListAdapter(MemoListActivity.this, getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
 
-            }
-        });
-
-        cancleSharing_ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharelayout_LL.setVisibility(View.INVISIBLE);
-                default_ll.setVisibility(View.VISIBLE);
-                shareTop_ll.setVisibility(View.INVISIBLE);
-                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
-                recyclerView.setAdapter(memoListAdapter);
             }
         });
 
@@ -238,7 +225,7 @@ public class MemoListActivity extends AppCompatActivity {
                 sharelayout_LL.setVisibility(View.INVISIBLE);
                 default_ll.setVisibility(View.VISIBLE);
                 shareTop_ll.setVisibility(View.INVISIBLE);
-                memoListAdapter = new MemoListAdapter(MemoListActivity.this,getApplicationContext(), memoDatabases);
+                memoListAdapter = new MemoListAdapter(MemoListActivity.this, getApplicationContext(), memoDatabases);
                 recyclerView.setAdapter(memoListAdapter);
             }
         });
@@ -313,17 +300,18 @@ public class MemoListActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Toast.makeText(this, "deepLink Clicked", Toast.LENGTH_SHORT).show();
-        String data=intent.getDataString();
-        int valuePosition=data.indexOf("key");
-        String shared_memo_key=data.substring(valuePosition+4);
-        Logger.d("deeplink shared key : "+shared_memo_key);
+        String data = intent.getDataString();
+        int valuePosition = data.indexOf("key");
+        String shared_memo_key = data.substring(valuePosition + 4);
+        Logger.d("deeplink shared key : " + shared_memo_key);
         //여기다가 MemoDatabaseARrayList에다가 가져온 데이터 추가하고 adapter에다가 notify보내기
         NetworkManager networkManager = NetworkManager.getInstance();
         OkHttpClient client = networkManager.getClient();
         HttpUrl.Builder builder = new HttpUrl.Builder();
 
+
         builder.scheme("http");
-        builder.host("115.71.236.6");
+        builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
         builder.port(80);
         builder.addPathSegment("mapmo");
         builder.addPathSegment("memo");
@@ -333,7 +321,7 @@ public class MemoListActivity extends AppCompatActivity {
 
         Logger.d(builder.build().toString());
 
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url(builder.build())
                 .build();
 
@@ -344,45 +332,51 @@ public class MemoListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
                 final String result = response.body().string();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Logger.d(result);
                         Gson gson = new Gson();
-
-                        realm = Realm.getDefaultInstance();
-                        ArrayList<MemoListDatabase> shared_memoListDatabases = (ArrayList<MemoListDatabase>) gson.fromJson(result,
-                                new TypeToken<ArrayList<MemoListDatabase>>() {
-                                }.getType());
-
-                        for (int i = 0; i < shared_memoListDatabases.size(); i++) {
-
-                            MemoListDatabase shared_memoListDatabase = shared_memoListDatabases.get(i);
-                            long no = realm.where(MemoDatabase.class).equalTo("memo_document_x", shared_memoListDatabase.getMemo_document_x()).equalTo("memo_document_y", shared_memoListDatabase.getMemo_document_y()).count();
-
-                            if (no <= 0) {
-                                realm = Realm.getDefaultInstance();
-                                int lastData = 0;
-                                if (realm.where(MemoDatabase.class).findFirst() != null) {
-                                    lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
-
-                                }
-                                MemoDatabase memoDatabase = new MemoDatabase();
-                                memoDatabase.setMemo_no(lastData + 1);
-                                memoDatabase.setDataFromMemoListDatabase(shared_memoListDatabase);
-                                realm.beginTransaction();
-                                memoDatabase = realm.copyToRealm(memoDatabase);
-
-                                realm.commitTransaction();
-                                shared_memoListDatabase.setIsNew(true);
-                                memoDatabases.add(shared_memoListDatabase);
-                            }
-
-
+                        if (response.code() != 200 || !response.message().equals("OK")) {
+                            Toast.makeText(MemoListActivity.this, "네트워크 상태가 불안정합니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        memoListAdapter.notifyDataSetChanged();
+                        realm = Realm.getDefaultInstance();
+                        try {
+                            ArrayList<MemoListDatabase> shared_memoListDatabases = (ArrayList<MemoListDatabase>) gson.fromJson(result,
+                                    new TypeToken<ArrayList<MemoListDatabase>>() {
+                                    }.getType());
+                            for (int i = 0; i < shared_memoListDatabases.size(); i++) {
+
+                                MemoListDatabase shared_memoListDatabase = shared_memoListDatabases.get(i);
+                                long no = realm.where(MemoDatabase.class).equalTo("memo_document_x", shared_memoListDatabase.getMemo_document_x()).equalTo("memo_document_y", shared_memoListDatabase.getMemo_document_y()).count();
+
+                                if (no <= 0) {
+                                    realm = Realm.getDefaultInstance();
+                                    int lastData = 0;
+                                    if (realm.where(MemoDatabase.class).findFirst() != null) {
+                                        lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
+
+                                    }
+                                    MemoDatabase memoDatabase = new MemoDatabase();
+                                    memoDatabase.setMemo_no(lastData + 1);
+                                    memoDatabase.setDataFromMemoListDatabase(shared_memoListDatabase);
+                                    realm.beginTransaction();
+                                    memoDatabase = realm.copyToRealm(memoDatabase);
+
+                                    realm.commitTransaction();
+                                    shared_memoListDatabase.setIsNew(true);
+                                    memoDatabases.add(shared_memoListDatabase);
+                                }
+                            }
+                            memoListAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            Toast.makeText(MemoListActivity.this, "오류가 발생했습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     }
                 });
 
@@ -399,5 +393,17 @@ public class MemoListActivity extends AppCompatActivity {
         if (!realm.isClosed()) {
             realm.close();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (sharelayout_LL.getVisibility() == View.VISIBLE) {
+            sharelayout_LL.setVisibility(View.INVISIBLE);
+            default_ll.setVisibility(View.VISIBLE);
+            shareTop_ll.setVisibility(View.INVISIBLE);
+            memoListAdapter = new MemoListAdapter(MemoListActivity.this, getApplicationContext(), memoDatabases);
+            recyclerView.setAdapter(memoListAdapter);
+        } else
+            super.onBackPressed();
     }
 }

@@ -111,11 +111,11 @@ public class LockScreenActivity extends AppCompatActivity {
             Toast.makeText(LockScreenActivity.this, "변경 잼", Toast.LENGTH_SHORT).show();
 
             RealmResults<MemoDatabase> memoDatabaseRealmResults = realm.where(MemoDatabase.class).findAll();
-            for (MemoDatabase memoDatabase : memoDatabaseRealmResults) {
-                if (calculateDistance.calculate(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()))) {
-                    lockScreenAdapter.addData(memoDatabase);
-                }
-            }
+//            for (MemoDatabase memoDatabase : memoDatabaseRealmResults) {
+//                if (calculateDistance.calculate(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()))) {
+//                    lockScreenAdapter.addData(memoDatabase);
+//                }
+//            }
             lockScreenAdapter.notifyDataSetChanged();
         }
 

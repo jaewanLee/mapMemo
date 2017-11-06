@@ -61,6 +61,7 @@ public class ScreenService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true);
         Notification notification=mBuilder.build();
+
         startForeground(111,notification);
 
         return START_REDELIVER_INTENT;

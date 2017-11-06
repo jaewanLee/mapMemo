@@ -145,7 +145,9 @@
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:text="가나다라마바사아자 가나다라"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="false"/>
 
 
             <TextView
@@ -154,6 +156,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="14sp"
                 android:lines="3"
+                android:focusable="false"
+                android:clickable="false"
                 android:text="여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나\n여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나" />
 
         </LinearLayout>
@@ -225,7 +229,9 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_list" />
+                android:src="@drawable/ic_list"
+                android:focusable="false"
+                android:clickable="false"/>
 
             <TextView
                 android:layout_width="97dp"
@@ -247,7 +253,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="메갈까시 2017.09.16"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:focusable="false"
+                android:clickable="false"/>
 
         </LinearLayout>
 

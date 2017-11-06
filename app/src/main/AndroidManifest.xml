@@ -122,6 +122,26 @@
 
         </activity>
         <activity android:name="product.dp.io.mapmo.Shared.SharedActivity"></activity>
+        <service
+            android:name=".PushMessage.PersistentService"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+
+        <receiver
+            android:name=".PushMessage.RestartService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="RestartService"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="ACTION.RESTART.PersistentService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+
+        출처: http://iw90.tistory.com/155 [woong's]
     </application>
 
 </manifest>

@@ -38,8 +38,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.message.template.ButtonObject;
+import com.kakao.message.template.ContentObject;
+import com.kakao.message.template.FeedTemplate;
+import com.kakao.message.template.LinkObject;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,12 +56,21 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import product.dp.io.mapmo.AddMemoView.AddMemoActivity;
+import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
+import product.dp.io.mapmo.Database.UserDatabase;
 import product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
+import product.dp.io.mapmo.MemoList.MemoListDatabase;
 import product.dp.io.mapmo.Menu.MenuActivity;
 import product.dp.io.mapmo.R;
+import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.TranscHash;
 
@@ -283,8 +301,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void setPermissionIssue() {
@@ -402,7 +418,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (requestCode == Constant.ADD_MEMO_INTENT && resultCode == Constant.ADD_MEMO_INTENT) {
             if (data.hasExtra("addMemoResult")) {
                 MemoDatabase newMemo = realm.where(MemoDatabase.class).equalTo("memo_no", data.getIntExtra("addMemoResult", 0)).findFirst();
-                tempMarker.remove();
+                if(tempMarker!=null){
+                    tempMarker.remove();
+                }
                 makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
                 menu_ib.setVisibility(VISIBLE);
                 back_ib.setVisibility(View.INVISIBLE);
@@ -494,6 +512,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.memoDetail_bt.setBackgroundTintList(ColorStateList.valueOf(Color
                     .parseColor("#8e24aa")));
             this.memoDetail_bt.setImageResource(R.drawable.ic_edit_memo);
+        }else{
+            this.memoDetail_bt.setBackgroundTintList(ColorStateList.valueOf(Color
+                    .parseColor("#ffc400")));
+            this.memoDetail_bt.setImageResource(R.drawable.ic_add_memo);
         }
         this.memoDetail_bt.show();
         this.call_bt.show();
@@ -504,7 +526,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void memoDetailLayoutInit(MemoDatabase memoDatabase) {
+    public void memoDetailLayoutInit(final MemoDatabase memoDatabase) {
 
         final MemoDatabase markerDatabase = memoDatabase;
         if (markerDatabase.getMemo_no() == -1) {
@@ -527,6 +549,23 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
             });
+            share_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(HomeActivity.this, "메모를 먼저 저장해 주세요", Toast.LENGTH_SHORT).show();
+                }
+            });
+            call_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (markerDatabase.getMemo_document_phone().equals("") || markerDatabase.getMemo_document_phone() == null)
+                        Toast.makeText(HomeActivity.this, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
+                    else {
+                        String tel = "tel:" + markerDatabase.getMemo_document_phone();
+                        startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
+                    }
+                }
+            });
 
         } else {
             this.memoInfo_ll.setVisibility(VISIBLE);
@@ -538,6 +577,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
             this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText(markerDatabase.getMemo_content());
+            memoInfo_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, AddMemoActivity.class);
+                    intent.putExtra("memo_no", markerDatabase.getMemo_no());
+                    intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
+                    startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
+                }
+            });
             this.memoDetail_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -562,13 +610,110 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onClick(View v) {
                     //TODO 공유하기 기능 추가
-                    Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
+                    UserDatabase userDatabase=MainApplication.getMainApplicationContext().getOnUserDatabase();
+                    if(!userDatabase.getUser_email().equals("guest")&&userDatabase.getUser_email()!=null) {
+                        Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
+                        final String shared_memo_key = userDatabase.getUser_email() + System.currentTimeMillis();
+
+
+                        final ArrayList<MemoListDatabase> requestValue = new ArrayList<>();
+
+                        requestValue.add(new MemoListDatabase(markerDatabase));
+
+                        NetworkManager networkManager = NetworkManager.getInstance();
+                        OkHttpClient client = networkManager.getClient();
+                        HttpUrl.Builder builder = new HttpUrl.Builder();
+
+                        builder.scheme("http");
+                        builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
+                        builder.port(80);
+                        builder.addPathSegment("mapmo");
+                        builder.addPathSegment("memo");
+                        builder.addPathSegment("share");
+                        builder.addPathSegment("post.php");
+
+                        String requestString = new Gson().toJson(requestValue);
+                        //TODO myValue에다가 내 아이디랑 시간 써서 넣기
+                        FormBody.Builder formBuilder = new FormBody.Builder()
+                                .add("key", shared_memo_key)
+                                .add("value", requestString);
+                        RequestBody body = formBuilder.build();
+
+                        final Request request = new Request.Builder()
+                                .url(builder.build())
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new okhttp3.Callback() {
+                            @Override
+                            public void onFailure(okhttp3.Call call, IOException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(HomeActivity.this, "request Err", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
+                                final String result = response.body().string();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (result.contains("200")) {
+                                            Toast.makeText(HomeActivity.this, result, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(HomeActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                                //이러고 나서 카카오쪽으로 보내기
+                                String kakao_link_title = "";
+                                for (MemoListDatabase requestMemoList : requestValue) {
+                                    kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
+                                }
+                                sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
+
+                            }
+                        });
+                    }else
+                        Toast.makeText(HomeActivity.this, "로그인을 해주세요", Toast.LENGTH_SHORT).show();
+
                 }
             });
 
         }
         bottom_ll.setVisibility(View.INVISIBLE);
 
+    }
+
+    private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
+        //TODO templet 이름 및 이미지 바꾸기
+        FeedTemplate params = FeedTemplate
+                .newBuilder(ContentObject.newBuilder("MapMo",
+                        "http://115.71.236.6/glide_testing_image.jpg",
+                        LinkObject.newBuilder()
+                                .setAndroidExecutionParams("key=" + memo_no)
+                                .build())
+                        .setDescrption(memo_titles)
+                        .build())
+                .addButton(new ButtonObject("앱으로 보기", LinkObject.newBuilder()
+                        .setAndroidExecutionParams("key=" + memo_no)
+                        .build()))
+                .build();
+
+
+        KakaoLinkService.getInstance().sendDefault(this, params, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                com.kakao.util.helper.log.Logger.e(errorResult.toString());
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+            }
+        });
     }
 
     public Marker makeAndAddMarker(MemoDatabase memoDatabase, LatLng latLng) {
