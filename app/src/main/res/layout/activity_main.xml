@@ -22,7 +22,7 @@
             android:id="@+id/main_fuctionTool_LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/search_view_background">
+            android:background="@drawable/linear_shadow_5">
 
             <FrameLayout
                 android:layout_width="28dp"
@@ -220,8 +220,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
-            android:background="#ffffff"
-            android:gravity="center_vertical">
+            android:background="@drawable/bottom_bar">
 
             <ImageButton
                 android:id="@+id/main_memoList_imageButton"

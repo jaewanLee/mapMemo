@@ -118,7 +118,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
             else memoAddr.setText(memoDatabase.getMemo_document_road_address_name());
             String category = memoDatabase.getMemo_document_category_group_code();
             category_tv.setText(TranscHash.rawToreFinedCategory(category));
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA);
             Date currentTime = new Date(System.currentTimeMillis());
             String dTime = formatter.format(currentTime);
             create_date_tv.setText(dTime);
