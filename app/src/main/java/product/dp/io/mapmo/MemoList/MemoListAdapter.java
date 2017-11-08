@@ -117,8 +117,8 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             public boolean onLongClick(View view) {
                 Toast.makeText(context, "롱클릭", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("title");
-                builder.setMessage("이거 삭제할꺼냐");
+                builder.setTitle("삭제");
+                builder.setMessage("이거 정말 삭제할꺼요?!");
 
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override

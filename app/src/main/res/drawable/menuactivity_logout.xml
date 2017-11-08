@@ -11,11 +11,11 @@
 
             <solid android:color="#ffffff" />
             <stroke android:color="#9e24aa" android:width="1dp"/>
-
+    <corners android:radius="4dp"/>
 
         </shape>
 
-    </item>
+    </item>]
 
 
 

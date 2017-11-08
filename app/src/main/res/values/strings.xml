@@ -34,6 +34,6 @@
     <string name="social_login_title">카카오 계정으로 로그인</string>
     <string name="setting_menu_title">내 정보 및 설정</string>
     <string name="setting_app_version">Version 0.9.0</string>
-    <string name="setting_app_desc">Developed by IanHodge, Tim \nDesigned by Hipzoep</string>
+    <string name="setting_app_desc">Developed by ian_hodge, Tim \nDesigned by Hipzoep</string>
 
 </resources>

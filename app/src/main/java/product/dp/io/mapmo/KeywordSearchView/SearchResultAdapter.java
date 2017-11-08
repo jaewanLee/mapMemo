@@ -46,6 +46,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         final KeywordSearchRepo.KeywordDocuments keywordDocument = keywordDocuments.get(position);
 
             //TODO 텍스트에서 이미지로 바꾸는 과정 필요

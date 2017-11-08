@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.AddMemoView.AddMemoActivity"
     android:orientation="vertical"
-    android:background="#ffffff"
-    >
+    android:background="#ffffff">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="162dp">
@@ -24,7 +21,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/testgradation"
+                android:src="@drawable/ic_edit_memo_gredient"
                 android:scaleType="fitXY"
                 android:id="@+id/add_memo_title_background"/>
             <LinearLayout
@@ -40,6 +37,7 @@
                     android:background="#00000000"
                     android:layout_marginTop="12dp"
                     android:id="@+id/add_memo_back"
+                    android:scaleType="fitXY"
 
                     />
                 <EditText
@@ -49,7 +47,6 @@
                     android:text="이름"
                     android:textColor="#ffffff"
                     android:paddingRight="5dp"
-                    android:paddingLeft="5dp"
                     android:textSize="14sp"
                     android:background="#00000000"
                     android:id="@+id/add_memo_title"/>
@@ -63,7 +60,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:paddingTop="7dp">
+        android:paddingTop="9dp">
         <TextView
             android:layout_width="70dp"
             android:layout_height="19dp"
@@ -71,7 +68,7 @@
             android:text="2017.08.16"
             android:layout_marginRight="9dp"
             android:layout_marginLeft="20dp"
-            android:textColor="#000000"
+            android:textColor="#8a000000"
             android:textSize="13sp"/>
 
         <TextView
@@ -79,7 +76,7 @@
             android:layout_height="19dp"
             android:text="음식점"
             android:textSize="13sp"
-            android:textColor="#000000"
+            android:textColor="#8a000000"
             android:id="@+id/add_memo_categpry"/>
 
         <TextView
@@ -93,7 +90,7 @@
             android:layout_marginRight="19dp"
             android:singleLine="true"
             android:text="서울 관악구 남현동 1887866"
-            android:textColor="#000000"/>
+            android:textColor="#8a000000"/>
     </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
@@ -111,6 +108,6 @@
         android:padding="14dp"
         android:background="#ffffff"
         android:id="@+id/add_memo_text"
-        android:textColor="#000000"/>
+        android:textColor="#5c007a"/>
 
 </LinearLayout>

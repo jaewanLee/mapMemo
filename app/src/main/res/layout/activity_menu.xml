@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="product.dp.io.mapmo.HomeView.MenuActivity">
+    android:background="@color/white">
 
 
     <include
@@ -40,21 +38,20 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="19dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_default_user" />
+                android:background="@drawable/guest_profile" />
 
             <TextView
                 android:id="@+id/user_profile_name"
                 android:layout_width="wrap_content"
-                android:text="guest"
+                android:text="사용자"
                 android:layout_marginTop="30.5dp"
                 android:layout_height="24dp"
-                android:textColor="@color/black"
+                android:textColor="#8a000000"
+                android:background="#00000000"
                 android:textSize="16sp"
                 android:layout_toRightOf="@+id/menu_profile_image"
-
-
                 />
 
             <!--<TextView-->
@@ -74,23 +71,23 @@
             <com.kakao.usermgmt.LoginButton
                 android:id="@+id/menu_kakaologin_button"
                 android:layout_width="146dp"
-                android:layout_height="36dp"
-                android:layout_centerVertical="true"
-                android:background="@color/social_login_color"
+                android:layout_height="40dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/round_social_login"
                 android:text="@string/social_login_title"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="24dp"/>
+                android:layout_marginRight="20dp"/>
 
             <Button
                 android:id="@+id/menu_kakaologinfake_button"
                 android:layout_width="146dp"
-                android:layout_height="36dp"
-                android:layout_centerVertical="true"
+                android:layout_height="40dp"
+                android:layout_marginTop="18dp"
                 android:background="@color/social_login_color"
                 android:text="@string/social_login_title"
                 android:textSize="13sp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="24dp"
+                android:layout_marginRight="20dp"
                 android:focusable="false"
                 android:clickable="false"/>
 
@@ -113,7 +110,7 @@
         <ImageView
             android:id="@+id/profile_line_imgae"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_below="@+id/profile_mid_layer"
             android:background="@color/setting_line_color" />
 
@@ -139,7 +136,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/setting_sub_title"
-                android:layout_marginTop="20dp">
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="0dp">
 
                 <TextView
                     android:layout_width="136dp"
@@ -154,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="40dp" />
+                    android:layout_marginRight="16dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -162,7 +160,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/preview_set_lay"
-                android:layout_marginTop="28dp">
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="0dp">
 
                 <TextView
                     android:layout_width="142dp"
@@ -179,7 +178,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="20dp"
                     android:clickable="false"
                     android:focusable="false"
                     android:background="@drawable/ic_navigate_next_black"
@@ -191,7 +190,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/memu_backup_relativelayout"
-                android:layout_marginTop="28dp">
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="0dp"
+                >
 
                 <TextView
                     android:layout_width="81dp"
@@ -210,7 +211,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/ic_navigate_next_black"
                     android:focusable="false"
                     android:clickable="false"/>
@@ -220,7 +221,7 @@
         <ImageView
             android:id="@+id/setting_line_imgae"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_below="@+id/setting_layer"
             android:layout_marginTop="14dp"
             android:background="@color/setting_line_color" />
@@ -245,10 +246,10 @@
             <RelativeLayout
                 android:id="@+id/faq_set_lay"
                 android:layout_width="match_parent"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/customer_service_title"
-                android:layout_marginTop="28dp">
+                android:paddingLeft="0dp">
 
                 <TextView
                     android:layout_width="27dp"
@@ -264,7 +265,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/ic_navigate_next_black"
                     android:focusable="false"
                     android:clickable="false"/>
@@ -275,7 +276,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/faq_set_lay"
-                android:layout_marginTop="26dp">
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="0dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -292,7 +294,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/ic_navigate_next_black"
                     android:focusable="false"
                     android:clickable="false"/>
@@ -302,7 +304,7 @@
         <ImageView
             android:id="@+id/cs_line_imgae"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_below="@+id/customer_service_layer"
             android:layout_marginTop="14dp"
             android:background="@color/setting_line_color" />

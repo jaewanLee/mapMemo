@@ -9,6 +9,12 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
     </style>
+    <style name="layout_click_animation" parent="Widget.AppCompat.Button.Colored">
+        <item name="background">@color/white</item>
+        <item name="android:colorButtonNormal">@color/white</item>
+        <item name="android:colorAccent">@color/black</item>
+    </style>
+
     <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
         <item name="android:windowContentOverlay">@null</item>
         <item name="windowActionBarOverlay">true</item>

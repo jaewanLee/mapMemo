@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:orientation="vertical">
 
@@ -16,35 +16,37 @@
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="43dp" />
+            android:layout_marginTop="45dp" />
 
         <LinearLayout
             android:id="@+id/main_fuctionTool_LinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:background="@drawable/linear_shadow_5">
 
             <FrameLayout
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
                 android:background="#00000000">
 
                 <ImageButton
                     android:id="@+id/main_back_ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="7dp"
                     android:background="#00000000"
                     android:src="@drawable/ic_arrow_back" />
 
                 <ImageButton
                     android:id="@+id/main_menu_ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="7dp"
                     android:background="#00000000"
                     android:scaleType="fitXY"
-                    android:src="@drawable/shape" />
+                    android:src="@drawable/shape"
+                    android:visibility="visible" />
 
             </FrameLayout>
 
@@ -56,20 +58,21 @@
                     android:id="@+id/main_search_editText"
                     android:layout_width="255dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
                     android:background="@null"
-                    android:gravity="center_vertical"
+                    android:gravity="top"
                     android:hint="원하는 장소를 적어주세요"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
+                    android:paddingTop="15dp"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="16dp"/>
+                    android:textSize="14sp" />
 
                 <FrameLayout
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="11.5dp"
 
                     >
 
@@ -84,8 +87,8 @@
 
                     <ImageButton
                         android:id="@+id/main_initSearch_ImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_close"
@@ -99,106 +102,116 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/main_memoInfo_LinearLayout"
+        <com.andexert.library.RippleView
+            android:id="@+id/more"
             android:layout_width="match_parent"
             android:layout_height="165dp"
             android:layout_gravity="bottom"
-            android:background="#ffffff"
-            android:orientation="vertical"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:paddingTop="24dp">
+            app:rv_color="#696969"
+            app:rv_rippleDuration="100"
+            app:rv_ripplePadding="100dp">
 
             <LinearLayout
+                android:id="@+id/main_memoInfo_LinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="21dp">
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="21dp">
+
+                    <TextView
+                        android:id="@+id/main_category_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:singleLine="true"
+                        android:text="음식점"
+                        android:textColor="#DE000000"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/main_createDate_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:text="2017.09.01"
+                        android:textColor="#61000000"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/main_category_textView"
+                    android:id="@+id/main_memoTitle_textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="1dp"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:singleLine="true"
-                    android:text="음식점"
-                    android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:text="가나다라마바사아자 가나다라"
+                    android:textSize="18sp"
+                    android:textColor="#DE000000"/>
+
 
                 <TextView
-                    android:id="@+id/main_createDate_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:singleLine="true"
-                    android:text="2017.09.01"
-                    android:textColor="#000000"
-                    android:textSize="14sp" />
-
+                    android:id="@+id/main_memoContent_textView"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="14sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:lines="3"
+                    android:textColor="#5c007a"
+                    android:text="여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나\n여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나" />
 
             </LinearLayout>
+        </com.andexert.library.RippleView>
 
-            <TextView
-                android:id="@+id/main_memoTitle_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="21dp"
-                android:layout_marginTop="1dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="가나다라마바사아자 가나다라"
-                android:textSize="14sp"
-                android:focusable="false"
-                android:clickable="false"/>
-
-
-            <TextView
-                android:id="@+id/main_memoContent_textView"
-                android:layout_width="280dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="14sp"
-                android:lines="3"
-                android:focusable="false"
-                android:clickable="false"
-                android:text="여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나\n여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나" />
-
-        </LinearLayout>
-
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/main_share_floatingbutton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="262dp"
             android:layout_marginRight="24dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_share"
-            app:fabSize="mini"
-            app:backgroundTint="#c158dc" />
+            android:background="#00000000"
 
-        <android.support.design.widget.FloatingActionButton
+            android:scaleType="fitCenter"
+            android:src="@drawable/share_memo_btn" />
+
+        <ImageButton
             android:id="@+id/main_call_floatingbutton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="210dp"
             android:layout_marginRight="24dp"
+            android:background="#00000000"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_call"
-            app:backgroundTint="#c158dc"
-            app:fabSize="mini"
+            android:src="@drawable/call_memo_btn"
 
             />
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/main_memoDetail_textView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="137dp"
             android:layout_marginRight="16dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:scaleType="center"
-            app:fabSize="mini"
-            android:src="@drawable/ic_add_memo"
-            app:backgroundTint="#ffc400" />
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add_memo_btn" />
 
 
         <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
@@ -218,7 +231,7 @@
         <LinearLayout
             android:id="@+id/main_bottom_linearlayout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:layout_gravity="bottom"
             android:background="@drawable/bottom_bar">
 
@@ -228,14 +241,16 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_list"
+                android:layout_marginTop="16dp"
+                android:clickable="false"
                 android:focusable="false"
-                android:clickable="false"/>
+                android:src="@drawable/ic_list" />
 
             <TextView
                 android:layout_width="97dp"
                 android:layout_height="21dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="18dp"
                 android:text="메모된 내용 보기"
                 android:textColor="#D9000000"
                 android:textSize="14sp" />
@@ -245,16 +260,18 @@
                 android:layout_width="1dp"
                 android:layout_height="13dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="21dp"
                 android:background="#59000000" />
 
             <TextView
                 android:id="@+id/main_simpleMemoTitle_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
-                android:text="메갈까시 2017.09.16"
-                android:textSize="12sp"
+                android:layout_marginTop="17dp"
+                android:clickable="false"
                 android:focusable="false"
-                android:clickable="false"/>
+                android:text="메갈까시 2017.09.16"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

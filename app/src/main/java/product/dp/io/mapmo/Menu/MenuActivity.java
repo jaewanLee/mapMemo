@@ -201,7 +201,7 @@ public class MenuActivity extends AppCompatActivity {
                         loginFake.setVisibility(View.VISIBLE);
                         kakaoLogin.setVisibility(View.VISIBLE);
 
-                        userImage.setImageResource(R.drawable.ic_default_user);
+                        userImage.setImageResource(R.drawable.guest_profile);
                         userName.setText("guset");
 
                     }
@@ -217,7 +217,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
                 builder.setTitle("포멧하시겠습니까?");
-                builder.setMessage("저장되어 있던 모든 내용이 삭제되고 처음 어플을 설치했을 때로 되돌아 갑니다");
+                builder.setMessage("저장되어 있던 모든 내용이 삭제되고 처음 어플을 설치했을 때로 되돌아 갑니다.");
 
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
@@ -236,8 +236,6 @@ public class MenuActivity extends AppCompatActivity {
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-
                     }
                 });
 
@@ -562,9 +560,12 @@ public class MenuActivity extends AppCompatActivity {
     private void callToChromeCustomTab(int index) {
 
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
-                .addDefaultShareMenuItem()
-                .setToolbarColor(this.getResources().getColor(R.color.colorPrimary))
-                .setShowTitle(true)
+                .enableUrlBarHiding()
+                .setShowTitle(false)
+                .setToolbarColor(getResources().getColor(R.color.black))
+//                .addDefaultShareMenuItem()
+//                .setToolbarColor(this.getResources().getColor(R.color.colorPrimary))
+//                .setShowTitle(true)
 //                .setCloseButtonIcon(backArrow)
                 .build();
 
@@ -577,7 +578,7 @@ public class MenuActivity extends AppCompatActivity {
             case 0:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
-                        Uri.parse("https://airbridge.io"),
+                        Uri.parse("http://ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com/mapmo/policy/privacypolicy.html"),
                         new WebViewFallback());
 
                 break;
@@ -585,10 +586,8 @@ public class MenuActivity extends AppCompatActivity {
             case 1:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
-                        Uri.parse("https://bitbucket.org/teamteheranslippers/mapmo"),
+                        Uri.parse("http://ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com/mapmo/policy/termsofservice.html"),
                         new WebViewFallback());
-
-
                 break;
 
         }

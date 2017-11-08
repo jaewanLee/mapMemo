@@ -64,6 +64,8 @@ public class MainApplication extends Application {
     }
 
 
+
+
     // Realm Object 초기화
     public void initRealm() {
         Realm.init(this);

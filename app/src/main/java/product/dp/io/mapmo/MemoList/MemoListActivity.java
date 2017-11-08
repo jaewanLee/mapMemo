@@ -38,6 +38,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
+import product.dp.io.mapmo.HomeView.HomeActivity;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Logger;
@@ -403,7 +404,12 @@ public class MemoListActivity extends AppCompatActivity {
             shareTop_ll.setVisibility(View.INVISIBLE);
             memoListAdapter = new MemoListAdapter(MemoListActivity.this, getApplicationContext(), memoDatabases);
             recyclerView.setAdapter(memoListAdapter);
-        } else
+        } else if (getIntent() == null) {
             super.onBackPressed();
+        }else{
+            Intent intent=new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

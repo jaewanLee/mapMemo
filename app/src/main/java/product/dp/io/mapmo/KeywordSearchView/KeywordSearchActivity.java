@@ -69,6 +69,7 @@ public class KeywordSearchActivity extends AppCompatActivity {
         recyclerView_adpaer = new SearchResultAdapter(KeywordSearchActivity.this);
         searchResult_recyclerView.setAdapter(recyclerView_adpaer);
         searchResult_recyclerView.addItemDecoration(new RecyclerViewDecoration(25));
+
     }
 
     private void functionInit() {

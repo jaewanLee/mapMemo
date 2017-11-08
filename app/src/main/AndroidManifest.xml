@@ -13,19 +13,17 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
 
-
     <application
-        android:name="product.dp.io.mapmo.Core.MainApplication"
+        android:name=".Core.MainApplication"
         android:allowBackup="true"
         android:icon="@drawable/launchicon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.ActionBar.Transparent">
-
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/Google_Aip_Key"/>
-
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/Google_Aip_Key" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/DAUM_API_KEY" />
@@ -33,47 +31,41 @@
             android:name="com.kakao.sdk.ClientSecret"
             android:value="@string/KAKAO_CLIENT_SECRET_VALUE" />
 
-        <!--<meta-data-->
-            <!--android:name="com.google.android.geo.API_KEY"-->
-            <!--android:value="@string/Google_Aip_Key" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.geo.API_KEY" -->
+        <!-- android:value="@string/Google_Aip_Key" /> -->
 
         <activity
-            android:name="product.dp.io.mapmo.HomeView.MainActivity"
-            android:label="#여기요">
-
-        </activity>
+            android:name=".HomeView.MainActivity"
+            android:label="#여기요"></activity>
         <activity android:name=".HomeView.HomeActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name="product.dp.io.mapmo.LockScreen.LockScreenActivity"
+            android:name=".LockScreen.LockScreenActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="product.dp.io.mapmo.Menu.Login"
+            android:name=".Menu.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name="product.dp.io.mapmo.Menu.SocialSignupActivity"
+            android:name=".Menu.SocialSignupActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name="product.dp.io.mapmo.LockScreen.BoradcastReceiver.RestartReceiver" />
+        <receiver android:name=".LockScreen.BoradcastReceiver.RestartReceiver" />
         <receiver
-            android:name="product.dp.io.mapmo.LockScreen.BoradcastReceiver.ScreenReceiver"
+            android:name=".LockScreen.BoradcastReceiver.ScreenReceiver"
             android:process=".remote">
             <intent-filter>
                 <action android:name="RestartReceiver.restart" />
             </intent-filter>
         </receiver>
 
-        <service android:name="product.dp.io.mapmo.LockScreen.Service.ScreenService" />
+        <service android:name=".LockScreen.Service.ScreenService" />
 
         <activity
-            android:name="product.dp.io.mapmo.HomeView.TimeBaseActivity"
+            android:name=".HomeView.TimeBaseActivity"
             android:launchMode="singleTop">
             <intent-filter>
 
@@ -92,24 +84,44 @@
                     android:host="www.mapmemo.com"
                     android:scheme="intent://baemin" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name="product.dp.io.mapmo.HomeView.SettingActivity"
+            android:name=".HomeView.SettingActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name="product.dp.io.mapmo.HomeView.FAQActivity"
+            android:name=".HomeView.FAQActivity"
             android:launchMode="standard" />
         <activity
-            android:name="product.dp.io.mapmo.HomeView.AccessTermActivity"
+            android:name=".HomeView.AccessTermActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name="product.dp.io.mapmo.KeywordSearchView.KeywordSearchActivity"
+            android:name=".KeywordSearchView.KeywordSearchActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="product.dp.io.mapmo.AddMemoView.AddMemoActivity" />
-        <activity android:name="product.dp.io.mapmo.Menu.MenuActivity" />
+        <activity android:name=".AddMemoView.AddMemoActivity" />
+        <activity android:name=".Menu.MenuActivity" />
+        <activity android:name=".MemoList.MemoListActivity">
 
-        <activity android:name="product.dp.io.mapmo.MemoList.MemoListActivity">
+        </activity>
+        <activity android:name=".Shared.SharedActivity" />
+
+        <service
+            android:name=".PushMessage.PersistentService"
+            android:enabled="true"
+            android:process=":remote"></service>
+
+        <receiver
+            android:name=".PushMessage.RestartService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="RestartService"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="ACTION.RESTART.PersistentService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".Core.IntroActivity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -118,30 +130,15 @@
 
                 <data android:scheme="@string/kakao_scheme" />
                 <data android:host="@string/kakaolink_host" />
+
             </intent-filter>
-
-        </activity>
-        <activity android:name="product.dp.io.mapmo.Shared.SharedActivity"></activity>
-        <service
-            android:name=".PushMessage.PersistentService"
-            android:enabled="true"
-            android:process=":remote" >
-        </service>
-
-        <receiver
-            android:name=".PushMessage.RestartService"
-            android:enabled="true"
-            android:exported="false"
-            android:label="RestartService"
-            android:process=":remote" >
             <intent-filter>
-                <action android:name="ACTION.RESTART.PersistentService" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </receiver>
+        </activity>
 
-
-        출처: http://iw90.tistory.com/155 [woong's]
     </application>
 
 </manifest>
