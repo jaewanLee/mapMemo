@@ -51,7 +51,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -71,6 +73,7 @@ import product.dp.io.mapmo.Menu.MenuActivity;
 import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Shared.NetworkManager;
 import product.dp.io.mapmo.Util.Constant;
+import product.dp.io.mapmo.Util.Logger;
 import product.dp.io.mapmo.Util.TranscHash;
 
 import static android.view.View.VISIBLE;
@@ -161,15 +164,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         memoDetail_bt.setVisibility(View.INVISIBLE);
         back_ib = (ImageButton) findViewById(R.id.main_back_ImageButton);
         init_ib = (ImageButton) findViewById(R.id.main_initSearch_ImageButton);
-        bottom_ll=(LinearLayout)findViewById(R.id.main_bottom_linearlayout);
-        memoList_ib=(ImageButton)findViewById(R.id.main_memoList_imageButton);
-        splitbar_iv=(ImageView)findViewById(R.id.main_splitBar_ImgaeView);
-        simpleMemoTitle_tv=(TextView)findViewById(R.id.main_simpleMemoTitle_TextView);
-        call_bt=(ImageButton) findViewById(R.id.main_call_floatingbutton);
+        bottom_ll = (LinearLayout) findViewById(R.id.main_bottom_linearlayout);
+        memoList_ib = (ImageButton) findViewById(R.id.main_memoList_imageButton);
+        splitbar_iv = (ImageView) findViewById(R.id.main_splitBar_ImgaeView);
+        simpleMemoTitle_tv = (TextView) findViewById(R.id.main_simpleMemoTitle_TextView);
+        call_bt = (ImageButton) findViewById(R.id.main_call_floatingbutton);
         call_bt.setVisibility(View.INVISIBLE);
-        share_bt=(ImageButton)findViewById(R.id.main_share_floatingbutton);
+        share_bt = (ImageButton) findViewById(R.id.main_share_floatingbutton);
         share_bt.setVisibility(View.INVISIBLE);
-        rippleView=(RippleView)findViewById(R.id.more);
+        rippleView = (RippleView) findViewById(R.id.more);
         rippleView.setVisibility(View.INVISIBLE);
 
 
@@ -264,7 +267,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, MenuActivity.class);
-                startActivityForResult(intent,MENU_INTENT);
+                startActivityForResult(intent, MENU_INTENT);
             }
         });
 
@@ -423,10 +426,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (requestCode == Constant.ADD_MEMO_INTENT && resultCode == Constant.ADD_MEMO_INTENT) {
             if (data.hasExtra("addMemoResult")) {
                 MemoDatabase newMemo = realm.where(MemoDatabase.class).equalTo("memo_no", data.getIntExtra("addMemoResult", 0)).findFirst();
-                if(tempMarker!=null){
+                if (tempMarker != null) {
                     tempMarker.remove();
                 }
-                Marker addedMarker=makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
+                Marker addedMarker = makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
 
                 menu_ib.setVisibility(VISIBLE);
                 back_ib.setVisibility(View.INVISIBLE);
@@ -446,18 +449,16 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 memoInfo_ll.setVisibility(View.INVISIBLE);
 
                 onMarkerClick(addedMarker);
-
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             }
-        }else if(requestCode==Constant.MENU_INTENT){
-            RealmResults realmResults=realm.where(MemoDatabase.class).findAll();
-            if(realmResults.size()<1){
+        } else if (requestCode == Constant.MENU_INTENT) {
+            RealmResults realmResults = realm.where(MemoDatabase.class).findAll();
+            if (realmResults.size() < 1) {
 
                 mGoogleMap.clear();
             }
-        }
-        else {
+        } else {
 
         }
     }
@@ -517,9 +518,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         MemoDatabase markerDatabase = (MemoDatabase) marker.getTag();
         memoDetailLayoutInit(markerDatabase);
 
-        if(markerDatabase.getMemo_no()!=-1){
+        if (markerDatabase.getMemo_no() != -1) {
             this.memoDetail_bt.setImageResource(R.drawable.edit_memo_btn);
-        }else{
+        } else {
             this.memoDetail_bt.setImageResource(R.drawable.add_memo_btn);
         }
         this.memoDetail_bt.setVisibility(VISIBLE);
@@ -542,9 +543,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             String dTime = formatter.format(currentTime);
             this.createdDate_tv.setText(dTime);
             String raw_category = markerDatabase.getMemo_document_category_group_code();
-            if(raw_category.equals("")){
+            if (raw_category.equals("")) {
                 this.category_tv.setText("장소");
-            }else{
+            } else {
                 this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
                 this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
             }
@@ -593,9 +594,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             String dTime = formatter.format(currentTime);
             this.createdDate_tv.setText(dTime);
             String raw_category = markerDatabase.getMemo_document_category_group_code();
-            if(raw_category.equals("")){
+            if (raw_category.equals("")) {
                 this.category_tv.setText("장소");
-            }else{
+            } else {
                 this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
                 this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
             }
@@ -640,8 +641,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onClick(View v) {
                     //TODO 공유하기 기능 추가
-                    UserDatabase userDatabase=MainApplication.getMainApplicationContext().getOnUserDatabase();
-                    if(!userDatabase.getUser_email().equals("guest")&&userDatabase.getUser_email()!=null) {
+                    UserDatabase userDatabase = MainApplication.getMainApplicationContext().getOnUserDatabase();
+                    if (!userDatabase.getUser_email().equals("guest") && userDatabase.getUser_email() != null) {
                         Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
                         final String shared_memo_key = userDatabase.getUser_email() + System.currentTimeMillis();
 
@@ -700,14 +701,16 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 });
                                 //이러고 나서 카카오쪽으로 보내기
                                 String kakao_link_title = "";
+
                                 for (MemoListDatabase requestMemoList : requestValue) {
                                     kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
                                 }
-                                sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
+                                sendCustomFeedTemplat(shared_memo_key,kakao_link_title);
+//                                sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
 
                             }
                         });
-                    }else
+                    } else
                         Toast.makeText(HomeActivity.this, "로그인을 해주세요", Toast.LENGTH_SHORT).show();
 
                 }
@@ -733,7 +736,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .build()))
                 .build();
 
-
         KakaoLinkService.getInstance().sendDefault(this, params, new ResponseCallback<KakaoLinkResponse>() {
             @Override
             public void onFailure(ErrorResult errorResult) {
@@ -742,6 +744,26 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onSuccess(KakaoLinkResponse result) {
+            }
+        });
+    }
+
+    private void sendCustomFeedTemplat(String memo_no, String memo_title) {
+        String templateId = "6494";
+
+        Map<String, String> templateArgs = new HashMap<String, String>();
+        templateArgs.put("MemoTitle", memo_title);
+        templateArgs.put("link_key","key="+memo_no);
+
+        KakaoLinkService.getInstance().sendCustom(this, templateId, templateArgs, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Logger.e(errorResult.toString());
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+                // 템플릿 밸리데이션과 쿼터 체크가 성공적으로 끝남. 톡에서 정상적으로 보내졌는지 보장은 할 수 없다.
             }
         });
     }

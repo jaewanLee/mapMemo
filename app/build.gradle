@@ -14,8 +14,8 @@ allprojects {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 21
             targetSdkVersion 26
-            versionCode 3
-            versionName "0.0.3"
+            versionCode 4
+            versionName new Date().format('yyyyMMdd')
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
@@ -57,7 +57,7 @@ allprojects {
         implementation 'com.android.support:design:26.0.2'
         implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 //        implementation 'com.tsengvn:typekit:1.0.1'
-        implementation 'io.airbridge:sdk-android:1.1.1'
+        implementation 'io.airbridge:sdk-android:1.1.+'
         implementation 'com.squareup.okhttp3:okhttp:3.2.0'
         implementation 'com.squareup.retrofit2:retrofit:2.1.0'
         implementation 'com.google.code.gson:gson:2.7'

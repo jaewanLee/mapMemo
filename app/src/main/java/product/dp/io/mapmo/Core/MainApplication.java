@@ -16,7 +16,6 @@ import product.dp.io.mapmo.Map.KeywordSearchInterface;
 import product.dp.io.mapmo.Util.KakaoSDKAdapter;
 import product.dp.io.mapmo.Util.Logger;
 import product.dp.io.mapmo.Util.TranscHash;
-import saschpe.android.customtabs.CustomTabsActivityLifecycleCallbacks;
 
 import static product.dp.io.mapmo.Util.Constant.USER_SHARED;
 
@@ -42,7 +41,7 @@ public class MainApplication extends Application {
         instance = this;
 
 //        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
-        AirBridge.init(this, "ablog", "38acf1efa9fc4f0987173f5a76516eb1");
+        AirBridge.init(this, "mapmo", "b145d75aee4f45609f6c891a709177c0");
         AirBridge.setDebugMode(true);
 
         //키워드 중심 검색
@@ -59,7 +58,7 @@ public class MainApplication extends Application {
 
 
         // Preload CUstom Tabs Service for Improved Perfomance
-        registerActivityLifecycleCallbacks(new CustomTabsActivityLifecycleCallbacks());
+//        registerActivityLifecycleCallbacks(new CustomTabsActivityLifecycleCallbacks());
 
     }
 

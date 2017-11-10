@@ -156,7 +156,7 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:singleLine="true"
-                    android:text="가나다라마바사아자 가나다라"
+                    android:text="새로운 메모입니다"
                     android:textSize="18sp"
                     android:textColor="#DE000000"/>
 
@@ -172,7 +172,7 @@
                     android:focusable="false"
                     android:lines="3"
                     android:textColor="#5c007a"
-                    android:text="여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나\n여기 지나가면 꼭 먹고 가야겠다 메모했다가 가야지 가나" />
+                    android:text="새 메모를 추가하기 위해 클릭해 주세요" />
 
             </LinearLayout>
         </com.andexert.library.RippleView>

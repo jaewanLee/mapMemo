@@ -43,6 +43,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import io.airbridge.AirBridge;
+import io.airbridge.statistics.events.inapp.SignInEvent;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -499,6 +501,7 @@ public class MenuActivity extends AppCompatActivity {
                     public void run() {
                         if (result.contains("200")) {
                             Toast.makeText(MenuActivity.this, result, Toast.LENGTH_SHORT).show();
+                            AirBridge.getTracker().send(new SignInEvent());
                         } else {
                             Toast.makeText(MenuActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
                         }
