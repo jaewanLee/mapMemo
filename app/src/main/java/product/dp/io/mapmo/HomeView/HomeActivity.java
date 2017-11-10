@@ -722,7 +722,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         //TODO templet 이름 및 이미지 바꾸기
         FeedTemplate params = FeedTemplate
                 .newBuilder(ContentObject.newBuilder("MapMo",
-                        "http://115.71.236.6/glide_testing_image.jpg",
+                        "http://ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com/mapmo/appstore_mapmo.png",
                         LinkObject.newBuilder()
                                 .setAndroidExecutionParams("key=" + memo_no)
                                 .build())
