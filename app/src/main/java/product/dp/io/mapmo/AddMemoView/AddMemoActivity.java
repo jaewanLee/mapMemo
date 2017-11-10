@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +40,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
     MapFragment mapFragment;
     Marker tempMarker;
     ImageView memoTitle_back;
-    ImageButton back_ib;
+    TextView back_ib;
 
     EditText memoTitle;
     TextView create_date_tv;
@@ -66,7 +65,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_add_memo);
 
         memoTitle_back = (ImageView) findViewById(R.id.add_memo_title_background);
-        back_ib = (ImageButton) findViewById(R.id.add_memo_back);
+        back_ib = (TextView) findViewById(R.id.add_memo_back);
         Drawable drawable = memoTitle_back.getDrawable();
         drawable.setAlpha(200);
         memoTitle = (EditText) findViewById(R.id.add_memo_title);
@@ -135,7 +134,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
                 memoContent.setText(memoDatabase.getMemo_content());
                 String category = memoDatabase.getMemo_document_category_group_code();
                 category_tv.setText(TranscHash.rawToreFinedCategory(category));
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA);
                 Date currentTime = new Date(memoDatabase.getMemo_createDate());
                 String dTime = formatter.format(currentTime);
                 create_date_tv.setText(dTime);

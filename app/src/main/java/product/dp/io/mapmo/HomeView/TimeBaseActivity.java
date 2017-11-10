@@ -21,14 +21,6 @@ public class TimeBaseActivity extends AppCompatActivity {
         Button faqButton = (Button) findViewById(product.dp.io.mapmo.R.id.time_standard_with);
         Button accessButton=(Button)findViewById(product.dp.io.mapmo.R.id.time_recent_screen);
 
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -45,6 +45,7 @@ import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -70,7 +71,7 @@ public class MenuActivity extends AppCompatActivity {
 
     ImageButton back_ib;
 
-    private ImageView userImage;
+    ImageView userImage;
     TextView userName;
     com.kakao.usermgmt.LoginButton kakaoLogin;
     Button loginFake;
@@ -155,7 +156,6 @@ public class MenuActivity extends AppCompatActivity {
                         stopService (intent);
                     }
 
-
                 }
 
             }
@@ -203,10 +203,7 @@ public class MenuActivity extends AppCompatActivity {
 
                         userImage.setImageResource(R.drawable.guest_profile);
                         userName.setText("guset");
-
                     }
-
-
                 });
                 Logger.d("로그아웃 버튼 클릭");
             }
@@ -291,6 +288,7 @@ public class MenuActivity extends AppCompatActivity {
                 Glide.with(this)
                         .load(bitmap)
                         .centerCrop()
+                        .bitmapTransform(new CropCircleTransformation(MenuActivity.this))
                         .into(userImage);
             }
             userName.setText(user_id);
@@ -369,7 +367,6 @@ public class MenuActivity extends AppCompatActivity {
         _user_db.setUser_image_url(_original_img_url);
         _user_db.setUserThumnailImg(_thumnail_img_url);
 
-
         setProfileInfo(_user_name, _email, _original_img_url);
         sendUserProfile(_user_name, _email, _original_img_url);
         setUserDatabase(_user_db);
@@ -406,10 +403,14 @@ public class MenuActivity extends AppCompatActivity {
 
     private void setProfileInfo(final String user_name, String email, String image_url) {
         userName.setText(user_name);
-        Glide.with(this)
+
+        Glide.with(MenuActivity.this)
                 .load(image_url)
                 .centerCrop()
+                .crossFade()
+                .bitmapTransform(new CropCircleTransformation(MenuActivity.this))
                 .into(userImage);
+
         Glide.with(this)
                 .load(image_url)
                 .asBitmap()

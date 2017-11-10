@@ -49,7 +49,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="64dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="18dp"
                         android:layout_gravity="center_vertical"
-                        android:text="17:08:17" />
+                        android:text="2017.11.07" />
                 </LinearLayout>
 
 
@@ -75,9 +75,11 @@
 
             <ImageView
                 android:id="@+id/memoListRecy_newMemo_ImageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="#ec4a4a"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginLeft="195dp"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/new_circle"
                 android:visibility="invisible" />
         </FrameLayout>
 

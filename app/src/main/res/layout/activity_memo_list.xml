@@ -26,7 +26,6 @@
                     android:src="@drawable/ic_arrow_back"
                     android:layout_marginRight="16dp"/>
 
-
                 <TextView
                     android:id="@+id/memoList_searchView_editText"
                     android:layout_width="wrap_content"
@@ -44,6 +43,7 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_share_black"
                     android:scaleType="fitCenter"
+                    android:alpha="0.54"
                     android:background="#ffffff"
                     android:layout_gravity="right|center_vertical" />
 

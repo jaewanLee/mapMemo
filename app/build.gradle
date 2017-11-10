@@ -14,8 +14,8 @@ allprojects {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 21
             targetSdkVersion 26
-            versionCode 1
-            versionName "0.0.1"
+            versionCode 3
+            versionName "0.0.3"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
@@ -23,6 +23,11 @@ allprojects {
             release {
                 minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                resValue "string", "Google_Aip_Key", "AIzaSyB2-UKnp-KnDX6fCJBpn6GpBN7RPKKL1JM"
+
+            }
+            debug{
+                resValue "string", "Google_Aip_Key", "AIzaSyBEIr05_U_aswKncwW60YWqmN0JiobNMAc"
             }
         }
 
@@ -61,7 +66,8 @@ allprojects {
         implementation 'com.android.support:recyclerview-v7:26.0.2'
         implementation 'gun0912.ted:tedpermission:1.0.3'
         implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
-        compile 'com.github.bumptech.glide:glide:3.8.0'
+        compile 'com.github.bumptech.glide:glide:3.7.0'
+        compile 'jp.wasabeef:glide-transformations:2.0.1'
         compile 'saschpe.android:customtabs:1.0.7'
 //        compile 'com.android.support:customtabs:25.3.1'
 

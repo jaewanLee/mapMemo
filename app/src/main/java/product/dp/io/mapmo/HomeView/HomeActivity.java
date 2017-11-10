@@ -170,6 +170,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         share_bt=(ImageButton)findViewById(R.id.main_share_floatingbutton);
         share_bt.setVisibility(View.INVISIBLE);
         rippleView=(RippleView)findViewById(R.id.more);
+        rippleView.setVisibility(View.INVISIBLE);
 
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
@@ -403,6 +404,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LatLng tempLatLng = new LatLng(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()));
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(tempLatLng));
                 tempMarker = makeAndtempMarker(memoDatabase, tempLatLng);
+                onMarkerClick(tempMarker);
 
                 menu_ib.setVisibility(VISIBLE);
                 back_ib.setVisibility(View.INVISIBLE);
@@ -411,6 +413,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(memoDatabase);
                 this.memoDetail_bt.setVisibility(VISIBLE);
+                rippleView.setVisibility(VISIBLE);
                 this.call_bt.setVisibility(VISIBLE);
                 this.share_bt.setVisibility(VISIBLE);
 
@@ -423,7 +426,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(tempMarker!=null){
                     tempMarker.remove();
                 }
-                makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
+                Marker addedMarker=makeAndAddMarker(newMemo, new LatLng(Double.valueOf(newMemo.getMemo_document_y()), Double.valueOf(newMemo.getMemo_document_x())));
+
                 menu_ib.setVisibility(VISIBLE);
                 back_ib.setVisibility(View.INVISIBLE);
                 erase_ib.setVisibility(View.INVISIBLE);
@@ -436,9 +440,12 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(newMemo);
                 this.memoDetail_bt.setVisibility(View.INVISIBLE);
+                rippleView.setVisibility(View.INVISIBLE);
                 this.call_bt.setVisibility(View.INVISIBLE);
                 this.share_bt.setVisibility(View.INVISIBLE);
                 memoInfo_ll.setVisibility(View.INVISIBLE);
+
+                onMarkerClick(addedMarker);
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
@@ -516,6 +523,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.memoDetail_bt.setImageResource(R.drawable.add_memo_btn);
         }
         this.memoDetail_bt.setVisibility(VISIBLE);
+        rippleView.setVisibility(VISIBLE);
         this.call_bt.setVisibility(VISIBLE);
         this.share_bt.setVisibility(VISIBLE);
         return true;
@@ -541,7 +549,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
             }
             //TODO 새로운 마커 추가될때 마커 컨텐츠에다가 새로운 메모입니다라는 내용 넣기
-            this.memoContent_tv.setText("새로운 메모입니다");
+            this.memoContent_tv.setText("이곳에 새로운 메모를 해주세요.");
             this.memoDetail_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -566,6 +574,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                         String tel = "tel:" + markerDatabase.getMemo_document_phone();
                         startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
                     }
+                }
+            });
+            rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                @Override
+                public void onComplete(RippleView rippleView) {
+                    Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(markerDatabase));
+                    intent.putExtra("Tag", Constant.MARKER_TAG_NEW);
+                    startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
                 }
             });
 
@@ -757,6 +774,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapClick(LatLng latLng) {
         memoInfo_ll.setVisibility(View.INVISIBLE);
         this.memoDetail_bt.setVisibility(View.INVISIBLE);
+        rippleView.setVisibility(View.INVISIBLE);
         this.call_bt.setVisibility(View.INVISIBLE);
         this.share_bt.setVisibility(View.INVISIBLE);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -764,6 +782,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         back_ib.setVisibility(View.INVISIBLE);
         menu_ib.setVisibility(VISIBLE);
         bottom_ll.setVisibility(VISIBLE);
+
 
     }
 

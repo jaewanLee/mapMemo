@@ -14,7 +14,6 @@
     <string name="KAKAO_CLIENT_SECRET_VALUE">5dUZvKAiHddhe9MGEqZbeoF7v0tIiUYg</string>
     <string name="kakao_scheme">kakao8ad4fb7aef2c1880a254d05f9a171904</string>
     <string name="kakaolink_host">kakaolink</string>
-    <string name="Google_Aip_Key">AIzaSyBEIr05_U_aswKncwW60YWqmN0JiobNMAc</string>
     <!--<string name="Google_Aip_Key">AIzaSyAaxtbsCDQlIzYQ84id4xgazqbRvEqcC7o</string>-->
     <string name="permission_deny_message">권한 설정 거부로 사용이 제한되었습니다</string>
     <string name="spinnerPromptCategory">분류를 선택하세요</string>

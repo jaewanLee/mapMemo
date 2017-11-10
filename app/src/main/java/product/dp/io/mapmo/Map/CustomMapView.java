@@ -180,7 +180,7 @@ public class CustomMapView extends MapView implements MapView.MapViewEventListen
             });
         } else {
             final MemoDatabase memoDatabase = ((CustomMarker) mapPOIItem).getMemoDatabase();
-            SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
+            SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm", Locale.KOREA );
             Date currentTime = new Date (memoDatabase.getMemo_createDate());
             String dTime = formatter.format ( currentTime );
             this.createdDate_tv.setText(dTime);

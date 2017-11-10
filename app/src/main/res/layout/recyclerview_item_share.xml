@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/memoListshare_title_TextView"
-                android:layout_width="146dp"
+                android:layout_width="138dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="11dp"
                 android:gravity="center_vertical"
@@ -27,6 +27,7 @@
                 android:textColor="#000000"/>
 
             <TextView
+                android:layout_marginLeft="8dp"
                 android:id="@+id/memoListshare_category_ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -43,7 +44,7 @@
 
             <TextView
                 android:id="@+id/memoListshare_memoContent_TextView"
-                android:layout_width="146dp"
+                android:layout_width="138dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="memo something"
@@ -52,6 +53,7 @@
                 android:textColor="#9e24aa"/>
 
             <TextView
+                android:layout_marginLeft="8dp"
                 android:id="@+id/memoListshare_date_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.ActionBar.Transparent">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/Google_Aip_Key" />
@@ -35,9 +35,7 @@
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="@string/Google_Aip_Key" /> -->
 
-        <activity
-            android:name=".HomeView.MainActivity"
-            android:label="#여기요"></activity>
+
         <activity android:name=".HomeView.HomeActivity">
 
         </activity>

@@ -60,7 +60,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         holder.memoTitle_tv.setText(currentMemoListDatabase.getMemo_document_place_name());
         String category_name=currentMemoListDatabase.getMemo_document_category_group_code();
         holder.memoCategory_tv.setText(TranscHash.rawToreFinedCategory(category_name));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.KOREA);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
         Date currentTime = new Date(currentMemoListDatabase.getMemo_createDate());
         String dTime = formatter.format(currentTime);
         holder.createDate_tv.setText(dTime);

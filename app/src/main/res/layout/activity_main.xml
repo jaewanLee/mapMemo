@@ -61,7 +61,7 @@
                     android:layout_marginLeft="16dp"
                     android:background="@null"
                     android:gravity="top"
-                    android:hint="원하는 장소를 적어주세요"
+                    android:hint="메모하고 싶은 장소를 검색하세요."
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:paddingTop="15dp"

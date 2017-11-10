@@ -24,33 +24,39 @@
                 android:src="@drawable/ic_edit_memo_gredient"
                 android:scaleType="fitXY"
                 android:id="@+id/add_memo_title_background"/>
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#00000000">
-                <ImageButton
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_back_white"
+                    android:layout_marginTop="7dp"
+                    android:gravity="center"
+                    android:text="완료"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
                     android:background="#00000000"
-                    android:layout_marginTop="12dp"
                     android:id="@+id/add_memo_back"
                     android:scaleType="fitXY"
-
                     />
                 <EditText
-                    android:layout_marginTop="17dp"
+                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
-                    android:text="이름"
+                    android:text="이름adgadgadgadgadgad"
+                    android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:paddingRight="5dp"
                     android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
                     android:background="#00000000"
-                    android:id="@+id/add_memo_title"/>
-            </LinearLayout>
+                    android:id="@+id/add_memo_title"
+
+                    />
+            </RelativeLayout>
 
         </FrameLayout>
 

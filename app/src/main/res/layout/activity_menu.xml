@@ -40,6 +40,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
                 android:background="@drawable/guest_profile" />
 
             <TextView
