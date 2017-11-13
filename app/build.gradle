@@ -14,7 +14,7 @@ allprojects {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 21
             targetSdkVersion 26
-            versionCode 4
+            versionCode 5
             versionName new Date().format('yyyyMMdd')
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
@@ -27,7 +27,7 @@ allprojects {
 
             }
             debug{
-                resValue "string", "Google_Aip_Key", "AIzaSyBEIr05_U_aswKncwW60YWqmN0JiobNMAc"
+                resValue "string", "Google_Aip_Key", "AIzaSyB2-UKnp-KnDX6fCJBpn6GpBN7RPKKL1JM"
             }
         }
 
@@ -81,8 +81,6 @@ allprojects {
         compile group: 'com.kakao.sdk', name: 'kakaolink', version: '1.5.1'
 
         compile files('libs/libDaumMapAndroid.jar')
-
-        compile 'com.github.Hitta:RippleEffect:82cf00e551'
 
     }
 

@@ -102,19 +102,11 @@
 
         </LinearLayout>
 
-        <com.andexert.library.RippleView
-            android:id="@+id/more"
-            android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:layout_gravity="bottom"
-            app:rv_color="#696969"
-            app:rv_rippleDuration="100"
-            app:rv_ripplePadding="100dp">
-
             <LinearLayout
                 android:id="@+id/main_memoInfo_LinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="165dp"
+                android:layout_gravity="bottom"
                 android:background="#ffffff"
                 android:orientation="vertical"
                 android:paddingLeft="18dp"
@@ -175,7 +167,6 @@
                     android:text="새 메모를 추가하기 위해 클릭해 주세요" />
 
             </LinearLayout>
-        </com.andexert.library.RippleView>
 
         <ImageButton
             android:id="@+id/main_share_floatingbutton"

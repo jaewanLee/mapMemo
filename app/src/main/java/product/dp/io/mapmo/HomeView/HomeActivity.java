@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -114,7 +113,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageButton memoList_ib;
     ImageView splitbar_iv;
     TextView simpleMemoTitle_tv;
-    RippleView rippleView;
 
     Realm realm;
 
@@ -147,6 +145,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         realm = Realm.getDefaultInstance();
 
 
+
+
     }
 
     private void initLayout() {
@@ -172,8 +172,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         call_bt.setVisibility(View.INVISIBLE);
         share_bt = (ImageButton) findViewById(R.id.main_share_floatingbutton);
         share_bt.setVisibility(View.INVISIBLE);
-        rippleView = (RippleView) findViewById(R.id.more);
-        rippleView.setVisibility(View.INVISIBLE);
 
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
@@ -416,7 +414,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(memoDatabase);
                 this.memoDetail_bt.setVisibility(VISIBLE);
-                rippleView.setVisibility(VISIBLE);
                 this.call_bt.setVisibility(VISIBLE);
                 this.share_bt.setVisibility(VISIBLE);
 
@@ -443,7 +440,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 memoDetailLayoutInit(newMemo);
                 this.memoDetail_bt.setVisibility(View.INVISIBLE);
-                rippleView.setVisibility(View.INVISIBLE);
                 this.call_bt.setVisibility(View.INVISIBLE);
                 this.share_bt.setVisibility(View.INVISIBLE);
                 memoInfo_ll.setVisibility(View.INVISIBLE);
@@ -524,7 +520,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.memoDetail_bt.setImageResource(R.drawable.add_memo_btn);
         }
         this.memoDetail_bt.setVisibility(VISIBLE);
-        rippleView.setVisibility(VISIBLE);
         this.call_bt.setVisibility(VISIBLE);
         this.share_bt.setVisibility(VISIBLE);
         return true;
@@ -577,9 +572,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             });
-            rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+//            bottom_ll.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+            memoInfo_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onComplete(RippleView rippleView) {
+                public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
                     intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(markerDatabase));
                     intent.putExtra("Tag", Constant.MARKER_TAG_NEW);
@@ -602,15 +603,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
             this.memoContent_tv.setText(markerDatabase.getMemo_content());
-//            memoInfo_ll.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-            rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            memoInfo_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onComplete(RippleView rippleView) {
+                public void onClick(View v) {
                     Intent intent = new Intent(HomeActivity.this, AddMemoActivity.class);
                     intent.putExtra("memo_no", markerDatabase.getMemo_no());
                     intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
@@ -796,7 +791,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapClick(LatLng latLng) {
         memoInfo_ll.setVisibility(View.INVISIBLE);
         this.memoDetail_bt.setVisibility(View.INVISIBLE);
-        rippleView.setVisibility(View.INVISIBLE);
         this.call_bt.setVisibility(View.INVISIBLE);
         this.share_bt.setVisibility(View.INVISIBLE);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
