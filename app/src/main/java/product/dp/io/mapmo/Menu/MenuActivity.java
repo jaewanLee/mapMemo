@@ -70,7 +70,6 @@ import static product.dp.io.mapmo.Util.Constant.USER_SHARED;
 
 public class MenuActivity extends AppCompatActivity {
 
-
     ImageButton back_ib;
 
     ImageView userImage;
@@ -82,7 +81,6 @@ public class MenuActivity extends AppCompatActivity {
     Switch lockScreen;
     RelativeLayout format_layout, faq_layout, userterm_layout;
     ImageButton back_bt;
-
 
     SharedPreferences sharedPreferences;
     SharedPreferences sharedPreferencesConfig;
@@ -106,7 +104,6 @@ public class MenuActivity extends AppCompatActivity {
         socialLogin();
 
     }
-
 
     private void initLayout() {
         sharedPreferencesConfig = getSharedPreferences("Config", MODE_PRIVATE);
@@ -277,7 +274,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void socialLogin() {
@@ -301,7 +297,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-
     // 카카오 세션 콜백,앱에 카카오 로그인이 성공한 경우(기존 로그인시에는 checkAndImplicitopen으로 자동 실행
     private class KakaoSessionCallback implements ISessionCallback {
         @Override
@@ -319,7 +314,6 @@ public class MenuActivity extends AppCompatActivity {
 
         }
     }
-
 
     // 카카오 세션 호출
     protected void KakaoRequestMe() {
@@ -487,7 +481,7 @@ public class MenuActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MenuActivity.this, "request Err", Toast.LENGTH_SHORT).show();
+                        Logger.d("User profile uploading err ");
                     }
                 });
             }
@@ -500,10 +494,12 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (result.contains("200")) {
-                            Toast.makeText(MenuActivity.this, result, Toast.LENGTH_SHORT).show();
+                            Logger.d("response of send user profile : "+result);
+                            Toast.makeText(MenuActivity.this, "유저 프로필이 정상적으로 등록되지 않았습니다", Toast.LENGTH_SHORT).show();
                             AirBridge.getTracker().send(new SignInEvent());
                         } else {
-                            Toast.makeText(MenuActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
+                            Logger.d("response of send user profile : 400 err");
+                            Toast.makeText(MenuActivity.this, "유저 프로필 등록에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

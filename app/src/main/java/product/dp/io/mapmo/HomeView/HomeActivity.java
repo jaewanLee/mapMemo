@@ -193,17 +193,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-                Toast.makeText(HomeActivity.this, "onStatusChanged", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-                Toast.makeText(HomeActivity.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-                Toast.makeText(HomeActivity.this, "onProviderDisabled", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 circleProgressBar.onAnimationEnd();
@@ -360,7 +357,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Toast.makeText(this, String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, String.valueOf(location.getLongitude()), Toast.LENGTH_SHORT).show();
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*60, 10, locationListener);
 //        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, locationListener);
 
@@ -509,7 +506,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onMarkerClick(Marker marker) {
         //마커에서 데이터베이스 빼내옴
         //빼낸 데이터베이스를 바탕으로 레이아웃 수정 및 클릭 리스너 등록
-        Toast.makeText(this, "마커클릭", Toast.LENGTH_SHORT).show();
 
         MemoDatabase markerDatabase = (MemoDatabase) marker.getTag();
         memoDetailLayoutInit(markerDatabase);
@@ -638,7 +634,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //TODO 공유하기 기능 추가
                     UserDatabase userDatabase = MainApplication.getMainApplicationContext().getOnUserDatabase();
                     if (!userDatabase.getUser_email().equals("guest") && userDatabase.getUser_email() != null) {
-                        Toast.makeText(HomeActivity.this, "shared!", Toast.LENGTH_SHORT).show();
+                        Logger.d("on HomeActivity shared action launch");
                         final String shared_memo_key = userDatabase.getUser_email() + System.currentTimeMillis();
 
 
@@ -676,7 +672,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(HomeActivity.this, "request Err", Toast.LENGTH_SHORT).show();
+                                        Logger.d("on HomeActivity client.newCall err");
+                                        Toast.makeText(HomeActivity.this, "메모 공유 중 에러가 발생하였습니다 다시 시도해 주세", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -688,9 +685,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     @Override
                                     public void run() {
                                         if (result.contains("200")) {
-                                            Toast.makeText(HomeActivity.this, result, Toast.LENGTH_SHORT).show();
+                                            Logger.d("response of sharing : "+result);
+                                            Toast.makeText(HomeActivity.this, "메모 공유가 완료되었습니다", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(HomeActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
+                                            Logger.d("response of sharing : request err 400");
+                                            Toast.makeText(HomeActivity.this, "메모공유에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });

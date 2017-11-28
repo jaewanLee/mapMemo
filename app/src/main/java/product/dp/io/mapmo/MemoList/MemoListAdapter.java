@@ -102,8 +102,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 //해당 아이템 선택시
-                //TODO 여기뿐만 아니라 메모관련 내용들 중에서 만일 변경될경우 해당 내용들 변경하는거 해줘야함
-                Toast.makeText(context, "걍클릭", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
                 intent.putExtra("memo_no", currentMemoListDatabase.getMemo_no());
                 intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
@@ -115,7 +113,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(context, "롱클릭", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle("삭제");
                 builder.setMessage("이거 정말 삭제할꺼요?!");
@@ -131,7 +128,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
                                 realmResults.deleteAllFromRealm();
                             }
                         });
-                        //TODO adapter 바꾸기
                         instance.memoDatabases.remove(position);
                         instance.notifyItemRemoved(position);
 

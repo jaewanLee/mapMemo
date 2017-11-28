@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,11 +52,9 @@ public class MemoListShareAdapter  extends RecyclerView.Adapter<MemoListShareAda
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(holder.isSharable.isChecked()){
                     memoDatabases.get(position).setIsChecked(true);
-                    Toast.makeText(context, "체크", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     memoDatabases.get(position).setIsChecked(false);
-                    Toast.makeText(context, "안체크", Toast.LENGTH_SHORT).show();
                 }
             }
         });

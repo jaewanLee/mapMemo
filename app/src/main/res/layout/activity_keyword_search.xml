@@ -57,9 +57,6 @@
         android:id="@+id/keyword_search_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="24dp"
-        android:paddingTop="12dp"
-        android:paddingRight="12dp"
 >
 
     </android.support.v7.widget.RecyclerView>

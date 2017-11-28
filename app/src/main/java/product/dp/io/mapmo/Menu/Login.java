@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -95,12 +94,12 @@ public class Login extends AppCompatActivity {
 
                 if(_network_error_code == _error_code) {
                     String _error_message = "카카오톡의 서버 네트워트가 불안정합니다. 다시 시도해 주세요.";
+                    Logger.d("kakao request err : -777");
                     Toast.makeText(getApplicationContext(), _error_message, Toast.LENGTH_SHORT).show();
 
                     return;
                 }
-
-                Log.d("Login", errorResult.getErrorMessage());
+                Logger.d("Login");
             }
 
             @Override

@@ -55,20 +55,6 @@
                 android:layout_toRightOf="@+id/menu_profile_image"
                 />
 
-            <!--<TextView-->
-            <!--android:id="@+id/user_profile_email"-->
-            <!--android:textSize="14sp"-->
-            <!--android:gravity="right"-->
-            <!--android:textColor="@color/setting_hint_color"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"/>-->
-
-            <!--<FrameLayout-->
-            <!--android:layout_below="@+id/user_profile_email"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-
             <com.kakao.usermgmt.LoginButton
                 android:id="@+id/menu_kakaologin_button"
                 android:layout_width="146dp"
@@ -119,18 +105,19 @@
             android:id="@+id/setting_layer"
             android:layout_width="match_parent"
             android:layout_height="191dp"
-            android:layout_below="@+id/profile_line_imgae"
-            android:layout_marginLeft="20dp">
+            android:layout_below="@+id/profile_line_imgae">
 
             <TextView
                 android:id="@+id/setting_sub_title"
-                android:layout_width="24dp"
+                android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:layout_marginTop="15dp"
                 android:gravity="left"
                 android:text="@string/setting_sub_title"
                 android:textColor="@color/setting_sub_title_color"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:paddingLeft="20dp"
+                />
 
             <RelativeLayout
                 android:id="@+id/preview_set_lay"
@@ -138,7 +125,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/setting_sub_title"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:paddingLeft="0dp">
+                android:paddingLeft="20dp"
+                >
 
                 <TextView
                     android:layout_width="136dp"
@@ -162,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/preview_set_lay"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:paddingLeft="0dp">
+                android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="142dp"
@@ -192,15 +180,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/memu_backup_relativelayout"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:paddingLeft="0dp"
+                android:paddingLeft="20dp"
                 >
 
                 <TextView
                     android:layout_width="81dp"
                     android:layout_height="21dp"
                     android:textSize="14sp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:text="메모 포맷"
                     android:textColor="@color/black"
@@ -231,8 +217,7 @@
             android:id="@+id/customer_service_layer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/setting_line_imgae"
-            android:paddingLeft="20dp">
+            android:layout_below="@+id/setting_line_imgae">
 
             <TextView
                 android:id="@+id/customer_service_title"
@@ -242,7 +227,9 @@
                 android:gravity="left"
                 android:text="@string/cs_sub_title"
                 android:textColor="@color/setting_sub_title_color"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+
+                android:paddingLeft="20dp"/>
 
             <RelativeLayout
                 android:id="@+id/faq_set_lay"
@@ -250,7 +237,8 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/customer_service_title"
-                android:paddingLeft="0dp">
+
+                android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="27dp"
@@ -278,7 +266,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/faq_set_lay"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:paddingLeft="0dp">
+                android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"

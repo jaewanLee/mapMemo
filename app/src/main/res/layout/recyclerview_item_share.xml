@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
+                android:singleLine="true"
                 android:text="음식점"
                 android:textSize="12sp"
                 android:textColor="#949494"/>
@@ -48,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="memo something"
-
+                android:singleLine="true"
                 android:textSize="12sp"
                 android:textColor="#9e24aa"/>
 
@@ -61,7 +62,8 @@
                 android:layout_weight="1"
                 android:text="17:08:17"
                 android:textSize="12sp"
-                android:textColor="#949494"/>
+                android:textColor="#949494"
+                android:singleLine="true"/>
         </LinearLayout>
 
     </LinearLayout>

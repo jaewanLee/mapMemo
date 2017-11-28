@@ -123,7 +123,7 @@ public class MemoListActivity extends AppCompatActivity {
                 for (MemoListDatabase memoListDatabase : memoListShareAdapter.memoDatabases) {
                     if (memoListDatabase.isChecked) {
                         requestValue.add(memoListDatabase);
-                        Toast.makeText(MemoListActivity.this, memoListDatabase.getMemo_document_place_name(), Toast.LENGTH_SHORT).show();
+                        Logger.d("comfirmed place name : " + memoListDatabase.getMemo_document_place_name());
                     }
                     memoListDatabase.setIsChecked(false);
                 }
@@ -158,7 +158,8 @@ public class MemoListActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MemoListActivity.this, "request Err", Toast.LENGTH_SHORT).show();
+                                Logger.d("shared memo client.newCall err");
+                                Toast.makeText(MemoListActivity.this, "요청에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -170,9 +171,10 @@ public class MemoListActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if (result.contains("200")) {
-                                    Toast.makeText(MemoListActivity.this, result, Toast.LENGTH_SHORT).show();
+                                    Logger.d("response of uploading shared memo data to server : " + result);
                                 } else {
-                                    Toast.makeText(MemoListActivity.this, "request Err 400", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MemoListActivity.this, "메모 데이터가 정상적으로 공유되지 않았습니다 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
+                                    Logger.d("response of uploading shared memo data to server : 400");
                                 }
                             }
                         });
@@ -299,8 +301,6 @@ public class MemoListActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
-        Toast.makeText(this, "deepLink Clicked", Toast.LENGTH_SHORT).show();
         String data = intent.getDataString();
         int valuePosition = data.indexOf("key");
         String shared_memo_key = data.substring(valuePosition + 4);
@@ -406,8 +406,8 @@ public class MemoListActivity extends AppCompatActivity {
             recyclerView.setAdapter(memoListAdapter);
         } else if (getIntent() == null) {
             super.onBackPressed();
-        }else{
-            Intent intent=new Intent(this, HomeActivity.class);
+        } else {
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
