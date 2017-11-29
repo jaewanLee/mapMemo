@@ -145,8 +145,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         realm = Realm.getDefaultInstance();
 
 
-
-
     }
 
     private void initLayout() {
@@ -398,21 +396,27 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.SEARCH_QUERY_INTENT && resultCode == Constant.SEARCH_QUERY_INTENT) {
             if (data.hasExtra("searchResult")) {
+
                 MemoDatabase memoDatabase = new Gson().fromJson(data.getStringExtra("searchResult"), MemoDatabase.class);
                 LatLng tempLatLng = new LatLng(Double.valueOf(memoDatabase.getMemo_document_y()), Double.valueOf(memoDatabase.getMemo_document_x()));
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(tempLatLng));
-                tempMarker = makeAndtempMarker(memoDatabase, tempLatLng);
-                onMarkerClick(tempMarker);
-
+                if (!data.hasExtra("existed")) {
+                    tempMarker = makeAndtempMarker(memoDatabase, tempLatLng);
+                    onMarkerClick(tempMarker);
+                    memoDetailLayoutInit(memoDatabase);
+                }else if(data.getIntExtra("existed",-1)!=-1){
+                    MemoDatabase existMemo=realm.where(MemoDatabase.class).equalTo("memo_no",data.getIntExtra("existed",-1)).findFirst();
+                    memoDetailLayoutInit(existMemo);
+                }
                 menu_ib.setVisibility(VISIBLE);
                 back_ib.setVisibility(View.INVISIBLE);
                 erase_ib.setVisibility(View.INVISIBLE);
                 init_ib.setVisibility(VISIBLE);
 
-                memoDetailLayoutInit(memoDatabase);
                 this.memoDetail_bt.setVisibility(VISIBLE);
                 this.call_bt.setVisibility(VISIBLE);
                 this.share_bt.setVisibility(VISIBLE);
+
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
@@ -685,7 +689,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     @Override
                                     public void run() {
                                         if (result.contains("200")) {
-                                            Logger.d("response of sharing : "+result);
+                                            Logger.d("response of sharing : " + result);
                                             Toast.makeText(HomeActivity.this, "메모 공유가 완료되었습니다", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Logger.d("response of sharing : request err 400");
@@ -699,7 +703,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 for (MemoListDatabase requestMemoList : requestValue) {
                                     kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
                                 }
-                                sendCustomFeedTemplat(shared_memo_key,kakao_link_title);
+                                sendCustomFeedTemplat(shared_memo_key, kakao_link_title);
 //                                sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
 
                             }
@@ -747,7 +751,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Map<String, String> templateArgs = new HashMap<String, String>();
         templateArgs.put("MemoTitle", memo_title);
-        templateArgs.put("link_key","key="+memo_no);
+        templateArgs.put("link_key", "key=" + memo_no);
 
         KakaoLinkService.getInstance().sendCustom(this, templateId, templateArgs, new ResponseCallback<KakaoLinkResponse>() {
             @Override

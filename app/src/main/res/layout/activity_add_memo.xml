@@ -29,13 +29,13 @@
                 android:layout_height="match_parent"
                 android:background="#00000000">
                 <TextView
-                    android:layout_width="40dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="7dp"
                     android:gravity="center"
-                    android:text="완료"
+                    android:text="저장 완료"
                     android:textSize="14sp"
                     android:textColor="#ffffff"
                     android:background="#00000000"
@@ -47,6 +47,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
+                    android:gravity="right"
                     android:singleLine="true"
                     android:textColor="#ffffff"
                     android:textSize="14sp"
@@ -79,18 +80,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginTop="9dp">
+        android:gravity="center_vertical">
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:src="@drawable/ic_edit_memo_context"
             android:scaleType="fitCenter"
+            android:alpha="0.38"
             android:layout_marginLeft="15dp"/>
         <EditText
             android:layout_width="119dp"
             android:layout_height="19dp"
             android:background="#00000000"
-            android:text="이름adgadgadgadgadgad asdfasdf"
+            android:text="메모 이름"
             android:layout_marginRight="9dp"
             android:layout_marginLeft="7dp"
             android:textColor="#8a000000"
@@ -99,22 +101,30 @@
             android:textSize="13sp"
             android:singleLine="true"
             android:maxLines="1"/>
-
-        <TextView
-            android:id="@+id/add_memo_addr"
+        <LinearLayout
             android:layout_width="159dp"
             android:layout_height="19dp"
             android:layout_weight="1"
-            android:layout_gravity="right"
-            android:textSize="13sp"
-            android:layout_marginRight="19dp"
-            android:layout_marginLeft="15dp"
-            android:singleLine="true"
-            android:text="서울 관악구 남현231 2345234 23445674567"
-            android:textColor="#8a000000"
-            android:ellipsize="end"
-            android:background="#00000000"/>
-    </LinearLayout>
+            android:gravity="right"
+            >
+
+            <TextView
+                android:id="@+id/add_memo_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="13sp"
+                android:layout_marginRight="19dp"
+                android:layout_marginLeft="15dp"
+                android:singleLine="true"
+                android:text="메모 주소"
+                android:textColor="#8a000000"
+                android:ellipsize="end"
+                android:background="#00000000"/>
+        </LinearLayout>
+
+
+        </LinearLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -125,10 +135,11 @@
         android:layout_height="0dp"
         android:layout_weight="1">
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:alpha="0.38"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_edit_memo_context"/>
         <EditText
             android:layout_width="0dp"

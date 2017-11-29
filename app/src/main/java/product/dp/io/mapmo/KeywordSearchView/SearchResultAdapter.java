@@ -49,7 +49,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         final KeywordSearchRepo.KeywordDocuments keywordDocument = keywordDocuments.get(position);
 
-            //TODO 텍스트에서 이미지로 바꾸는 과정 필요
         holder.title.setText(keywordDocument.getPlace_name());
         if (keywordDocument.getCategory_group_code().equals("") || keywordDocument.getCategory_group_code() == null) {
             holder.category.setImageResource(R.drawable.ic_category_default);

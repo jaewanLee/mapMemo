@@ -578,7 +578,7 @@ public class MenuActivity extends AppCompatActivity {
             case 0:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
-                        Uri.parse("http://ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com/mapmo/policy/privacypolicy.html"),
+                        Uri.parse("https://goo.gl/vcbHyd"),
                         new WebViewFallback());
 
                 break;
@@ -586,7 +586,7 @@ public class MenuActivity extends AppCompatActivity {
             case 1:
 
                 CustomTabsHelper.openCustomTab(this, customTabsIntent,
-                        Uri.parse("http://ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com/mapmo/policy/termsofservice.html"),
+                        Uri.parse("https://goo.gl/KNs4Na"),
                         new WebViewFallback());
                 break;
 

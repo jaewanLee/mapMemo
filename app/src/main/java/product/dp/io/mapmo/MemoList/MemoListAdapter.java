@@ -38,8 +38,8 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     Context context;
     ArrayList<MemoListDatabase> memoDatabases;
     Activity activity;
-    MemoListDatabase currentMemoListDatabase;
     MemoListAdapter instance;
+
 
     public MemoListAdapter(Activity activity, Context context, ArrayList<MemoListDatabase> memoDatabases) {
         this.activity = activity;
@@ -55,8 +55,9 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        currentMemoListDatabase = memoDatabases.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final int position_num=position;
+        final MemoListDatabase currentMemoListDatabase = memoDatabases.get(position_num);
         holder.memoTitle_tv.setText(currentMemoListDatabase.getMemo_document_place_name());
         String category_name=currentMemoListDatabase.getMemo_document_category_group_code();
         holder.memoCategory_tv.setText(TranscHash.rawToreFinedCategory(category_name));
@@ -65,11 +66,12 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         String dTime = formatter.format(currentTime);
         holder.createDate_tv.setText(dTime);
         holder.memoContent_tv.setText(currentMemoListDatabase.getMemo_content());
+        holder.viewPosition=position;
         holder.phoneCall_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentMemoListDatabase.getMemo_document_phone().equals("") || currentMemoListDatabase.getMemo_document_phone() == null)
-                    Toast.makeText(activity, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(activity, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
                 else {
                     String tel = "tel:" + currentMemoListDatabase.getMemo_document_phone();
                     activity.startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
@@ -102,6 +104,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 //해당 아이템 선택시
+                int lastposition=holder.viewPosition;
                 Intent intent = new Intent(activity.getApplicationContext(), AddMemoActivity.class);
                 intent.putExtra("memo_no", currentMemoListDatabase.getMemo_no());
                 intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
@@ -128,8 +131,8 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
                                 realmResults.deleteAllFromRealm();
                             }
                         });
-                        instance.memoDatabases.remove(position);
-                        instance.notifyItemRemoved(position);
+                        instance.memoDatabases.remove(position_num);
+                        instance.notifyItemRemoved(position_num);
 
                     }
                 });
@@ -173,6 +176,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
         ImageButton phoneCall_ib;
         ImageButton blogWeb_ib;
         ImageView newMemo_iv;
+        int viewPosition;
 
         public ViewHolder(View itemView) {
             super(itemView);

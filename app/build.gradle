@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'realm-android'
 allprojects {
     repositories {
@@ -12,7 +27,7 @@ allprojects {
         buildToolsVersion '26.0.2'
         defaultConfig {
             applicationId "product.dp.io.mapmo"
-            minSdkVersion 21
+            minSdkVersion 19
             targetSdkVersion 26
             versionCode 6
             versionName new Date().format('yyyyMMdd')
@@ -87,4 +102,7 @@ allprojects {
 }
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:+'
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
 }

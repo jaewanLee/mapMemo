@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -69,6 +71,7 @@ public class MemoListActivity extends AppCompatActivity {
 
     String shared_memo_key;
 
+    GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,13 @@ public class MemoListActivity extends AppCompatActivity {
 
         memoDatabases = new ArrayList<>();
         memoListAdapter = new MemoListAdapter(this, this, memoDatabases);
+
+        gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
 
         DatabaseInit(memoDatabases, memoListAdapter, recyclerView);
 
@@ -232,16 +242,6 @@ public class MemoListActivity extends AppCompatActivity {
                 recyclerView.setAdapter(memoListAdapter);
             }
         });
-
-//        search_ib.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                memoDatabases=keywordSearch(search_et.getText().toString());
-//                memoListAdapter.setMemoDatabases(memoDatabases);
-//                memoListAdapter.notifyDataSetChanged();
-//            }
-//        });
-
     }
 
     private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
@@ -376,12 +376,8 @@ public class MemoListActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(MemoListActivity.this, "오류가 발생했습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 });
-
-
             }
         });
 

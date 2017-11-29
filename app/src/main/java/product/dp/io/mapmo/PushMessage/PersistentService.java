@@ -100,7 +100,7 @@ public class PersistentService extends Service {
                 Toast.makeText(this, "정상적인 사용을 위해 권한설정을 해주세요", Toast.LENGTH_SHORT).show();
 
             }
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*60*10, 10000, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*20, 1000, locationListener);
             Logger.d("location Listener on");
         }
 

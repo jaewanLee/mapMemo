@@ -18,6 +18,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import product.dp.io.mapmo.Core.MainApplication;
 import product.dp.io.mapmo.Database.MemoDatabase;
 import product.dp.io.mapmo.Map.KeywordSearchInterface;
@@ -98,6 +100,11 @@ public class KeywordSearchActivity extends AppCompatActivity {
                             MemoDatabase memoDatabase = new MemoDatabase();
                             memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
                             intent.putExtra("searchResult", new GsonBuilder().serializeNulls().create().toJson(memoDatabase));
+                            Realm realm=Realm.getDefaultInstance();
+                            RealmResults<MemoDatabase> realmResults=realm.where(MemoDatabase.class).equalTo("memo_document_x",memoDatabase.getMemo_document_x()).equalTo("memo_document_y",memoDatabase.getMemo_document_y()).findAll();
+                            Boolean isDataExist=!realmResults.isEmpty();
+                            if(isDataExist)
+                                intent.putExtra("existed",realmResults.first().getMemo_no());
                         }
                     }
                     setResult(Constant.SEARCH_QUERY_INTENT, intent);

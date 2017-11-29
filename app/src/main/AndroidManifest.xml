@@ -36,8 +36,9 @@
         <!-- android:value="@string/Google_Aip_Key" /> -->
 
 
-        <activity android:name=".HomeView.HomeActivity">
-
+        <activity android:name=".HomeView.HomeActivity"
+            android:screenOrientation="portrait"
+            >
         </activity>
         <activity
             android:name=".LockScreen.LockScreenActivity"
@@ -64,7 +65,9 @@
 
         <activity
             android:name=".HomeView.TimeBaseActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
 
                 <!-- Sets the intent action to view the activity -->
@@ -85,22 +88,38 @@
         </activity>
         <activity
             android:name=".HomeView.SettingActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".HomeView.FAQActivity"
-            android:launchMode="standard" />
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".HomeView.AccessTermActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".KeywordSearchView.KeywordSearchActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".AddMemoView.AddMemoActivity" />
-        <activity android:name=".Menu.MenuActivity" />
-        <activity android:name=".MemoList.MemoListActivity">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".AddMemoView.AddMemoActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".Menu.MenuActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".MemoList.MemoListActivity"
+            android:screenOrientation="portrait"
+            >
 
         </activity>
-        <activity android:name=".Shared.SharedActivity" />
+        <activity android:name=".Shared.SharedActivity"
+            android:screenOrientation="portrait"
+            />
 
         <service
             android:name=".PushMessage.PersistentService"
@@ -119,7 +138,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Core.IntroActivity">
+        <activity android:name=".Core.IntroActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -137,6 +158,9 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="58a9c7c3c36dea1b3f77ce43e01948153fd3ab39" />
     </application>
 
 </manifest>
