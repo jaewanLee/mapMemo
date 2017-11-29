@@ -29,7 +29,7 @@ allprojects {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 19
             targetSdkVersion 26
-            versionCode 6
+            versionCode 7
             versionName new Date().format('yyyyMMdd')
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
