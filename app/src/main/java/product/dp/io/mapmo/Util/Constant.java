@@ -22,6 +22,8 @@ public class Constant {
 
     public static final int MARKER_TAG_SAVED=9113;
 
+    public static final int MARKER_TAG_CUSTOM=9114;
+
     public static final String DAUME_SEARCH_API_KEY="KakaoAK 13154e096c55ada7691f4e2df3c5c9f4";
 
     public static final int SEARCH_QUERY_INTENT=9402;

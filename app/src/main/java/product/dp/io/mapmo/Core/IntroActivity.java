@@ -1,5 +1,6 @@
 package product.dp.io.mapmo.Core;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import io.airbridge.AirBridge;
+import io.airbridge.deeplink.DeepLink;
 import io.fabric.sdk.android.Fabric;
 import product.dp.io.mapmo.HomeView.HomeActivity;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
@@ -31,6 +34,7 @@ public class IntroActivity extends AppCompatActivity {
     ImageButton user_term;
     TextView waitingText;
     ImageView waiting_img;
+    Activity activity;
 
 
     @Override
@@ -39,12 +43,13 @@ public class IntroActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_intro);
 
+        activity = this;
+
         intro_agree = (Button) findViewById(R.id.intro_agreed_button);
         service_term = (ImageButton) findViewById(R.id.intro_serviceterm_ImageButton);
         user_term = (ImageButton) findViewById(R.id.intro_userterm_ImageButton);
         waitingText = (TextView) findViewById(R.id.intro_texting_textView);
         waiting_img = (ImageView) findViewById(R.id.intro_image_ImageView);
-
 
         isInstalled = isFirstTime();
         if (isInstalled) {
@@ -74,8 +79,6 @@ public class IntroActivity extends AppCompatActivity {
                     CustomTabsHelper.openCustomTab(IntroActivity.this, customTabsIntent,
                             Uri.parse("https://goo.gl/KNs4Na"),
                             new WebViewFallback());
-
-
                 }
             });
             user_term.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +98,6 @@ public class IntroActivity extends AppCompatActivity {
             });
 
 
-
         } else {
             //전에 왔던거->바로 넘어가기
             intro_agree.setVisibility(View.INVISIBLE);
@@ -105,15 +107,31 @@ public class IntroActivity extends AppCompatActivity {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    if (getIntent().getData() !=null) {
-                        Intent intent = new Intent(IntroActivity.this, MemoListActivity.class);
-                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        intent.setAction(getIntent().getAction());
-                        intent.setData(getIntent().getData());
-                        startActivity(intent);
-                        Logger.d("On Intro Activity");
-                        finish();
-                    } else  {
+                    if (getIntent().getData() != null) {
+                        //kakaotalk을 통해 들어온 경우
+                        if (getIntent().getDataString() != null && getIntent().getDataString().contains("key")) {
+                            Intent intent = new Intent(IntroActivity.this, MemoListActivity.class);
+                            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                            intent.setAction(getIntent().getAction());
+                            intent.setData(getIntent().getData());
+                            startActivity(intent);
+                            Logger.d("On Intro Activity");
+                            finish();
+                        }
+                        //airbridge 딥링크
+                        else {
+                            if (activity != null) {
+                                if (DeepLink.hadOpened(activity)) {
+                                    Logger.d("airbridge Deeplink");
+                                    AirBridge.getTracker().onNewIntent(getIntent());
+                                    Intent movingIntent = new Intent(IntroActivity.this, HomeActivity.class);
+                                    startActivity(movingIntent);
+                                    finish();
+                                }
+                            }
+                        }
+                    } else {
+                        Logger.d("reusing User skip the intro set");
                         Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
                         startActivity(intent);
                         finish();
@@ -121,15 +139,11 @@ public class IntroActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
-
     }
 
     public boolean isFirstTime() {
@@ -143,4 +157,5 @@ public class IntroActivity extends AppCompatActivity {
         editor.putBoolean("isInstalled", false);
         editor.commit();
     }
+
 }

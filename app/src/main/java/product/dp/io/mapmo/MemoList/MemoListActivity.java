@@ -302,86 +302,89 @@ public class MemoListActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         String data = intent.getDataString();
-        int valuePosition = data.indexOf("key");
-        String shared_memo_key = data.substring(valuePosition + 4);
-        Logger.d("deeplink shared key : " + shared_memo_key);
-        //여기다가 MemoDatabaseARrayList에다가 가져온 데이터 추가하고 adapter에다가 notify보내기
-        NetworkManager networkManager = NetworkManager.getInstance();
-        OkHttpClient client = networkManager.getClient();
-        HttpUrl.Builder builder = new HttpUrl.Builder();
+        if(data!=null){
+            int valuePosition = data.indexOf("key");
+            String shared_memo_key = data.substring(valuePosition + 4);
+            Logger.d("deeplink shared key : " + shared_memo_key);
+            //여기다가 MemoDatabaseARrayList에다가 가져온 데이터 추가하고 adapter에다가 notify보내기
+            NetworkManager networkManager = NetworkManager.getInstance();
+            OkHttpClient client = networkManager.getClient();
+            HttpUrl.Builder builder = new HttpUrl.Builder();
 
 
-        builder.scheme("http");
-        builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
-        builder.port(80);
-        builder.addPathSegment("mapmo");
-        builder.addPathSegment("memo");
-        builder.addPathSegment("share");
-        builder.addPathSegment("get.php");
-        builder.addQueryParameter("key", shared_memo_key);
+            builder.scheme("http");
+            builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
+            builder.port(80);
+            builder.addPathSegment("mapmo");
+            builder.addPathSegment("memo");
+            builder.addPathSegment("share");
+            builder.addPathSegment("get.php");
+            builder.addQueryParameter("key", shared_memo_key);
 
-        Logger.d(builder.build().toString());
+            Logger.d(builder.build().toString());
 
-        final Request request = new Request.Builder()
-                .url(builder.build())
-                .build();
+            final Request request = new Request.Builder()
+                    .url(builder.build())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-            }
+                }
 
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                final String result = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Logger.d(result);
-                        Gson gson = new Gson();
-                        if (response.code() != 200 || !response.message().equals("OK")) {
-                            Toast.makeText(MemoListActivity.this, "네트워크 상태가 불안정합니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        realm = Realm.getDefaultInstance();
-                        try {
-                            ArrayList<MemoListDatabase> shared_memoListDatabases = (ArrayList<MemoListDatabase>) gson.fromJson(result,
-                                    new TypeToken<ArrayList<MemoListDatabase>>() {
-                                    }.getType());
-                            for (int i = 0; i < shared_memoListDatabases.size(); i++) {
-
-                                MemoListDatabase shared_memoListDatabase = shared_memoListDatabases.get(i);
-                                long no = realm.where(MemoDatabase.class).equalTo("memo_document_x", shared_memoListDatabase.getMemo_document_x()).equalTo("memo_document_y", shared_memoListDatabase.getMemo_document_y()).count();
-
-                                if (no <= 0) {
-                                    realm = Realm.getDefaultInstance();
-                                    int lastData = 0;
-                                    if (realm.where(MemoDatabase.class).findFirst() != null) {
-                                        lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
-
-                                    }
-                                    MemoDatabase memoDatabase = new MemoDatabase();
-                                    memoDatabase.setMemo_no(lastData + 1);
-                                    memoDatabase.setDataFromMemoListDatabase(shared_memoListDatabase);
-                                    realm.beginTransaction();
-                                    memoDatabase = realm.copyToRealm(memoDatabase);
-
-                                    realm.commitTransaction();
-                                    shared_memoListDatabase.setIsNew(true);
-                                    memoDatabases.add(shared_memoListDatabase);
-                                }
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Logger.d(result);
+                            Gson gson = new Gson();
+                            if (response.code() != 200 || !response.message().equals("OK")) {
+                                Toast.makeText(MemoListActivity.this, "네트워크 상태가 불안정합니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                                return;
                             }
-                            memoListAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            Toast.makeText(MemoListActivity.this, "오류가 발생했습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
+                            realm = Realm.getDefaultInstance();
+                            try {
+                                ArrayList<MemoListDatabase> shared_memoListDatabases = (ArrayList<MemoListDatabase>) gson.fromJson(result,
+                                        new TypeToken<ArrayList<MemoListDatabase>>() {
+                                        }.getType());
+                                for (int i = 0; i < shared_memoListDatabases.size(); i++) {
 
-        AirBridge.getTracker().onNewIntent(intent);
+                                    MemoListDatabase shared_memoListDatabase = shared_memoListDatabases.get(i);
+                                    long no = realm.where(MemoDatabase.class).equalTo("memo_document_x", shared_memoListDatabase.getMemo_document_x()).equalTo("memo_document_y", shared_memoListDatabase.getMemo_document_y()).count();
+
+                                    if (no <= 0) {
+                                        realm = Realm.getDefaultInstance();
+                                        int lastData = 0;
+                                        if (realm.where(MemoDatabase.class).findFirst() != null) {
+                                            lastData = realm.where(MemoDatabase.class).max("memo_no").intValue();
+
+                                        }
+                                        MemoDatabase memoDatabase = new MemoDatabase();
+                                        memoDatabase.setMemo_no(lastData + 1);
+                                        memoDatabase.setDataFromMemoListDatabase(shared_memoListDatabase);
+                                        realm.beginTransaction();
+                                        memoDatabase = realm.copyToRealm(memoDatabase);
+
+                                        realm.commitTransaction();
+                                        shared_memoListDatabase.setIsNew(true);
+                                        memoDatabases.add(shared_memoListDatabase);
+                                    }
+                                }
+                                memoListAdapter.notifyDataSetChanged();
+                            } catch (Exception e) {
+                                Toast.makeText(MemoListActivity.this, "오류가 발생했습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+
+            AirBridge.getTracker().onNewIntent(intent);
+        }
+
     }
 
     @Override

@@ -495,7 +495,6 @@ public class MenuActivity extends AppCompatActivity {
                     public void run() {
                         if (result.contains("200")) {
                             Logger.d("response of send user profile : "+result);
-                            Toast.makeText(MenuActivity.this, "유저 프로필이 정상적으로 등록되지 않았습니다", Toast.LENGTH_SHORT).show();
                             AirBridge.getTracker().send(new SignInEvent());
                         } else {
                             Logger.d("response of send user profile : 400 err");

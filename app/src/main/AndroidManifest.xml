@@ -39,6 +39,7 @@
         <activity android:name=".HomeView.HomeActivity"
             android:screenOrientation="portrait"
             >
+
         </activity>
         <activity
             android:name=".LockScreen.LockScreenActivity"
@@ -59,7 +60,7 @@
             <intent-filter>
                 <action android:name="RestartReceiver.restart" />
             </intent-filter>
-        </receiver>
+        </receiver>shasum -a 256 /tmp/1.iso
 
         <service android:name=".LockScreen.Service.ScreenService" />
 
@@ -149,8 +150,13 @@
 
                 <data android:scheme="@string/kakao_scheme" />
                 <data android:host="@string/kakaolink_host" />
+                <data
+                    android:scheme="mapmo"
+                    android:host="deeplink"
+                    />
 
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

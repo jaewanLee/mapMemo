@@ -203,7 +203,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 circleProgressBar.onAnimationEnd();
                 circleProgressBar.setVisibility(View.INVISIBLE);
-
             }
         };
 
@@ -404,8 +403,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                     tempMarker = makeAndtempMarker(memoDatabase, tempLatLng);
                     onMarkerClick(tempMarker);
                     memoDetailLayoutInit(memoDatabase);
-                }else if(data.getIntExtra("existed",-1)!=-1){
-                    MemoDatabase existMemo=realm.where(MemoDatabase.class).equalTo("memo_no",data.getIntExtra("existed",-1)).findFirst();
+                } else if (data.getIntExtra("existed", -1) != -1) {
+                    MemoDatabase existMemo = realm.where(MemoDatabase.class).equalTo("memo_no", data.getIntExtra("existed", -1)).findFirst();
                     memoDetailLayoutInit(existMemo);
                 }
                 menu_ib.setVisibility(VISIBLE);
@@ -416,7 +415,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 this.memoDetail_bt.setVisibility(VISIBLE);
                 this.call_bt.setVisibility(VISIBLE);
                 this.share_bt.setVisibility(VISIBLE);
-
 
             } else {
                 Toast.makeText(this, "통신오류가 발생하였습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show();
@@ -588,6 +586,60 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
 
+        }
+        //지도 클릭해서 만든 메모일 경우
+        else if (memoDatabase.getMemo_no() == -2) {
+            this.memoInfo_ll.setVisibility(VISIBLE);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA);
+            Date currentTime = new Date(System.currentTimeMillis());
+            String dTime = formatter.format(currentTime);
+            this.createdDate_tv.setText(dTime);
+            String raw_category = markerDatabase.getMemo_document_category_group_code();
+            if (raw_category.equals("")) {
+                this.category_tv.setText("내가 찍은 장소");
+            } else {
+                this.category_tv.setText(TranscHash.rawToreFinedCategory(raw_category));
+                this.memoName_tv.setText(markerDatabase.getMemo_document_place_name());
+            }
+            //TODO 새로운 마커 추가될때 마커 컨텐츠에다가 새로운 메모입니다라는 내용 넣기
+            this.memoContent_tv.setText("이곳에 새로운 메모를 해주세요.");
+            this.memoDetail_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(markerDatabase));
+                    intent.putExtra("Tag", Constant.MARKER_TAG_CUSTOM);
+                    startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
+                }
+            });
+            share_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(HomeActivity.this, "메모를 먼저 저장해 주세요", Toast.LENGTH_SHORT).show();
+                }
+            });
+            call_bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(HomeActivity.this, "연락처 정보가 등록되어 있지 않은 장소입니다", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+//            bottom_ll.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+            memoInfo_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra("keywordDocument", new GsonBuilder().serializeNulls().create().toJson(markerDatabase));
+                    intent.putExtra("Tag", Constant.MARKER_TAG_CUSTOM);
+                    startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
+                }
+            });
         } else {
             this.memoInfo_ll.setVisibility(VISIBLE);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA);
@@ -710,13 +762,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                         });
                     } else
                         Toast.makeText(HomeActivity.this, "로그인을 해주세요", Toast.LENGTH_SHORT).show();
-
                 }
             });
-
         }
         bottom_ll.setVisibility(View.INVISIBLE);
-
     }
 
     private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
@@ -802,6 +851,21 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         menu_ib.setVisibility(VISIBLE);
         bottom_ll.setVisibility(VISIBLE);
 
+        //찍은곳의 위경도 가자오고
+        //이걸 주소값으로 변경시킨 다음에
+
+        //TODO 내위치 메모 추가 내용
+//        if (tempMarker != null) {
+//            tempMarker.remove();
+//        }
+//
+//        MemoDatabase clickedMemoDatabase = new MemoDatabase();
+//        clickedMemoDatabase.setMemo_document_x(String.valueOf(latLng.longitude));
+//        clickedMemoDatabase.setMemo_document_y(String.valueOf(latLng.latitude));
+//        clickedMemoDatabase.setMemo_no(-2);
+//        clickedMemoDatabase.setMemo_document_category_group_code("CM");
+//
+//        tempMarker = makeAndtempMarker(clickedMemoDatabase, latLng);
 
     }
 

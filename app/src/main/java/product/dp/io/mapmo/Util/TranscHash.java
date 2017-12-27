@@ -56,6 +56,7 @@ public class TranscHash {
         categoryHash.put("CE7", "카페");
         categoryHash.put("HP8", "병원");
         categoryHash.put("PM9", "약국");
+        categoryHash.put("CM","내가 찍은 장소");
 
         categoryToImage=new HashMap<>();
 
@@ -77,6 +78,7 @@ public class TranscHash {
         categoryToImage.put("CE7", R.drawable.ic_category_cafe);
         categoryToImage.put("HP8", R.drawable.ic_category_hospital);
         categoryToImage.put("PM9", R.drawable.ic_category_pharmacy);
+        categoryToImage.put("CM",R.drawable.ic_category_custom);
 
 //        spinnerToMarkerTag=new HashMap<>();
 //        spinnerToMarkerTag.put(0,9107);
