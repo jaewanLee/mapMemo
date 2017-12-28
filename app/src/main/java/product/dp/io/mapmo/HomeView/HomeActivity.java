@@ -512,7 +512,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         MemoDatabase markerDatabase = (MemoDatabase) marker.getTag();
         memoDetailLayoutInit(markerDatabase);
 
-        if (markerDatabase.getMemo_no() != -1) {
+        if (markerDatabase.getMemo_no() != -1 && markerDatabase.getMemo_no()!=-2) {
             this.memoDetail_bt.setImageResource(R.drawable.edit_memo_btn);
         } else {
             this.memoDetail_bt.setImageResource(R.drawable.add_memo_btn);
@@ -765,7 +765,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
         }
-        bottom_ll.setVisibility(View.INVISIBLE);
+//        bottom_ll.setVisibility(View.INVISIBLE);
     }
 
     private void sendDefaultFeedTemplate(String memo_no, String memo_titles) {
@@ -849,23 +849,24 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         imm.hideSoftInputFromWindow(searchView_et.getWindowToken(), 0);
         back_ib.setVisibility(View.INVISIBLE);
         menu_ib.setVisibility(VISIBLE);
-        bottom_ll.setVisibility(VISIBLE);
+//        bottom_ll.setVisibility(VISIBLE);
 
         //찍은곳의 위경도 가자오고
         //이걸 주소값으로 변경시킨 다음에
 
         //TODO 내위치 메모 추가 내용
-//        if (tempMarker != null) {
-//            tempMarker.remove();
-//        }
-//
-//        MemoDatabase clickedMemoDatabase = new MemoDatabase();
-//        clickedMemoDatabase.setMemo_document_x(String.valueOf(latLng.longitude));
-//        clickedMemoDatabase.setMemo_document_y(String.valueOf(latLng.latitude));
-//        clickedMemoDatabase.setMemo_no(-2);
-//        clickedMemoDatabase.setMemo_document_category_group_code("CM");
-//
-//        tempMarker = makeAndtempMarker(clickedMemoDatabase, latLng);
+        if (tempMarker != null) {
+            tempMarker.remove();
+        }
+
+        MemoDatabase clickedMemoDatabase = new MemoDatabase();
+        clickedMemoDatabase.setMemo_document_x(String.valueOf(latLng.longitude));
+        clickedMemoDatabase.setMemo_document_y(String.valueOf(latLng.latitude));
+        clickedMemoDatabase.setMemo_no(-2);
+        clickedMemoDatabase.setMemo_document_category_group_code("CM");
+        clickedMemoDatabase.setMemo_document_place_name("새 메모");
+
+        tempMarker = makeAndtempMarker(clickedMemoDatabase, latLng);
 
     }
 

@@ -32,6 +32,9 @@ import product.dp.io.mapmo.R;
 import product.dp.io.mapmo.Util.Constant;
 import product.dp.io.mapmo.Util.Logger;
 import product.dp.io.mapmo.Util.TranscHash;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -57,6 +60,8 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
     int tag;
     Intent getIntent;
     int memo_no;
+
+    String latLngSearchResult;
 
 
     @Override
@@ -122,6 +127,61 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
             String dTime = formatter.format(currentTime);
             create_date_tv.setText(dTime);
 
+        } else if (tag == Constant.MARKER_TAG_CUSTOM) {
+            memoDatabase = new Gson().fromJson(getIntent.getStringExtra("keywordDocument"), MemoDatabase.class);
+            memoTitle.setText(memoDatabase.getMemo_document_place_name());
+
+            //여기서 위경도로 위치 바꿔서 저장하기
+            final LatLngSearchInterface latLngSearchInterface = MainApplication.getMainApplicationContext().getLatLngSearchInterface();
+            Call<LatLngSearchRepo> call = latLngSearchInterface.getLatLngSearchRepo(memoDatabase.getMemo_document_x(), memoDatabase.getMemo_document_y());
+            latLngSearchResult = "";
+            call.enqueue(new Callback<LatLngSearchRepo>() {
+
+                @Override
+                public void onResponse(Call<LatLngSearchRepo> call, Response<LatLngSearchRepo> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getLatLngDocuments() != null && response.body().getLatLngDocuments().size() > 0) {
+
+                            LatLngSearchRepo.LatLngDocuments latLngDocuments = response.body().getLatLngDocuments().get(0);
+
+                            if (latLngDocuments.latLngRoadAddress != null)
+                                latLngSearchResult = latLngDocuments.latLngRoadAddress.road_address_name;
+                            else if (latLngDocuments.latLngAddress != null)
+                                latLngSearchResult = latLngDocuments.latLngAddress.address_name;
+                            else
+                                latLngSearchResult = "";
+                            memoDatabase.setMemo_document_road_address_name(latLngSearchResult);
+                            memoAddr.setText(memoDatabase.getMemo_document_road_address_name());
+
+                            memoDatabase.setMemo_document_place_url("http://map.daum.net/?map_type=DEFAULT&map_hybrid=false&q="+latLngSearchResult);
+                        } else {
+                            Logger.d("위경도 검색했으나 주소가 없음");
+                            latLngSearchResult = "";
+                            memoDatabase.setMemo_document_road_address_name(latLngSearchResult);
+                            memoAddr.setText(memoDatabase.getMemo_document_road_address_name());
+                            Toast.makeText(AddMemoActivity.this, "주소검색에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LatLngSearchRepo> call, Throwable t) {
+                    Logger.d(t.getMessage());
+                    latLngSearchResult = "";
+                    Toast.makeText(AddMemoActivity.this, "주소검색에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                    memoDatabase.setMemo_document_road_address_name(latLngSearchResult);
+                    memoAddr.setText(memoDatabase.getMemo_document_road_address_name());
+                }
+            });
+
+
+            String category = memoDatabase.getMemo_document_category_group_code();
+            category_tv.setText(TranscHash.rawToreFinedCategory(category));
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+            Date currentTime = new Date(System.currentTimeMillis());
+            String dTime = formatter.format(currentTime);
+            create_date_tv.setText(dTime);
         } else {
             int memo_no = getIntent.getIntExtra("memo_no", -1);
             RealmResults<MemoDatabase> realmResults = realm.where(MemoDatabase.class).equalTo("memo_no", memo_no).findAll();
@@ -176,6 +236,30 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
                 setResult(Constant.ADD_MEMO_INTENT, intent);
                 Logger.d("정상적으로 저장되었습니다");
 
+            } else if (tag == Constant.MARKER_TAG_CUSTOM) {
+                realm.beginTransaction();
+                int lastData = -1;
+//                    MemoDatabase lastDatbase = realm.createObject(MemoDatabase.class, number.intValue() + 1);
+                if (realmResults.max("memo_no") != null)
+                    lastData = realmResults.max("memo_no").intValue();
+                memoDatabase.setMemo_no(lastData + 1);
+
+                memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
+                memoDatabase.setMemo_createDate(System.currentTimeMillis());
+
+//                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
+                memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
+                memoDatabase.setMemo_content(memoContent.getText().toString());
+                memo_no = memoDatabase.getMemo_no();
+
+                memoDatabase = realm.copyToRealm(memoDatabase);
+
+                realm.commitTransaction();
+
+                Intent intent = new Intent();
+                intent.putExtra("addMemoResult", memo_no);
+                setResult(Constant.ADD_MEMO_INTENT, intent);
+                Logger.d("정상적으로 저장되었습니다");
             } else {
                 realm.beginTransaction();
                 memoDatabase = realm.where(MemoDatabase.class).equalTo("memo_no", getIntent.getIntExtra("memo_no", 0)).findFirst();
@@ -205,7 +289,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     protected void onDestroy() {
-        if (!realm.isClosed()&&!realm.isInTransaction())
+        if (!realm.isClosed() && !realm.isInTransaction())
             realm.close();
         super.onDestroy();
 

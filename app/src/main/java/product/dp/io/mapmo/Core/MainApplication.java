@@ -11,6 +11,7 @@ import io.airbridge.AirBridge;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import product.dp.io.mapmo.AddMemoView.LatLngSearchInterface;
 import product.dp.io.mapmo.Database.UserDatabase;
 import product.dp.io.mapmo.Map.KeywordSearchInterface;
 import product.dp.io.mapmo.Util.KakaoSDKAdapter;
@@ -32,6 +33,7 @@ public class MainApplication extends Application {
     public SharedPreferences sharedPreferences;
     public UserDatabase onUserDatabase;
     private KeywordSearchInterface keywordSearchInterface;
+    private LatLngSearchInterface latLngSearchInterface;
     Realm realm;
 
     @Override
@@ -46,6 +48,9 @@ public class MainApplication extends Application {
 
         //키워드 중심 검색
         keywordSearchInterface = KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
+
+        //위경도 기반 검색
+        latLngSearchInterface=LatLngSearchInterface.retrofit.create(LatLngSearchInterface.class);
 
         //CategoryHash init
         TranscHash.init();
@@ -118,6 +123,9 @@ public class MainApplication extends Application {
 
     public KeywordSearchInterface getKeywordSearchInterface() {
         return this.keywordSearchInterface;
+    }
+    public LatLngSearchInterface getLatLngSearchInterface(){
+        return  this.latLngSearchInterface;
     }
 
     @Override
