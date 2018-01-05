@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class KeywordSearchActivity extends AppCompatActivity {
 
     ArrayList keywordSearchDocumentList;
 
+    FirebaseAnalytics firebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,8 @@ public class KeywordSearchActivity extends AppCompatActivity {
         recyclerView_adpaer = new SearchResultAdapter(KeywordSearchActivity.this);
         searchResult_recyclerView.setAdapter(recyclerView_adpaer);
         searchResult_recyclerView.addItemDecoration(new RecyclerViewDecoration(25));
+
+        firebaseAnalytics=MainApplication.getMainApplicationInstance().getFirebaseAnalytics();
 
     }
 
@@ -154,6 +159,8 @@ public class KeywordSearchActivity extends AppCompatActivity {
         search_edit_text.setText(query);
         Call<KeywordSearchRepo> call = keywordSearchInterface.getKeywordSearchRepo(query);
 
+
+
         call.enqueue(new Callback<KeywordSearchRepo>() {
             @Override
             public void onResponse(Call<KeywordSearchRepo> call, Response<KeywordSearchRepo> response) {
@@ -162,6 +169,10 @@ public class KeywordSearchActivity extends AppCompatActivity {
                     keywordSearchDocumentList = new ArrayList(response.body().getKeywordDocuments());
                     recyclerView_adpaer.replaceDataSet(keywordSearchDocumentList);
                     recyclerView_adpaer.notifyDataSetChanged();
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM,search_edit_text.getText().toString());
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH,bundle);
                 } else {
                     //TODO 키워드가 아니라 도로명 주소나 일반 주소로검색하면 우째됨?
                     Toast.makeText(KeywordSearchActivity.this, "검색결과가 없습니다 다른 키워드로 검색해 주세요", Toast.LENGTH_SHORT).show();

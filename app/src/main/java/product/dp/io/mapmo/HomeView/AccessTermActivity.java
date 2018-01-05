@@ -24,7 +24,6 @@ public class AccessTermActivity extends AppCompatActivity {
         Button faqButton = (Button) findViewById(product.dp.io.mapmo.R.id.accessTerm_standard_with);
         Button accessButton=(Button)findViewById(product.dp.io.mapmo.R.id.accessTerm_recent_screen);
 
-
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

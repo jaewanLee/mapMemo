@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kakao.auth.ApiResponseCallback;
 import com.kakao.auth.AuthService;
 import com.kakao.auth.ISessionCallback;
@@ -42,6 +43,9 @@ import com.kakao.util.exception.KakaoException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import io.airbridge.AirBridge;
 import io.airbridge.statistics.events.inapp.SignInEvent;
@@ -88,6 +92,7 @@ public class MenuActivity extends AppCompatActivity {
     public UserDatabase _user_db = new UserDatabase();
     private UserDatabase mainApplication_userdb;
     private KakaoSessionCallback _kakaoSessionCallback;
+    private FirebaseAnalytics firebaseAnalytics;
 
     RestartService restartService;
 
@@ -124,7 +129,9 @@ public class MenuActivity extends AppCompatActivity {
         lockScreen = (Switch) findViewById(R.id.switch_memo);
         lockScreen.setChecked(sharedPreferencesConfig.getBoolean("lockScreen", false));
 
-        mainApplication_userdb = MainApplication.getMainApplicationContext().getOnUserDatabase();
+        mainApplication_userdb = MainApplication.getMainApplicationInstance().getOnUserDatabase();
+
+        firebaseAnalytics=MainApplication.getMainApplicationInstance().getFirebaseAnalytics();
 
     }
 
@@ -146,6 +153,17 @@ public class MenuActivity extends AppCompatActivity {
                     IntentFilter intentFilter = new IntentFilter("product.dp.io.mapmo.PushMessage.PersistentService");
                     registerReceiver(restartService, intentFilter);
                     startService(intent);
+
+                    //firebase Analystic Push On event 전송
+                    Bundle eventBundle=new Bundle();
+                    eventBundle.putString("Action","On");
+                    eventBundle.putString("user_id",userName.getText().toString());
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+                    Date currentTime = new Date(System.currentTimeMillis());
+                    String dTime = formatter.format(currentTime);
+                    eventBundle.putString("requestTime",dTime);
+                    firebaseAnalytics.logEvent("Push",eventBundle);
+
                 } else {
                     editor.putBoolean("lockScreen", false);
                     editor.apply();
@@ -154,6 +172,16 @@ public class MenuActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), PersistentService.class);
                         stopService (intent);
                     }
+
+                    //firebase Analystic Push Off event 전송
+                    Bundle eventBundle=new Bundle();
+                    eventBundle.putString("Action","Off");
+                    eventBundle.putString("user_id",userName.getText().toString());
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+                    Date currentTime = new Date(System.currentTimeMillis());
+                    String dTime = formatter.format(currentTime);
+                    eventBundle.putString("requestTime",dTime);
+                    firebaseAnalytics.logEvent("Push",eventBundle);
 
                 }
 
@@ -194,7 +222,7 @@ public class MenuActivity extends AppCompatActivity {
                         editor.apply();
                         UserDatabase guestUser = new UserDatabase();
                         guestUser.setUser_email("guest");
-                        MainApplication.getMainApplicationContext().setOnUserDatabase(guestUser);
+                        MainApplication.getMainApplicationInstance().setOnUserDatabase(guestUser);
                         mainApplication_userdb = guestUser;
                         logout_bt.setVisibility(View.INVISIBLE);
                         loginFake.setVisibility(View.VISIBLE);
@@ -530,13 +558,17 @@ public class MenuActivity extends AppCompatActivity {
             realm.commitTransaction();
         }
         //메인 어플리케이션의 UserDatabase를 수정해줌
-        MainApplication.getMainApplicationContext().setOnUserDatabase(userDatabase);
+        MainApplication.getMainApplicationInstance().setOnUserDatabase(userDatabase);
         mainApplication_userdb = userDatabase;
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isAutoLogin", true);
         editor.putString("user_email", userDatabase.getUser_email());
         editor.apply();
+
+        Bundle bundle=new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD,userDatabase.getUser_email());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN,bundle);
 
     }
 

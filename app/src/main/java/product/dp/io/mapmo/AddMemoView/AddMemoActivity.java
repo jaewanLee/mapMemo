@@ -17,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +64,8 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
 
     String latLngSearchResult;
 
+    FirebaseAnalytics firebaseAnalytics;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,8 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
         category_tv = (TextView) findViewById(R.id.add_memo_categpry);
         memoAddr = (TextView) findViewById(R.id.add_memo_addr);
         memoContent = (EditText) findViewById(R.id.add_memo_text);
+
+        firebaseAnalytics=MainApplication.getMainApplicationInstance().getFirebaseAnalytics();
 
         realm = Realm.getDefaultInstance();
 
@@ -132,7 +137,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
             memoTitle.setText(memoDatabase.getMemo_document_place_name());
 
             //여기서 위경도로 위치 바꿔서 저장하기
-            final LatLngSearchInterface latLngSearchInterface = MainApplication.getMainApplicationContext().getLatLngSearchInterface();
+            final LatLngSearchInterface latLngSearchInterface = MainApplication.getMainApplicationInstance().getLatLngSearchInterface();
             Call<LatLngSearchRepo> call = latLngSearchInterface.getLatLngSearchRepo(memoDatabase.getMemo_document_x(), memoDatabase.getMemo_document_y());
             latLngSearchResult = "";
             call.enqueue(new Callback<LatLngSearchRepo>() {
@@ -206,7 +211,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
 
     public void save() {
         RealmResults<MemoDatabase> realmResults = realm.where(MemoDatabase.class).findAll();
-        String user_id = MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email();
+        String user_id = MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email();
         if (realmResults.size() > 10 && user_id.equals("guest")) {
             Toast.makeText(AddMemoActivity.this, "현재 손님계정이십니다 추가 메모를 사용하기 위해서는 로그인을 해주세요", Toast.LENGTH_LONG).show();
         } else {
@@ -219,7 +224,8 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
                     lastData = realmResults.max("memo_no").intValue();
                 memoDatabase.setMemo_no(lastData + 1);
 
-                memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
+                String memoDatebaseUser=MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email();
+                memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email());
                 memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
 //                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
@@ -227,14 +233,28 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
                 memoDatabase.setMemo_content(memoContent.getText().toString());
                 memo_no = memoDatabase.getMemo_no();
 
-                memoDatabase = realm.copyToRealm(memoDatabase);
 
+                //Firebase Anaylystic AddCart카테고리 저장
+                Bundle bundle=new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID,memoDatabase.getMemo_own_user_id());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,memoDatabase.getMemo_document_place_name());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY,memoDatabase.getMemo_document_category_name());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID,memoDatabase.getMemo_document_place_name());
+                bundle.putString(FirebaseAnalytics.Param.PRICE,String.valueOf(lastData+1));
+
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART,bundle);
+
+
+                memoDatabase = realm.copyToRealm(memoDatabase);
                 realm.commitTransaction();
 
                 Intent intent = new Intent();
                 intent.putExtra("addMemoResult", memo_no);
                 setResult(Constant.ADD_MEMO_INTENT, intent);
                 Logger.d("정상적으로 저장되었습니다");
+
+
+
 
             } else if (tag == Constant.MARKER_TAG_CUSTOM) {
                 realm.beginTransaction();
@@ -244,13 +264,22 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
                     lastData = realmResults.max("memo_no").intValue();
                 memoDatabase.setMemo_no(lastData + 1);
 
-                memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email());
+                memoDatabase.setMemo_own_user_id(MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email());
                 memoDatabase.setMemo_createDate(System.currentTimeMillis());
 
 //                    memoDatabase.setDataFromKeyworDocuemnt(keywordDocuments);
                 memoDatabase.setMemo_document_place_name(memoTitle.getText().toString());
                 memoDatabase.setMemo_content(memoContent.getText().toString());
                 memo_no = memoDatabase.getMemo_no();
+
+                //Firebase Anaylystic AddCart카테고리 저장
+                Bundle bundle=new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID,memoDatabase.getMemo_own_user_id());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,memoDatabase.getMemo_document_place_name());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY,memoDatabase.getMemo_document_category_name());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID,memoDatabase.getMemo_document_place_name());
+
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART,bundle);
 
                 memoDatabase = realm.copyToRealm(memoDatabase);
 

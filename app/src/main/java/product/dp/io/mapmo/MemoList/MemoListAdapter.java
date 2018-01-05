@@ -109,7 +109,6 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoListAdapter.ViewHo
                 intent.putExtra("memo_no", currentMemoListDatabase.getMemo_no());
                 intent.putExtra("Tag", Constant.MARKER_TAG_SAVED);
                 activity.startActivityForResult(intent, Constant.ADD_MEMO_INTENT);
-
             }
         });
 

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
@@ -127,7 +128,8 @@ public class MemoListActivity extends AppCompatActivity {
         confirmSharing_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shared_memo_key = MainApplication.getMainApplicationContext().getOnUserDatabase().getUser_email() + System.currentTimeMillis();
+                final String user_email=MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email();
+                shared_memo_key = MainApplication.getMainApplicationInstance().getOnUserDatabase().getUser_email() + System.currentTimeMillis();
                 final ArrayList<MemoListDatabase> requestValue = new ArrayList<>();
 
                 for (MemoListDatabase memoListDatabase : memoListShareAdapter.memoDatabases) {
@@ -170,6 +172,7 @@ public class MemoListActivity extends AppCompatActivity {
                             public void run() {
                                 Logger.d("shared memo client.newCall err");
                                 Toast.makeText(MemoListActivity.this, "요청에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+
                             }
                         });
                     }
@@ -188,12 +191,21 @@ public class MemoListActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        //Firebase에 이벤트 전송
+                        Bundle bundle=new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE,"On HomeActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,user_email);
+                        MainApplication.getMainApplicationInstance().getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE,bundle);
+
+
                         //이러고 나서 카카오쪽으로 보내기
                         String kakao_link_title = "";
                         for (MemoListDatabase requestMemoList : requestValue) {
                             kakao_link_title = kakao_link_title + " # " + requestMemoList.getMemo_document_place_name();
                         }
                         sendDefaultFeedTemplate(shared_memo_key, kakao_link_title);
+
+
 
                     }
                 });

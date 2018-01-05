@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
@@ -688,11 +689,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onClick(View v) {
                     //TODO 공유하기 기능 추가
-                    UserDatabase userDatabase = MainApplication.getMainApplicationContext().getOnUserDatabase();
+                    final UserDatabase userDatabase = MainApplication.getMainApplicationInstance().getOnUserDatabase();
+                    final String user_id=userDatabase.getUser_email();
                     if (!userDatabase.getUser_email().equals("guest") && userDatabase.getUser_email() != null) {
                         Logger.d("on HomeActivity shared action launch");
                         final String shared_memo_key = userDatabase.getUser_email() + System.currentTimeMillis();
-
 
                         final ArrayList<MemoListDatabase> requestValue = new ArrayList<>();
 
@@ -700,7 +701,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         NetworkManager networkManager = NetworkManager.getInstance();
                         OkHttpClient client = networkManager.getClient();
-                        HttpUrl.Builder builder = new HttpUrl.Builder();
+                        final HttpUrl.Builder builder = new HttpUrl.Builder();
 
                         builder.scheme("http");
                         builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
@@ -743,12 +744,20 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         if (result.contains("200")) {
                                             Logger.d("response of sharing : " + result);
                                             Toast.makeText(HomeActivity.this, "메모 공유가 완료되었습니다", Toast.LENGTH_SHORT).show();
+
                                         } else {
                                             Logger.d("response of sharing : request err 400");
                                             Toast.makeText(HomeActivity.this, "메모공유에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
+
+                                Bundle bundle=new Bundle();
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE,"On HomeActivity");
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID,user_id);
+                                MainApplication.getMainApplicationInstance().getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.SHARE,bundle);
+
+
                                 //이러고 나서 카카오쪽으로 보내기
                                 String kakao_link_title = "";
 
@@ -822,7 +831,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public Marker makeAndtempMarker(MemoDatabase memoDatabase, LatLng latLng) {
-        Marker newMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_memo_edit)));
+        Marker newMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.group)));
         newMarker.setTag(memoDatabase);
         return newMarker;
     }

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kakao.auth.KakaoSDK;
 
 import io.airbridge.AirBridge;
@@ -35,6 +37,8 @@ public class MainApplication extends Application {
     private KeywordSearchInterface keywordSearchInterface;
     private LatLngSearchInterface latLngSearchInterface;
     Realm realm;
+    private FirebaseAnalytics firebaseAnalytics;
+
 
     @Override
     public void onCreate() {
@@ -60,6 +64,12 @@ public class MainApplication extends Application {
         userDataInit();
 
         KakaoSDK.init(new KakaoSDKAdapter());
+
+        firebaseAnalytics=FirebaseAnalytics.getInstance(this);
+        if(firebaseAnalytics==null){
+            Log.d("","");
+        }
+
 
 
         // Preload CUstom Tabs Service for Improved Perfomance
@@ -107,7 +117,7 @@ public class MainApplication extends Application {
     }
 
     // singleton application object 획득이 목적
-    public static MainApplication getMainApplicationContext() {
+    public static MainApplication getMainApplicationInstance() {
         if (null == instance) {
             throw new IllegalStateException("state error");
         }
@@ -144,4 +154,11 @@ public class MainApplication extends Application {
         this.onUserDatabase = onUserDatabase;
 
     }
+
+    synchronized public FirebaseAnalytics getFirebaseAnalytics(){
+        if(firebaseAnalytics==null)
+            firebaseAnalytics=FirebaseAnalytics.getInstance(this);
+        return firebaseAnalytics;
+    }
+
 }
