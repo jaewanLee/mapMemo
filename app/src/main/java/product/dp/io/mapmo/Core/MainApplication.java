@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kakao.auth.KakaoSDK;
@@ -66,9 +65,7 @@ public class MainApplication extends Application {
         KakaoSDK.init(new KakaoSDKAdapter());
 
         firebaseAnalytics=FirebaseAnalytics.getInstance(this);
-        if(firebaseAnalytics==null){
-            Log.d("","");
-        }
+
 
 
 

@@ -52,7 +52,6 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
     TextView memoAddr;
     EditText memoContent;
 
-
     Realm realm;
 
     KeywordSearchRepo.KeywordDocuments keywordDocuments;

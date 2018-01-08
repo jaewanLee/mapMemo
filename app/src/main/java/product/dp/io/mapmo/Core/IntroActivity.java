@@ -109,7 +109,8 @@ public class IntroActivity extends AppCompatActivity {
                 public void run() {
                     if (getIntent().getData() != null) {
                         //kakaotalk을 통해 들어온 경우
-                        if (getIntent().getDataString() != null && getIntent().getDataString().contains("key")) {
+                        if (getIntent().getDataString() != null && getIntent().getDataString().contains("kakaolink?")) {
+                            Intent getIntent=getIntent();
                             Intent intent = new Intent(IntroActivity.this, MemoListActivity.class);
                             intent.addCategory(Intent.CATEGORY_BROWSABLE);
                             intent.setAction(getIntent().getAction());
