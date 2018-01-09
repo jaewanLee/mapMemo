@@ -58,10 +58,8 @@ public class MemoListActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-
     LinearLayout sharelayout_LL;
     LinearLayout confirmSharing_ll;
-
 
     Realm realm;
 
