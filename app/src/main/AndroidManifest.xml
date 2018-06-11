@@ -116,6 +116,15 @@
         <activity
             android:name=".Shared.SharedActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".Core.DauthActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".Menu.DauthWallet"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+
+        </activity>
+
 
         <service
             android:name=".PushMessage.PersistentService"
@@ -167,6 +176,13 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="58a9c7c3c36dea1b3f77ce43e01948153fd3ab39" />
+
+        <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

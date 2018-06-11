@@ -1,6 +1,7 @@
 package product.dp.io.mapmo.AddMemoView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +72,7 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_memo);
 
+        manageABL();
         memoTitle_back = (ImageView) findViewById(R.id.add_memo_title_background);
         back_ib = (TextView) findViewById(R.id.add_memo_back);
         Drawable drawable = memoTitle_back.getDrawable();
@@ -330,5 +332,17 @@ public class AddMemoActivity extends AppCompatActivity implements OnMapReadyCall
         if (!realm.isInTransaction())
             Logger.d("transaction이 종료되었습니다");
         super.onBackPressed();
+    }
+
+    public void manageABL(){
+
+        SharedPreferences firstTimeShared = getSharedPreferences("Config", MODE_PRIVATE);
+
+        int myABLAmount = firstTimeShared.getInt("myABLAmount", 0);
+        SharedPreferences.Editor editor = firstTimeShared.edit();
+        int addedValue=(int)Math.random()*(30-5+1)+3;
+        editor.putInt("myABLAmount", myABLAmount+addedValue);
+        editor.commit();
+
     }
 }

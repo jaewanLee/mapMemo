@@ -5,8 +5,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsflyer.AppsFlyerConversionListener;
+import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kakao.auth.KakaoSDK;
+
+import java.util.Map;
 
 import io.airbridge.AirBridge;
 import io.realm.Realm;
@@ -30,6 +34,7 @@ public class MainApplication extends Application {
 
     private static volatile MainApplication instance = null;
     private static volatile Activity currentActivity = null;
+    private static final String AF_DEV_KEY="Q8oW9QqM3NDSixGP4XuuwT";
 
     public SharedPreferences sharedPreferences;
     public UserDatabase onUserDatabase;
@@ -65,6 +70,8 @@ public class MainApplication extends Application {
         KakaoSDK.init(new KakaoSDKAdapter());
 
         firebaseAnalytics=FirebaseAnalytics.getInstance(this);
+
+        setAppsFlyer();
 
 
 
@@ -156,6 +163,32 @@ public class MainApplication extends Application {
         if(firebaseAnalytics==null)
             firebaseAnalytics=FirebaseAnalytics.getInstance(this);
         return firebaseAnalytics;
+    }
+
+    private void setAppsFlyer(){
+        AppsFlyerConversionListener conversionDataListener=new AppsFlyerConversionListener() {
+            @Override
+            public void onInstallConversionDataLoaded(Map<String, String> map) {
+
+            }
+
+            @Override
+            public void onInstallConversionFailure(String s) {
+
+            }
+
+            @Override
+            public void onAppOpenAttribution(Map<String, String> map) {
+
+            }
+
+            @Override
+            public void onAttributionFailure(String s) {
+
+            }
+        };
+        AppsFlyerLib.getInstance().init(AF_DEV_KEY, conversionDataListener, getApplicationContext());
+        AppsFlyerLib.getInstance().startTracking(this);
     }
 
 }

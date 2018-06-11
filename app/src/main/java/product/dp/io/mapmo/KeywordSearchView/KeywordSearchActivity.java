@@ -19,6 +19,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+import io.airbridge.AirBridge;
+import io.airbridge.ecommerce.Product;
+import io.airbridge.ecommerce.SearchResultViewEvent;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import product.dp.io.mapmo.Core.MainApplication;
@@ -130,6 +133,9 @@ public class KeywordSearchActivity extends AppCompatActivity {
         });
 
 
+
+
+
         //검색버튼을 추가로 누를 경우
         search_edit_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -160,6 +166,10 @@ public class KeywordSearchActivity extends AppCompatActivity {
         Call<KeywordSearchRepo> call = keywordSearchInterface.getKeywordSearchRepo(query);
 
 
+        Product product=new Product();
+        product.setName("memo POI");
+        SearchResultViewEvent searchResultViewEvent=new SearchResultViewEvent(query,product);
+        AirBridge.getTracker().send(searchResultViewEvent);
 
         call.enqueue(new Callback<KeywordSearchRepo>() {
             @Override

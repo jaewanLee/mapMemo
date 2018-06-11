@@ -104,7 +104,7 @@
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="232dp"
+            android:layout_height="230dp"
             android:layout_gravity="bottom"
             android:orientation="vertical">
             <LinearLayout
@@ -173,10 +173,11 @@
                     android:text="새 메모를 추가하기 위해 클릭해 주세요" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/main_bottom_linearlayout"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="51dp"
                 android:layout_gravity="bottom"
                 android:background="@drawable/bottom_bar">
 

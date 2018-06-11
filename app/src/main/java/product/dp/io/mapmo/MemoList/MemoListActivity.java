@@ -12,6 +12,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AFInAppEventType;
+import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +29,8 @@ import com.kakao.network.callback.ResponseCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.airbridge.AirBridge;
 import io.airbridge.deeplink.DeepLink;
@@ -76,6 +81,10 @@ public class MemoListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(product.dp.io.mapmo.R.layout.activity_memo_list);
+
+        Map<String,Object> eventValue=new HashMap<String,Object>();
+        eventValue.put(AFInAppEventParameterName.CONTENT_LIST,"View List");
+        AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), AFInAppEventType.CONTENT_VIEW,eventValue);
 
         default_ll = (LinearLayout) findViewById(R.id.memoList_default_LinearLayout);
         back_ib = (ImageButton) findViewById(R.id.memoList_menu_ImageButtona);

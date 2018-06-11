@@ -53,6 +53,9 @@ public class IntroActivity extends AppCompatActivity {
 
         isInstalled = isFirstTime();
         if (isInstalled) {
+            //DeepLink 설정
+            AirBridge.getTracker().onNewIntent(getIntent());
+
             //처음 시작임
             waitingText.setVisibility(View.INVISIBLE);
             waiting_img.setVisibility(View.INVISIBLE);
@@ -132,10 +135,20 @@ public class IntroActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Logger.d("reusing User skip the intro set");
-                        Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
+                        boolean isDauthAgree=getSharedPreferences("Config",MODE_PRIVATE).getBoolean("isDauthAgree",false);
+                        Intent intent=new Intent(IntroActivity.this,DauthActivity.class);
                         startActivity(intent);
                         finish();
+//                        if(isDauthAgree){
+//                            Logger.d("reusing User skip the intro set");
+//                            Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
+//                            startActivity(intent);
+//                            finish();
+//                        }else{
+//
+//                        }
+
+
                     }
                 }
             }, 2000);
@@ -159,4 +172,9 @@ public class IntroActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        AirBridge.getTracker().onNewIntent(intent);
+    }
 }

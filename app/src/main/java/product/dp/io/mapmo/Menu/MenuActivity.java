@@ -83,7 +83,7 @@ public class MenuActivity extends AppCompatActivity {
     Button logout_bt;
     RelativeLayout backup_rl;
     Switch lockScreen;
-    RelativeLayout format_layout, faq_layout, userterm_layout;
+    RelativeLayout format_layout, faq_layout, userterm_layout, daut_layout;
     ImageButton back_bt;
 
     SharedPreferences sharedPreferences;
@@ -108,6 +108,8 @@ public class MenuActivity extends AppCompatActivity {
 
         socialLogin();
 
+        manageABL();
+
     }
 
     private void initLayout() {
@@ -124,6 +126,7 @@ public class MenuActivity extends AppCompatActivity {
         format_layout = (RelativeLayout) findViewById(R.id.format_set_lay);
         backup_rl = (RelativeLayout) findViewById(R.id.memu_backup_relativelayout);
         faq_layout = (RelativeLayout) findViewById(R.id.faq_set_lay);
+        daut_layout = (RelativeLayout) findViewById(R.id.dauth_set_lay);
         userterm_layout = (RelativeLayout) findViewById(R.id.userterm_set_lay);
 
         lockScreen = (Switch) findViewById(R.id.switch_memo);
@@ -131,7 +134,7 @@ public class MenuActivity extends AppCompatActivity {
 
         mainApplication_userdb = MainApplication.getMainApplicationInstance().getOnUserDatabase();
 
-        firebaseAnalytics=MainApplication.getMainApplicationInstance().getFirebaseAnalytics();
+        firebaseAnalytics = MainApplication.getMainApplicationInstance().getFirebaseAnalytics();
 
     }
 
@@ -155,14 +158,14 @@ public class MenuActivity extends AppCompatActivity {
                     startService(intent);
 
                     //firebase Analystic Push On event 전송
-                    Bundle eventBundle=new Bundle();
-                    eventBundle.putString("Action","On");
-                    eventBundle.putString("user_id",userName.getText().toString());
+                    Bundle eventBundle = new Bundle();
+                    eventBundle.putString("Action", "On");
+                    eventBundle.putString("user_id", userName.getText().toString());
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
                     Date currentTime = new Date(System.currentTimeMillis());
                     String dTime = formatter.format(currentTime);
-                    eventBundle.putString("requestTime",dTime);
-                    firebaseAnalytics.logEvent("Push",eventBundle);
+                    eventBundle.putString("requestTime", dTime);
+                    firebaseAnalytics.logEvent("Push", eventBundle);
 
                 } else {
                     editor.putBoolean("lockScreen", false);
@@ -170,18 +173,18 @@ public class MenuActivity extends AppCompatActivity {
                     if (restartService != null) {
                         unregisterReceiver(restartService);
                         Intent intent = new Intent(getApplicationContext(), PersistentService.class);
-                        stopService (intent);
+                        stopService(intent);
                     }
 
                     //firebase Analystic Push Off event 전송
-                    Bundle eventBundle=new Bundle();
-                    eventBundle.putString("Action","Off");
-                    eventBundle.putString("user_id",userName.getText().toString());
+                    Bundle eventBundle = new Bundle();
+                    eventBundle.putString("Action", "Off");
+                    eventBundle.putString("user_id", userName.getText().toString());
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
                     Date currentTime = new Date(System.currentTimeMillis());
                     String dTime = formatter.format(currentTime);
-                    eventBundle.putString("requestTime",dTime);
-                    firebaseAnalytics.logEvent("Push",eventBundle);
+                    eventBundle.putString("requestTime", dTime);
+                    firebaseAnalytics.logEvent("Push", eventBundle);
 
                 }
 
@@ -275,6 +278,17 @@ public class MenuActivity extends AppCompatActivity {
                 int index = 0;
 
                 callToChromeCustomTab(index);
+            }
+        });
+
+        daut_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isDauthAgree = getSharedPreferences("Config", MODE_PRIVATE).getBoolean("isDauthAgree", false);
+                if(isDauthAgree){
+                    Intent intent=new Intent(MenuActivity.this,DauthWallet.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -471,10 +485,12 @@ public class MenuActivity extends AppCompatActivity {
         return user_image;
     }
 
-    private void sendUserProfile(String user_name, String email, String image_url) {
+    private void sendUserProfile(final String user_name, String email, String image_url) {
         NetworkManager networkManager = NetworkManager.getInstance();
         OkHttpClient client = networkManager.getClient();
         HttpUrl.Builder builder = new HttpUrl.Builder();
+
+        final String user_email = email;
 
         builder.scheme("http");
         builder.host("ec2-52-199-177-224.ap-northeast-1.compute.amazonaws.com");
@@ -484,10 +500,10 @@ public class MenuActivity extends AppCompatActivity {
         builder.addPathSegment("kakao");
         builder.addPathSegment("post.php");
         String user_image_url;
-        if(image_url==null||image_url.equals("")){
-            user_image_url="null";
-        }else{
-            user_image_url=image_url;
+        if (image_url == null || image_url.equals("")) {
+            user_image_url = "null";
+        } else {
+            user_image_url = image_url;
         }
 
         //TODO myValue에다가 내 아이디랑 시간 써서 넣기
@@ -522,8 +538,11 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (result.contains("200")) {
-                            Logger.d("response of send user profile : "+result);
-                            AirBridge.getTracker().send(new SignInEvent());
+                            Logger.d("response of send user profile : " + result);
+                            SignInEvent signInEvent = new SignInEvent();
+                            signInEvent.setUserEmail(user_email);
+                            signInEvent.setUserId(user_name);
+                            AirBridge.getTracker().send(signInEvent);
                         } else {
                             Logger.d("response of send user profile : 400 err");
                             Toast.makeText(MenuActivity.this, "유저 프로필 등록에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();
@@ -566,9 +585,9 @@ public class MenuActivity extends AppCompatActivity {
         editor.putString("user_email", userDatabase.getUser_email());
         editor.apply();
 
-        Bundle bundle=new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD,userDatabase.getUser_email());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, userDatabase.getUser_email());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
     }
 
@@ -625,5 +644,15 @@ public class MenuActivity extends AppCompatActivity {
 
 
     }
+    public void manageABL(){
 
+        SharedPreferences firstTimeShared = getSharedPreferences("Config", MODE_PRIVATE);
+
+        int myABLAmount = firstTimeShared.getInt("myABLAmount", 0);
+        SharedPreferences.Editor editor = firstTimeShared.edit();
+        int addedValue=(int)Math.random()*(30-5+1)+3;
+        editor.putInt("myABLAmount", myABLAmount+addedValue);
+        editor.commit();
+
+    }
 }

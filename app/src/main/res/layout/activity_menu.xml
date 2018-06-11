@@ -230,13 +230,40 @@
                 android:textSize="13sp"
 
                 android:paddingLeft="20dp"/>
+            <RelativeLayout
+                android:id="@+id/dauth_set_lay"
+                android:layout_width="match_parent"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/customer_service_title"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:layout_centerVertical="true"
+                    android:text="Airbloc Reward"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/dauth_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/faq_set_lay"
                 android:layout_width="match_parent"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/customer_service_title"
+                android:layout_below="@+id/dauth_set_lay"
 
                 android:paddingLeft="20dp">
 
@@ -295,7 +322,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@+id/customer_service_layer"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="5dp"
             android:background="@color/setting_line_color" />
 
         <TextView
@@ -304,7 +331,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cs_line_imgae"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="5dp"
             android:text="version 0.9.0"
             android:textColor="@color/setting_sub_title_color"
             android:textSize="13sp" />
@@ -315,7 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/setting_app_ver_title"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="2dp"
             android:text="@string/setting_app_desc"
             android:textColor="@color/setting_sub_title_color"
             android:textSize="13sp" />

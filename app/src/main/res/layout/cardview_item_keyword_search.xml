@@ -52,10 +52,21 @@
                 android:textSize="9sp" />
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/addMemoImage"
+            android:src="@drawable/ic_add_memo_view" />
+
         <TextView
             android:id="@+id/keyword_search_result_cardview_addr_text"
             android:layout_alignParentBottom="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_toLeftOf="@id/addMemoImage"
+            android:layout_marginRight="10dp"
             android:layout_height="29.5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="2dp"
@@ -64,14 +75,6 @@
             android:text="검색 결과 주소"
             android:textColor="#7c7c7c"
             android:textSize="13sp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_add_memo_view" />
 
     </RelativeLayout>
 

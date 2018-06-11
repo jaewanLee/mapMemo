@@ -24,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AFInAppEventParameterName;
+import com.appsflyer.AFInAppEventType;
+import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -145,6 +148,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         // realm init
         realm = Realm.getDefaultInstance();
 
+        manageABL();
 
     }
 
@@ -171,7 +175,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         call_bt.setVisibility(View.INVISIBLE);
         share_bt = (ImageButton) findViewById(R.id.main_share_floatingbutton);
         share_bt.setVisibility(View.INVISIBLE);
-
 
         memoInfo_ll.setVisibility(View.INVISIBLE);
 
@@ -221,14 +224,19 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         searchView_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
                 String searchKeyword = textView.getText().toString();
+
+                Map<String,Object> eventValue=new HashMap<String,Object>();
+                eventValue.put(AFInAppEventParameterName.SEARCH_STRING,searchKeyword);
+                AppsFlyerLib.getInstance().trackEvent(getApplicationContext(),AFInAppEventType.SEARCH,eventValue);
+
                 Intent searchKeywordIntent = new Intent(HomeActivity.this, KeywordSearchActivity.class);
                 searchKeywordIntent.putExtra("search_query", searchKeyword);
                 startActivityForResult(searchKeywordIntent, Constant.SEARCH_QUERY_INTENT);
                 return true;
             }
         });
-
         searchView_et.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,8 +306,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void setPermissionIssue() {
@@ -831,7 +837,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public Marker makeAndtempMarker(MemoDatabase memoDatabase, LatLng latLng) {
-        Marker newMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.group)));
+        Marker newMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_add_memo)));
         newMarker.setTag(memoDatabase);
         return newMarker;
     }
@@ -878,6 +884,19 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         tempMarker = makeAndtempMarker(clickedMemoDatabase, latLng);
 
     }
+
+    public void manageABL(){
+
+        SharedPreferences firstTimeShared = getSharedPreferences("Config", MODE_PRIVATE);
+
+        int myABLAmount = firstTimeShared.getInt("myABLAmount", 0);
+        SharedPreferences.Editor editor = firstTimeShared.edit();
+        int addedValue=(int)Math.random()*(30-5+1)+3;
+        editor.putInt("myABLAmount", myABLAmount+addedValue);
+        editor.commit();
+
+    }
+
 
 
     //글꼴 설정
