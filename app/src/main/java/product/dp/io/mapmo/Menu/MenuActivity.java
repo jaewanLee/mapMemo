@@ -542,7 +542,7 @@ public class MenuActivity extends AppCompatActivity {
                             SignInEvent signInEvent = new SignInEvent();
                             signInEvent.setUserEmail(user_email);
                             signInEvent.setUserId(user_name);
-                            AirBridge.getTracker().send(signInEvent);
+                            AirBridge.getTracker().sendEvent(signInEvent);
                         } else {
                             Logger.d("response of send user profile : 400 err");
                             Toast.makeText(MenuActivity.this, "유저 프로필 등록에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();

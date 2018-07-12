@@ -169,7 +169,7 @@ public class KeywordSearchActivity extends AppCompatActivity {
         Product product=new Product();
         product.setName("memo POI");
         SearchResultViewEvent searchResultViewEvent=new SearchResultViewEvent(query,product);
-        AirBridge.getTracker().send(searchResultViewEvent);
+        AirBridge.getTracker().sendEvent(searchResultViewEvent);
 
         call.enqueue(new Callback<KeywordSearchRepo>() {
             @Override

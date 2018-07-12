@@ -53,8 +53,6 @@ public class IntroActivity extends AppCompatActivity {
 
         isInstalled = isFirstTime();
         if (isInstalled) {
-            //DeepLink 설정
-            AirBridge.getTracker().onNewIntent(getIntent());
 
             //처음 시작임
             waitingText.setVisibility(View.INVISIBLE);
@@ -113,7 +111,7 @@ public class IntroActivity extends AppCompatActivity {
                     if (getIntent().getData() != null) {
                         //kakaotalk을 통해 들어온 경우
                         if (getIntent().getDataString() != null && getIntent().getDataString().contains("kakaolink?")) {
-                            Intent getIntent=getIntent();
+                            Intent getIntent = getIntent();
                             Intent intent = new Intent(IntroActivity.this, MemoListActivity.class);
                             intent.addCategory(Intent.CATEGORY_BROWSABLE);
                             intent.setAction(getIntent().getAction());
@@ -127,7 +125,6 @@ public class IntroActivity extends AppCompatActivity {
                             if (activity != null) {
                                 if (DeepLink.hadOpened(activity)) {
                                     Logger.d("airbridge Deeplink");
-                                    AirBridge.getTracker().onNewIntent(getIntent());
                                     Intent movingIntent = new Intent(IntroActivity.this, HomeActivity.class);
                                     startActivity(movingIntent);
                                     finish();
@@ -135,18 +132,15 @@ public class IntroActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        boolean isDauthAgree=getSharedPreferences("Config",MODE_PRIVATE).getBoolean("isDauthAgree",false);
-                        Intent intent=new Intent(IntroActivity.this,DauthActivity.class);
+
+                        Logger.d("reusing User skip the intro set");
+                        Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
                         startActivity(intent);
                         finish();
-//                        if(isDauthAgree){
-//                            Logger.d("reusing User skip the intro set");
-//                            Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
-//                            startActivity(intent);
-//                            finish();
-//                        }else{
-//
-//                        }
+//                        boolean isDauthAgree=getSharedPreferences("Config",MODE_PRIVATE).getBoolean("isDauthAgree",false);
+//                        Intent intent=new Intent(IntroActivity.this,DauthActivity.class);
+//                        startActivity(intent);
+//                        finish();
 
 
                     }
@@ -169,7 +163,7 @@ public class IntroActivity extends AppCompatActivity {
         SharedPreferences firstTimeShared = getSharedPreferences("Config", MODE_PRIVATE);
         SharedPreferences.Editor editor = firstTimeShared.edit();
         editor.putBoolean("isInstalled", false);
-        editor.commit();
+        editor.apply();
     }
 
     @Override

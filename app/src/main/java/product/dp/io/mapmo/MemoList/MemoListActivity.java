@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.airbridge.AirBridge;
 import io.airbridge.deeplink.DeepLink;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -401,7 +400,6 @@ public class MemoListActivity extends AppCompatActivity {
                 }
             });
 
-            AirBridge.getTracker().onNewIntent(intent);
         }
 
     }
