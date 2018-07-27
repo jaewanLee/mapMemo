@@ -29,7 +29,7 @@ allprojects {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 19
             targetSdkVersion 26
-            versionCode 14
+            versionCode 15
             versionName new Date().format('yyyyMMdd')
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
@@ -57,7 +57,7 @@ allprojects {
     }
 
     realm {
-        syncEnabled = true;
+        syncEnabled = true
     }
 
 

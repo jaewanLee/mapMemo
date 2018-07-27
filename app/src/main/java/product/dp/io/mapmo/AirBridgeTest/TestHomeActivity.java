@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -139,6 +140,11 @@ public class TestHomeActivity extends AppCompatActivity implements OnMapReadyCal
         // 버튼리스터 init
         initButtonListener();
 
+        if(isFirstTime()){
+            Intent intent=new Intent(this, TestIntroActivity.class);
+            startActivity(intent);
+            finish();
+        }
         // 퍼미션 세팅
         setPermissionIssue();
 
@@ -333,6 +339,10 @@ public class TestHomeActivity extends AppCompatActivity implements OnMapReadyCal
                 .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission\n")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_COARSE_LOCATION)
                 .check();
+    }
+
+    private int checkPermission(){
+        return ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
 
@@ -895,6 +905,11 @@ public class TestHomeActivity extends AppCompatActivity implements OnMapReadyCal
         editor.putInt("myABLAmount", myABLAmount+addedValue);
         editor.commit();
 
+    }
+
+    public boolean isFirstTime() {
+        SharedPreferences firstTimeShared = getSharedPreferences("Config", MODE_PRIVATE);
+        return firstTimeShared.getBoolean("isInstalled", true);
     }
 
 

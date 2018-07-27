@@ -138,7 +138,7 @@ public class IntroActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
 //                        boolean isDauthAgree=getSharedPreferences("Config",MODE_PRIVATE).getBoolean("isDauthAgree",false);
-//                        Intent intent=new Intent(IntroActivity.this,DauthActivity.class);
+//                        Intent intent=new Intent(TestIntroActivity.this,DauthActivity.class);
 //                        startActivity(intent);
 //                        finish();
 

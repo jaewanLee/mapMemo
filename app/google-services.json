@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "424368738053",
+    "firebase_url": "https://mapmemo-cb07e.firebaseio.com",
+    "project_id": "mapmemo-cb07e",
+    "storage_bucket": "mapmemo-cb07e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424368738053:android:b7c585f10139761f",
+        "android_client_info": {
+          "package_name": "product.dp.io.mapmo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424368738053-n64496iclvd0nvlea5o0sht1j8gjbfpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "product.dp.io.mapmo",
+            "certificate_hash": "59234229fecfa9981bdca4abacc8e52c241aa0fb"
+          }
+        },
+        {
+          "client_id": "424368738053-3e94e2dimq8hs6jv19b61qao316m2lp0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY9eOgsm7WJZB1ITsKoCsfugoV2MI3ZF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424368738053-3e94e2dimq8hs6jv19b61qao316m2lp0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

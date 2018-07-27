@@ -116,10 +116,12 @@
         <activity
             android:name=".Shared.SharedActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Core.DauthActivity"
+        <activity
+            android:name=".Core.DauthActivity"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Menu.DauthWallet"
+        <activity
+            android:name=".Menu.DauthWallet"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
 
@@ -161,15 +163,16 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="deeplink"
                     android:scheme="mapmo" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -177,11 +180,35 @@
             android:name="io.fabric.ApiKey"
             android:value="58a9c7c3c36dea1b3f77ce43e01948153fd3ab39" />
 
-        <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".AirBridgeTest.TestHomeActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="deeplink"
+                    android:scheme="mapmotest" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".AirBridgeTest.TestIntroActivity">
+
+        </activity>
 
     </application>
 
