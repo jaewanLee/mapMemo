@@ -20,16 +20,18 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+        maven { url "https://appboy.github.io/appboy-android-sdk/sdk" }
+        maven { url "https://maven.google.com" }
     }
 
     android {
-        compileSdkVersion 26
+        compileSdkVersion 27
         buildToolsVersion '26.0.2'
         defaultConfig {
             applicationId "product.dp.io.mapmo"
             minSdkVersion 19
-            targetSdkVersion 26
-            versionCode 15
+            targetSdkVersion 27
+            versionCode 17
             versionName new Date().format('yyyyMMdd')
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
@@ -70,8 +72,8 @@ allprojects {
             exclude group: 'com.android.support', module: 'support-annotations'
         })
         testImplementation 'junit:junit:4.12'
-        implementation 'com.android.support:appcompat-v7:26.0.2'
-        implementation 'com.android.support:design:26.0.2'
+        implementation 'com.android.support:appcompat-v7:27.1.0'
+        implementation 'com.android.support:design:27.1.0'
         implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 //        implementation 'com.tsengvn:typekit:1.0.1'
 
@@ -106,6 +108,10 @@ allprojects {
 
         //AppsFlyer
         compile 'com.appsflyer:af-android-sdk:4+@aar'
+
+        //AppBoy
+        implementation 'com.appboy:android-sdk-ui:2.5.+'
+
 
     }
 

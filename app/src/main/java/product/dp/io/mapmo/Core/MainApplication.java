@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.appboy.Appboy;
+import com.appboy.AppboyLifecycleCallbackListener;
+import com.appboy.support.AppboyLogger;
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -13,6 +17,7 @@ import com.kakao.auth.KakaoSDK;
 import java.util.Map;
 
 import io.airbridge.AirBridge;
+import io.airbridge.integration.AppboyIntegrator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -42,6 +47,7 @@ public class MainApplication extends Application {
     private LatLngSearchInterface latLngSearchInterface;
     Realm realm;
     private FirebaseAnalytics firebaseAnalytics;
+    private String user_email;
 
 
     @Override
@@ -52,6 +58,7 @@ public class MainApplication extends Application {
 
 //        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
         AirBridge.init(this, "mapmo", "b145d75aee4f45609f6c891a709177c0");
+        AirBridge.turnOnIntegration(new AppboyIntegrator());
         AirBridge.setDebugMode(true);
 
         //키워드 중심 검색
@@ -73,7 +80,7 @@ public class MainApplication extends Application {
 
         setAppsFlyer();
 
-
+        setAppboy();
 
 
         // Preload CUstom Tabs Service for Improved Perfomance
@@ -102,7 +109,7 @@ public class MainApplication extends Application {
             onUserDatabase = new UserDatabase();
             onUserDatabase.setUser_email("guest");
         } else {
-            String user_email = sharedPreferences.getString("user_email", "");
+            user_email = sharedPreferences.getString("user_email", "");
             if (!user_email.equals("")) {
                 this.realm = Realm.getDefaultInstance();
                 RealmResults<UserDatabase> userDatabases = realm.where(UserDatabase.class).equalTo("user_email", user_email).findAll();
@@ -189,6 +196,16 @@ public class MainApplication extends Application {
         };
         AppsFlyerLib.getInstance().init(AF_DEV_KEY, conversionDataListener, getApplicationContext());
         AppsFlyerLib.getInstance().startTracking(this);
+    }
+    public void setAppboy(){
+        AppboyLogger.setLogLevel(Log.VERBOSE);
+        if(user_email!=null){
+            Appboy.getInstance(getApplicationContext()).getCurrentUser().setFirstName(user_email);
+        }else{
+            Appboy.getInstance(getApplicationContext()).getCurrentUser().setFirstName("guest");
+        }
+        registerActivityLifecycleCallbacks(new AppboyLifecycleCallbackListener());
+
     }
 
 }

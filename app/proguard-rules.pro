@@ -43,3 +43,7 @@
 -dontwarn android.support.v4.**,org.slf4j.**,com.google.android.gms.**
 
 -dontwarn com.android.installreferrer
+
+-keep class bo.app.** { *; }
+-keep class com.appboy.** { *; }
+
