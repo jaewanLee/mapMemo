@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/airbridge_sdk/airbridge_sdk.iml" filepath="$PROJECT_DIR$/airbridge_sdk/airbridge_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mapmemo.iml" filepath="$PROJECT_DIR$/mapmemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sdk-android-1.4.0/sdk-android-1.4.0.iml" filepath="$PROJECT_DIR$/sdk-android-1.4.0/sdk-android-1.4.0.iml" />
     </modules>
   </component>
 </project>

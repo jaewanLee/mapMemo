@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
-import io.airbridge.AirBridge;
-import io.airbridge.deeplink.DeepLink;
 import io.fabric.sdk.android.Fabric;
 import product.dp.io.mapmo.HomeView.HomeActivity;
 import product.dp.io.mapmo.MemoList.MemoListActivity;
@@ -42,6 +40,7 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_intro);
+
 
         activity = this;
 
@@ -120,16 +119,16 @@ public class IntroActivity extends AppCompatActivity {
                             Logger.d("On Intro Activity");
                             finish();
                         }
-                        //airbridge 딥링크
+                        //TODO restore airbridge 딥링크
                         else {
-                            if (activity != null) {
-                                if (DeepLink.hadOpened(activity)) {
-                                    Logger.d("airbridge Deeplink");
-                                    Intent movingIntent = new Intent(IntroActivity.this, HomeActivity.class);
-                                    startActivity(movingIntent);
-                                    finish();
-                                }
-                            }
+//                            if (activity != null) {
+//                                if (DeepLink.hadOpened(activity)) {
+//                                    Logger.d("airbridge Deeplink");
+//                                    Intent movingIntent = new Intent(IntroActivity.this, HomeActivity.class);
+//                                    startActivity(movingIntent);
+//                                    finish();
+//                                }
+//                            }
                         }
                     } else {
 
@@ -169,6 +168,7 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        AirBridge.getTracker().onNewIntent(intent);
+        //TODO restore Airbridge
+//        AirBridge.getTracker().onNewIntent(intent);
     }
 }

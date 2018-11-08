@@ -4,8 +4,6 @@ import android.util.Log;
 
 import java.util.MissingFormatArgumentException;
 
-import io.airbridge.AirBridge;
-
 import static product.dp.io.mapmo.Util.Constant.LOG_TAG;
 
 /**
@@ -24,7 +22,8 @@ public class Logger {
             message = format;
         }
 
-        if (!AirBridge.isDebugMode) return;
+        //TODO restore airbridge
+//        if (!AirBridge.isDebugMode) return;
         Log.v(LOG_TAG, message);
     }
 
@@ -37,7 +36,7 @@ public class Logger {
             message = format;
         }
 
-        if (!AirBridge.isAppDebuggable) return;
+//        if (!AirBridge.isAppDebuggable) return;
         Log.d(LOG_TAG, message);
     }
 

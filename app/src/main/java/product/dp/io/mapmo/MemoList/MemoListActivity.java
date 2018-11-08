@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.airbridge.deeplink.DeepLink;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import okhttp3.Call;
@@ -115,11 +114,12 @@ public class MemoListActivity extends AppCompatActivity {
 
         DatabaseInit(memoDatabases, memoListAdapter, recyclerView);
 
-        if (DeepLink.hadOpened(this)) {
-
-            onNewIntent(getIntent());
-
-        }
+        //TODO airbridge restore
+//        if (DeepLink.hadOpened(this)) {
+//
+//            onNewIntent(getIntent());
+//
+//        }
         share_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

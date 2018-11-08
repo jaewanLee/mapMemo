@@ -47,7 +47,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import io.airbridge.AirBridge;
 import io.airbridge.statistics.events.inapp.SignInEvent;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -101,6 +100,8 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(product.dp.io.mapmo.R.layout.activity_menu);
+
+
 
         initLayout();
 
@@ -284,11 +285,15 @@ public class MenuActivity extends AppCompatActivity {
         daut_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isDauthAgree = getSharedPreferences("Config", MODE_PRIVATE).getBoolean("isDauthAgree", false);
-                if(isDauthAgree){
-                    Intent intent=new Intent(MenuActivity.this,DauthWallet.class);
-                    startActivity(intent);
-                }
+
+
+                //TODO restore for Aibloc not airbridge
+//                boolean isDauthAgree = getSharedPreferences("Config", MODE_PRIVATE).getBoolean("isDauthAgree", false);
+//                if(isDauthAgree){
+//                    Intent intent=new Intent(MenuActivity.this,DauthWallet.class);
+//                    startActivity(intent);
+//                }
+                MainApplication.getMainApplicationInstance().getReferrer();
             }
         });
 
@@ -542,7 +547,8 @@ public class MenuActivity extends AppCompatActivity {
                             SignInEvent signInEvent = new SignInEvent();
                             signInEvent.setUserEmail(user_email);
                             signInEvent.setUserId(user_name);
-                            AirBridge.getTracker().sendEvent(signInEvent);
+                            //TODO restore airbridge
+//                            AirBridge.getTracker().sendEvent(signInEvent);
                         } else {
                             Logger.d("response of send user profile : 400 err");
                             Toast.makeText(MenuActivity.this, "유저 프로필 등록에 실패하였습니다 다시 시도해주세요", Toast.LENGTH_SHORT).show();

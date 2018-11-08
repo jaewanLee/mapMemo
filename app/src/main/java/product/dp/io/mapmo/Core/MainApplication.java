@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.RemoteException;
 import android.util.Log;
 
+import com.android.installreferrer.api.InstallReferrerClient;
+import com.android.installreferrer.api.InstallReferrerStateListener;
+import com.android.installreferrer.api.ReferrerDetails;
 import com.appboy.Appboy;
 import com.appboy.AppboyLifecycleCallbackListener;
 import com.appboy.support.AppboyLogger;
@@ -14,10 +18,9 @@ import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kakao.auth.KakaoSDK;
 
+import java.util.Locale;
 import java.util.Map;
 
-import io.airbridge.AirBridge;
-import io.airbridge.integration.AppboyIntegrator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -49,17 +52,25 @@ public class MainApplication extends Application {
     private FirebaseAnalytics firebaseAnalytics;
     private String user_email;
 
+    InstallReferrerClient mReferrerClient;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Locale.getDefault().getCountry();
 
         instance = this;
 
 //        Typekit.getInstance().addNormal(Typekit.createFromAsset(this, "BMHANNA_11yrs_otf.otf"));
-        AirBridge.init(this, "mapmo", "b145d75aee4f45609f6c891a709177c0");
-        AirBridge.turnOnIntegration(new AppboyIntegrator());
-        AirBridge.setDebugMode(true);
+//        AirBridge.turnOnIntegration(new AppboyIntegrator());
+//        AirBridge.setDebugMode(true);
+//        AirBridge.init(this, "mapmo", "b145d75aee4f45609f6c891a709177c0");
+
+
+
+        mReferrerClient = InstallReferrerClient.newBuilder(getApplicationContext()).build();
+
 
         //키워드 중심 검색
         keywordSearchInterface = KeywordSearchInterface.retrofit.create(KeywordSearchInterface.class);
@@ -206,6 +217,52 @@ public class MainApplication extends Application {
         }
         registerActivityLifecycleCallbacks(new AppboyLifecycleCallbackListener());
 
+    }
+
+    public void getReferrer(){
+        if(!mReferrerClient.isReady()){
+            mReferrerClient= InstallReferrerClient.newBuilder(getApplicationContext()).build();
+        }
+        mReferrerClient.startConnection(new InstallReferrerStateListener() {
+            @Override
+            public void onInstallReferrerSetupFinished(int responseCode) {
+                switch (responseCode) {
+                    case InstallReferrerClient.InstallReferrerResponse.OK:
+                        Log.d("Referrer","InstallReferrer is conneted");
+                        ReferrerDetails response = null;
+                        try {
+                            response = mReferrerClient.getInstallReferrer();
+                            String installReferrer=response.getInstallReferrer();
+                            if(installReferrer==null||installReferrer.equals("")){
+                                Log.d("Referrer","insatllReferrelr null or blank");
+                            }
+                            response.getInstallReferrer();
+
+                            Log.d("Referrer","install Referrer"+response.getInstallReferrer());
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                        // API not available on the current Play Store app
+                        Log.d("Referrer","InstallREferrer is not supported by Playstore");
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                        Log.d("Referrer","InstallReferrer can't be established");
+                        // Connection could not be established
+                        break;
+                }
+                mReferrerClient.endConnection();
+            }
+
+            @Override
+            public void onInstallReferrerServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                Log.d("Referrer","InstallReferrer is disconnected");
+            }
+        });
     }
 
 }

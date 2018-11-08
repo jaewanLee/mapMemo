@@ -1,1 +1,1 @@
-include ':app', ':airbridge_sdk'
+include ':app', ':airbridge_sdk', ':sdk-android-1.4.0'
