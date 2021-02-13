@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jaewanlee.mapmemo">
+    package="product.dp.io.mapmo">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,35 +10,52 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DIAL_PHONE" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
 
     <application
         android:name=".Core.MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/launchicon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/Google_Aip_Key" />
+        <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/DUAM_API_KEY" />
+            android:value="@string/DAUM_API_KEY" />
+        <meta-data
+            android:name="com.kakao.sdk.ClientSecret"
+            android:value="@string/KAKAO_CLIENT_SECRET_VALUE" />
+
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.geo.API_KEY" -->
+        <!-- android:value="@string/Google_Aip_Key" /> -->
+
 
         <activity
-            android:name=".HomeView.MainActivity"
-            android:label="#여기요"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".HomeView.HomeActivity"
+            android:screenOrientation="portrait">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".LockScreen.LockScreenActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <activity android:name=".Login.Login" />
+        <activity
+            android:name=".Menu.Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.SocialSignupActivity"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".LockScreen.BoradcastReceiver.RestartReceiver" />
         <receiver
@@ -52,22 +69,151 @@
         <service android:name=".LockScreen.Service.ScreenService" />
 
         <activity
-            android:name=".HomeView.LocationBaseActivity"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".HomeView.TimeBaseActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+
+                <!-- Sets the intent action to view the activity -->
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Allows the link to be opened from a web browser -->
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the deep link to be used without specifying the app name -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- URI mapmemo://deeplink -->
+                <data
+                    android:host="deeplink"
+                    android:scheme="intent" />
+                <!-- URI http://www.mapmemo.com -->
+                <data
+                    android:host="www.mapmemo.com"
+                    android:scheme="intent://baemin" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".HomeView.SettingActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeView.FAQActivity"
-            android:launchMode="standard" />
+            android:launchMode="standard"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeView.AccessTermActivity"
-            android:launchMode="standard" />
-        <activity android:name=".KeywordSearchView.KeywordSearchActivity" />
-        <activity android:name=".AddMemoView.AddMemoActivity"></activity>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".KeywordSearchView.KeywordSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".AddMemoView.AddMemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.MenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MemoList.MemoListActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".Shared.SharedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Core.DauthActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".Menu.DauthWallet"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+
+        </activity>
+
+
+        <service
+            android:name=".PushMessage.PersistentService"
+            android:enabled="true"
+            android:process=":remote"></service>
+
+        <receiver
+            android:name=".PushMessage.RestartService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="RestartService"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="ACTION.RESTART.PersistentService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".Core.IntroActivity"
+            android:screenOrientation="portrait">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/kakao_scheme" />
+                <data android:host="@string/kakaolink_host" />
+
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="deeplink"
+                    android:scheme="mapmo" />
+            </intent-filter>
+
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="58a9c7c3c36dea1b3f77ce43e01948153fd3ab39" />
+
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".AirBridgeTest.TestHomeActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="deeplink"
+                    android:scheme="mapmotest" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".AirBridgeTest.TestIntroActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

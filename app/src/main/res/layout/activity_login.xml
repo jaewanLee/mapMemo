@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jaewanlee.mapmemo.Login.Login"
+    tools:context="com.example.jaewanlee.mapmemo.product.example.jaewanlee.mapmemo.Login.Login"
     android:weightSum="10"
     android:orientation="vertical">
     <Space
@@ -110,15 +110,14 @@
             android:layout_height="0dp"
             android:layout_weight="2.5"
             android:weightSum="10">
-            <ImageButton
+            <com.kakao.usermgmt.LoginButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:gravity="center"
                 android:layout_marginLeft="65dp"
                 android:layout_gravity="center"
-                android:src="@drawable/img_horizontal_test"
-                android:id="@+id/login_login_button"/>
+                android:id="@+id/social_login_button"/>
         </LinearLayout>
         <Space
             android:layout_width="match_parent"

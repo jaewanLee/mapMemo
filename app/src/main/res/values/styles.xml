@@ -1,13 +1,33 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="android:colorPrimary">#ffffff</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="android:colorPrimaryDark">#5476B2</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="android:colorAccent">#ffb1b1</item>
+
+    </style>
+
+
+    <style name="layout_click_animation" parent="Widget.AppCompat.Button.Colored">
+        <item name="background">@color/white</item>
+        <item name="android:colorButtonNormal">@color/white</item>
+        <item name="android:colorAccent">@color/black</item>
+    </style>
+
+
+
+
+    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="thickness">1dp</item>
+        <item name="gapBetweenBars">5dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,5 +38,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="PrimaryButton" parent="Theme.AppCompat">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
 
 </resources>

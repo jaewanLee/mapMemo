@@ -1,24 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-    <include
-        layout="@layout/app_bar_main"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        <fragment
+            android:id="@+id/main_map_replace"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="45dp" />
 
-</android.support.v4.widget.DrawerLayout>
+        <LinearLayout
+            android:id="@+id/main_fuctionTool_LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/linear_shadow_5">
+
+            <FrameLayout
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:background="#00000000">
+
+                <ImageButton
+                    android:id="@+id/main_back_ImageButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="7dp"
+                    android:background="#00000000"
+                    android:src="@drawable/ic_arrow_back"
+                    android:visibility="invisible"/>
+
+                <ImageButton
+                    android:id="@+id/main_menu_ImageButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="#00000000"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_shape_setting"
+                    android:visibility="visible" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/main_search_editText"
+                    android:layout_width="255dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="메모하고 싶은 장소를 검색하세요."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingTop="15dp"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <FrameLayout
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="11.5dp"
+                    >
+
+                    <ImageButton
+                        android:id="@+id/main_erase_ImageButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#ffffff"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_cancel"
+                        android:visibility="invisible" />
+
+                    <ImageButton
+                        android:id="@+id/main_initSearch_ImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_close"
+                        android:visibility="invisible" />
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/main_memoInfo_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="185dp"
+                android:background="@drawable/bottom_bar"
+                android:orientation="vertical"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="18dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/main_category_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:layout_marginRight="8dp"
+                        android:singleLine="true"
+                        android:text="음식점"
+                        android:textColor="#DE000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/main_createDate_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:singleLine="true"
+                        android:text="2017.09.01"
+                        android:textColor="#61000000"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/main_memoTitle_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="5dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:text="새로운 메모입니다"
+                    android:textSize="18sp"
+                    android:textColor="#DE000000"/>
+
+
+                <TextView
+                    android:id="@+id/main_memoContent_textView"
+                    android:layout_width="280dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="14sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:lines="3"
+                    android:textColor="#5c007a"
+                    android:text="새 메모를 추가하기 위해 클릭해 주세요" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_bottom_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bottom_bar">
+
+                <ImageButton
+                    android:id="@+id/main_memoList_imageButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_list" />
+
+                <TextView
+                    android:layout_width="97dp"
+                    android:layout_height="21dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="18dp"
+                    android:text="메모된 내용 보기"
+                    android:textColor="#D9000000"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/main_splitBar_ImgaeView"
+                    android:layout_width="1dp"
+                    android:layout_height="13dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="21dp"
+                    android:background="#59000000" />
+
+                <TextView
+                    android:id="@+id/main_simpleMemoTitle_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="17dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="메갈까시 2017.09.16"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+
+        <ImageButton
+            android:id="@+id/main_share_floatingbutton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="312dp"
+            android:layout_marginRight="24dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/share_memo_btn" />
+
+        <ImageButton
+            android:id="@+id/main_call_floatingbutton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="260dp"
+            android:layout_marginRight="24dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/call_memo_btn"
+
+            />
+
+        <ImageButton
+            android:id="@+id/main_memoDetail_textView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="187dp"
+            android:layout_marginRight="16dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add_memo_btn" />
+
+
+        <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+            android:id="@+id/main_progressbar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:mlpb_arrow_height="5dp"
+            app:mlpb_arrow_width="10dp"
+            app:mlpb_enable_circle_background="true"
+            app:mlpb_progress_color="#2b0000"
+            app:mlpb_progress_stoke_width="5dp"
+            app:mlpb_progress_text_color="#000000"
+            app:mlpb_show_arrow="true" />
+
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

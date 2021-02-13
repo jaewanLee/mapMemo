@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <include
+        layout="@layout/setting_header_layout"
+        android:id="@+id/menu_header"/>
+
+    <RelativeLayout
+        android:id="@+id/profile_layer"
+        android:layout_width="match_parent"
+        android:layout_height="520dp"
+        android:layout_below="@+id/menu_header"
+        >
+
+        <!--<TextView-->
+        <!--android:textSize="14sp"-->
+        <!--android:gravity="left"-->
+        <!--android:text="@string/user_profile_name_title"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+        <RelativeLayout
+            android:id="@+id/profile_mid_layer"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="20dp">
+
+            <ImageView
+                android:id="@+id/menu_profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/guest_profile" />
+
+            <TextView
+                android:id="@+id/user_profile_name"
+                android:layout_width="wrap_content"
+                android:text="사용자"
+                android:layout_marginTop="30.5dp"
+                android:layout_height="24dp"
+                android:textColor="#8a000000"
+                android:background="#00000000"
+                android:textSize="16sp"
+                android:layout_toRightOf="@+id/menu_profile_image"
+                />
+
+            <com.kakao.usermgmt.LoginButton
+                android:id="@+id/menu_kakaologin_button"
+                android:layout_width="146dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/round_social_login"
+                android:text="@string/social_login_title"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"/>
+
+            <Button
+                android:id="@+id/menu_kakaologinfake_button"
+                android:layout_width="146dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/social_login_color"
+                android:text="@string/social_login_title"
+                android:textSize="13sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:focusable="false"
+                android:clickable="false"/>
+
+
+            <Button
+                android:id="@+id/menu_logout_button"
+                android:layout_width="74.5dp"
+                android:layout_height="36dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="24dp"
+                android:text="로그아웃"
+                android:textSize="13sp"
+                android:textColor="#9e24aa"
+                android:visibility="invisible"
+                android:background="@drawable/menuactivity_logout"/>
+            <!--</FrameLayout>-->
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/profile_line_imgae"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/profile_mid_layer"
+            android:background="@color/setting_line_color" />
+
+        <RelativeLayout
+            android:id="@+id/setting_layer"
+            android:layout_width="match_parent"
+            android:layout_height="191dp"
+            android:layout_below="@+id/profile_line_imgae">
+
+            <TextView
+                android:id="@+id/setting_sub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginTop="15dp"
+                android:gravity="left"
+                android:text="@string/setting_sub_title"
+                android:textColor="@color/setting_sub_title_color"
+                android:textSize="13sp"
+                android:paddingLeft="20dp"
+                />
+
+            <RelativeLayout
+                android:id="@+id/preview_set_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/setting_sub_title"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="20dp"
+                >
+
+                <TextView
+                    android:layout_width="136dp"
+                    android:layout_height="20dp"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    android:text="주변 메모 푸쉬 설정"
+                    android:textColor="@color/black" />
+
+                <Switch
+                    android:id="@+id/switch_memo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/memu_backup_relativelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/preview_set_lay"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="142dp"
+                    android:layout_height="21dp"
+                    android:layout_centerVertical="true"
+                    android:text="데이터 백업"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/menu_backup_imagebutton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:background="@drawable/ic_navigate_next_black"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/format_set_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/memu_backup_relativelayout"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="20dp"
+                >
+
+                <TextView
+                    android:layout_width="81dp"
+                    android:layout_height="21dp"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    android:text="메모 포맷"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/format_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/setting_line_imgae"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/setting_layer"
+            android:layout_marginTop="14dp"
+            android:background="@color/setting_line_color" />
+
+        <RelativeLayout
+            android:id="@+id/customer_service_layer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setting_line_imgae">
+
+            <TextView
+                android:id="@+id/customer_service_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="left"
+                android:text="@string/cs_sub_title"
+                android:textColor="@color/setting_sub_title_color"
+                android:textSize="13sp"
+
+                android:paddingLeft="20dp"/>
+            <RelativeLayout
+                android:id="@+id/dauth_set_lay"
+                android:layout_width="match_parent"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/customer_service_title"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:layout_centerVertical="true"
+                    android:text="Airbloc Reward"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/dauth_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/faq_set_lay"
+                android:layout_width="match_parent"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dauth_set_lay"
+
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="27dp"
+                    android:layout_height="21dp"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cs_faq_title"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/faq_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/userterm_set_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/faq_set_lay"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cs_userterm_title"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <ImageButton
+                    android:id="@+id/user_term_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_navigate_next_black"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/cs_line_imgae"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/customer_service_layer"
+            android:layout_marginTop="5dp"
+            android:background="@color/setting_line_color" />
+
+        <TextView
+            android:id="@+id/setting_app_ver_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cs_line_imgae"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:text="version 0.9.0"
+            android:textColor="@color/setting_sub_title_color"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/setting_app_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setting_app_ver_title"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/setting_app_desc"
+            android:textColor="@color/setting_sub_title_color"
+            android:textSize="13sp" />
+
+
+    </RelativeLayout>
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1.5"-->
+    <!--android:orientation="vertical">-->
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="Type"/>-->
+
+    <!--<Switch-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="LockScreen"-->
+    <!--android:id="@+id/menu_Lockscreen_Switch"/>-->
+
+    <!--<Button-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="Type something"-->
+    <!--android:id="@+id/menu_type5_button"/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="0.5">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="version 1.1.0" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="right"-->
+    <!--android:text="dev:ian_hodge / design:hipzoep" />-->
+    <!--</LinearLayout>-->
+
+
+</RelativeLayout>
